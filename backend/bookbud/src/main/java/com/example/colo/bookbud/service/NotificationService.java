@@ -1,0 +1,81 @@
+package com.example.colo.bookbud.service;
+
+import com.example.colo.bookbud.dto.notification.NotificationDTO;
+import com.example.colo.bookbud.entity.Notification;
+import com.example.colo.bookbud.entity.User;
+import com.example.colo.bookbud.exception.BusinessException;
+import com.example.colo.bookbud.exception.ResourceNotFoundException;
+import com.example.colo.bookbud.repository.NotificationRepository;
+import com.example.colo.bookbud.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class NotificationService {
+
+    private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
+
+    @Transactional
+    public Notification createNotification(String userId, String message) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("DB-001", "User not found"));
+
+        Notification notification = Notification.builder()
+                .notificationId(UUID.randomUUID().toString())
+                .user(user)
+                .message(message)
+                .isRead(false)
+                .build();
+
+        return notificationRepository.save(notification);
+    }
+
+    @Transactional(readOnly = true)
+    public List<NotificationDTO> getMyNotifications(String userId) {
+        return notificationRepository.findByUserUserIdOrderByCreatedAtDesc(userId).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public NotificationDTO markAsRead(String notificationId, String userId) {
+        Notification notification = notificationRepository.findByNotificationIdAndUserUserId(notificationId, userId)
+                .orElseThrow(() -> new BusinessException("AUTH-003", "Not own notification"));
+
+        notification.setIsRead(true);
+        notification = notificationRepository.save(notification);
+        return mapToDTO(notification);
+    }
+
+    @Transactional
+    public void markAllAsRead(String userId) {
+        List<Notification> notifications = notificationRepository.findByUserUserIdOrderByCreatedAtDesc(userId);
+        notifications.forEach(n -> n.setIsRead(true));
+        notificationRepository.saveAll(notifications);
+    }
+
+    @Transactional
+    public void deleteNotification(String notificationId, String userId) {
+        Notification notification = notificationRepository.findByNotificationIdAndUserUserId(notificationId, userId)
+                .orElseThrow(() -> new BusinessException("AUTH-003", "Not own notification"));
+
+        notificationRepository.delete(notification);
+    }
+
+    private NotificationDTO mapToDTO(Notification notification) {
+        return NotificationDTO.builder()
+                .notificationId(notification.getNotificationId())
+                .userId(notification.getUser().getUserId())
+                .message(notification.getMessage())
+                .isRead(notification.getIsRead())
+                .createdAt(notification.getCreatedAt().toString())
+                .build();
+    }
+}
