@@ -8,7 +8,7 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example.colo</groupId>
+	<groupId>edu.cit.colo</groupId>
 	<artifactId>bookbud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bookbud</name>
