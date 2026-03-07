@@ -1,7 +1,6 @@
 package edu.cit.colo.bookbud.service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,6 @@ public class AuthService {
         }
 
         User user = User.builder()
-                .userId(UUID.randomUUID().toString())
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
@@ -53,7 +51,7 @@ public class AuthService {
                 .accountStatus("Active")
                 .build();
 
-        user = userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
 
         String accessToken = jwtUtil.generateAccessToken(user.getUserId(), user.getEmail(), user.getRole().name());
         String refreshToken = createRefreshToken(user);
@@ -114,7 +112,6 @@ public class AuthService {
         String token = jwtUtil.generateRefreshToken(user.getUserId());
         
         RefreshToken refreshToken = RefreshToken.builder()
-                .tokenId(UUID.randomUUID().toString())
                 .user(user)
                 .token(token)
                 .expiresAt(LocalDateTime.now().plusDays(7))
@@ -132,7 +129,7 @@ public class AuthService {
                         .email(user.getEmail())
                         .role(user.getRole().name())
                         .rating(user.getRating() != null ? user.getRating().toString() : null)
-                        .createdAt(user.getCreatedAt().toString())
+                        .createdAt(user.getCreatedAt() != null ? user.getCreatedAt().toString() : null)
                         .build())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

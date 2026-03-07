@@ -14,11 +14,15 @@ import edu.cit.colo.bookbud.repository.BookRepository;
 import edu.cit.colo.bookbud.repository.TransactionRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import edu.cit.colo.bookbud.repository.WishlistRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -36,16 +40,41 @@ public class BookService {
     private final WishlistRepository wishlistRepository;
 
     @Transactional(readOnly = true)
-    public PaginatedResponse<BookDTO> getAllBooks(String q, String genre, String condition, 
-                                                   String type, BigDecimal minPrice, BigDecimal maxPrice, 
+    public PaginatedResponse<BookDTO> getAllBooks(String q, String genre, String condition,
+                                                   String type, BigDecimal minPrice, BigDecimal maxPrice,
                                                    String status, int page, int size) {
         Book.Status bookStatus = status != null ? Book.Status.valueOf(status) : Book.Status.Available;
         Book.Condition bookCondition = condition != null ? Book.Condition.valueOf(condition) : null;
         Book.TransactionType transactionType = type != null ? Book.TransactionType.valueOf(type) : null;
 
+        Specification<Book> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isBlank()) {
+                String pattern = "%" + q.toLowerCase() + "%";
+                predicates.add(cb.or(
+                    cb.like(cb.lower(root.get("title")), pattern),
+                    cb.like(cb.lower(root.get("author")), pattern)
+                ));
+            }
+            if (genre != null) predicates.add(cb.equal(root.get("genre"), genre));
+            if (bookCondition != null) predicates.add(cb.equal(root.get("condition"), bookCondition));
+            if (transactionType != null) predicates.add(cb.equal(root.get("transactionType"), transactionType));
+            if (bookStatus != null) predicates.add(cb.equal(root.get("status"), bookStatus));
+            if (minPrice != null) predicates.add(cb.or(
+                cb.greaterThanOrEqualTo(root.get("priceRent"), minPrice),
+                cb.greaterThanOrEqualTo(root.get("priceSale"), minPrice)
+            ));
+            if (maxPrice != null) predicates.add(cb.or(
+                cb.lessThanOrEqualTo(root.get("priceRent"), maxPrice),
+                cb.lessThanOrEqualTo(root.get("priceSale"), maxPrice)
+            ));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<Book> books = bookRepository.findByFilters(q, genre, bookCondition, transactionType, 
-                bookStatus, minPrice, maxPrice, pageable);
+        Page<Book> books = bookRepository.findAll(spec, pageable);
 
         return PaginatedResponse.<BookDTO>builder()
                 .content(books.getContent().stream().map(this::mapToDTO).collect(Collectors.toList()))
