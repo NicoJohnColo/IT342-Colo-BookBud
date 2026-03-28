@@ -1,0 +1,5 @@
+edu.cit.colo.bookbud.test.app-core-1.6.1-0 C:\Users\Nicoj\.gradle\caches\transforms-3\2bc867f6bcf036c710c553a5019de6fb\transformed\core-1.6.1\res
+edu.cit.colo.bookbud.test.app-androidTest-1 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\generated\res\resValues\androidTest\debug
+edu.cit.colo.bookbud.test.app-mergeDebugAndroidTestResources-2 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+edu.cit.colo.bookbud.test.app-mergeDebugAndroidTestResources-3 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+edu.cit.colo.bookbud.test.app-merged_res-4 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\merged_res\debugAndroidTest

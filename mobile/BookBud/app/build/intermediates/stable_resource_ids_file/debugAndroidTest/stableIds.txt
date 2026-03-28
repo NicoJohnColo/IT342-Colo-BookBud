@@ -1,0 +1,2 @@
+edu.cit.colo.bookbud.test:style/WhiteBackgroundTheme = 0x7f010001
+edu.cit.colo.bookbud.test:style/WhiteBackgroundDialogTheme = 0x7f010000

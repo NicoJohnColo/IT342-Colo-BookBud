@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1d7a1cb0-81d0-484f-8a5b-feefeb3fada8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/BookbudApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/BookbudApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/java/edu/cit/colo/bookbud/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/bookbud/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/bookbud/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid13396.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid21152.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid24704.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/replay_pid13396.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/replay_pid24704.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/components/ProtectedRoute/ProtectedRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/components/ProtectedRoute/ProtectedRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/context/AuthContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/context/AuthContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/pages/LandingPage/LandingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/pages/LandingPage/LandingPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/pages/auth/LoginPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/pages/auth/RegisterPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/bookbud/src/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/bookbud/src/services/authService.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="3BYakM1gc7y7iqE4ImmJyXIbnJb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/Nicoj/OneDrive/Desktop/IT342-Colo-BookBud/mobile/settings.gradle.kts"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1d7a1cb0-81d0-484f-8a5b-feefeb3fada8" name="Changes" comment="" />
+      <created>1774668599498</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1774668599498</updated>
+    </task>
+    <servers />
+  </component>
+</project>
