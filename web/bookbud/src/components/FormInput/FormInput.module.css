@@ -1,0 +1,104 @@
+.formGroup {
+  margin-bottom: 22px;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+  transition: color var(--transition-base);
+  cursor: pointer;
+}
+
+.labelFocused {
+  color: var(--color-primary);
+}
+
+.labelRight {
+  font-size: 13px;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-gray-50);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+}
+
+.inputWrapper.focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+  background: var(--color-white);
+}
+
+.inputWrapper.hasError {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+.inputWrapper.hasValue {
+  background: var(--color-white);
+}
+
+.input {
+  flex: 1;
+  width: 100%;
+  padding: 13px 16px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  color: var(--color-gray-900);
+  outline: none;
+  font-family: var(--font-body);
+  line-height: 1.4;
+}
+
+.input::placeholder {
+  color: var(--color-gray-400);
+}
+
+.togglePassword {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0 14px;
+  cursor: pointer;
+  color: var(--color-gray-400);
+  transition: color var(--transition-base);
+  flex-shrink: 0;
+}
+
+.togglePassword:hover {
+  color: var(--color-gray-700);
+}
+
+.errorMessage {
+  display: block;
+  font-size: 12px;
+  color: var(--color-error);
+  margin-top: 6px;
+  animation: slideInDown 0.2s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

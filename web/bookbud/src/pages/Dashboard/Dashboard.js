@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import useAuth from '../../hooks/useAuth';
 import bookService from '../../services/bookService';
 import './Dashboard.css';
 
 const TABS = ['Overview', 'Browse Books', 'My Listings', 'Wishlist'];
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, handleLogout: doLogout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Overview');
   const [books, setBooks] = useState([]);
@@ -30,7 +30,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) { navigate('/login'); return; }
+    if (!user) { navigate('/?auth=login'); return; }
     fetchBooks();
   }, [user, navigate, fetchBooks]);
 
@@ -50,7 +50,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await doLogout();
     navigate('/');
   };
 
