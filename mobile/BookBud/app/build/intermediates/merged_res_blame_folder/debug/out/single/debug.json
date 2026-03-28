@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-merged_res-35:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-main-37:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-merged_res-35:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-main-37:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-merged_res-35:\\layout_activity_dashboard.xml.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-main-37:\\layout\\activity_dashboard.xml"
+    },
+    {
+        "merged": "edu.cit.colo.bookbud.app-merged_res-35:/layout_activity_main.xml.flat",
+        "source": "edu.cit.colo.bookbud.app-main-37:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-merged_res-35:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.2\\edu.cit.colo.bookbud.app-main-37:\\layout\\activity_main.xml"
+    }
+]

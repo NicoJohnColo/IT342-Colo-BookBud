@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bb_background_light">#FFF3E4</color>
+    <color name="bb_orange">#FF8A1F</color>
+    <color name="bb_orange_dark">#E67612</color>
+    <color name="bb_text_dark">#333333</color>
+    <color name="bb_text_light">#FFFFFF</color>
+    <string name="app_name">BookBud</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="featured_books">Featured Books</string>
+    <string name="get_started">Get Started</string>
+    <string name="have_account_login">Already have an account? Login</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="no_account_register">No account yet - Register</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="tagline">Read more for less</string>
+    <string name="welcome_back">Welcome back</string>
+    <style name="Theme.BookBud" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/bb_orange</item>
+        <item name="colorPrimaryVariant">@color/bb_orange_dark</item>
+        <item name="colorOnPrimary">@color/bb_text_light</item>
+        <item name="android:statusBarColor">@color/bb_orange_dark</item>
+        <item name="android:navigationBarColor">@color/bb_background_light</item>
+        <item name="android:windowBackground">@color/bb_background_light</item>
+    </style>
+</resources>
