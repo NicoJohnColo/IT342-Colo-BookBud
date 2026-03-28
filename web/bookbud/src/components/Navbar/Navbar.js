@@ -1,51 +1,112 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import './Navbar.css';
+import useAuth from '../../hooks/useAuth';
+import styles from './Navbar.module.css';
+import LogoImg from '../imgs/logo.png';
 
-const Navbar = () => {
-  const { user, logout } = useAuth();
+const NAV_ITEMS = [
+  { label: 'Home', href: '/#home' },
+  { label: 'About', href: '/#about' },
+  { label: 'Genres', href: '/#genres' },
+  { label: 'Books', href: '/#books' },
+  { label: 'Gallery', href: '/#gallery' },
+];
+
+const Navbar = ({ onSignInClick }) => {
+  const { user, isAuthenticated, handleLogout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleLogout = async () => {
-    await logout();
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, []);
+
+  const onLogout = async () => {
+    setDropdownOpen(false);
+    await handleLogout();
     navigate('/');
   };
 
-  const isActive = (hash) => location.hash === hash || (hash === '' && location.pathname === '/' && !location.hash);
+  const isActiveHash = (hash) => {
+    const target = hash.replace('/#', '#');
+    return location.hash === target || (target === '#home' && location.pathname === '/' && !location.hash);
+  };
+
+  const userInitial = user?.username
+    ? user.username.charAt(0).toUpperCase()
+    : user?.name
+      ? user.name.charAt(0).toUpperCase()
+      : 'U';
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          <span className="logo-bb">B</span><span className="logo-b2">B</span>
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
+      <div className={styles.container}>
+        <Link to="/" className={styles.logo}>
+          <img src={LogoImg} alt="BookBud logo" className={styles.logoImage} />
+          <span className={styles.logoText}>BookBud</span>
         </Link>
 
-        <button className="navbar-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-          <span /><span /><span />
-        </button>
-
-        <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-          <li><a href="/#home" className={isActive('#home') || isActive('') ? 'active' : ''} onClick={() => setMenuOpen(false)}>Home</a></li>
-          <li><a href="/#about" className={isActive('#about') ? 'active' : ''} onClick={() => setMenuOpen(false)}>About</a></li>
-          <li><a href="/#genres" className={isActive('#genres') ? 'active' : ''} onClick={() => setMenuOpen(false)}>Genres</a></li>
-          <li><a href="/#books" className={isActive('#books') ? 'active' : ''} onClick={() => setMenuOpen(false)}>Books</a></li>
-          <li><a href="/#gallery" className={isActive('#gallery') ? 'active' : ''} onClick={() => setMenuOpen(false)}>Gallery</a></li>
-          {user && <li><Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>}
+        <ul className={styles.navLinks}>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.label}>
+              <a
+                href={item.href}
+                className={`${styles.navLink} ${isActiveHash(item.href) ? styles.navLinkActive : ''}`}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
         </ul>
 
-        <div className="navbar-auth">
-          {user ? (
-            <div className="navbar-user-menu">
-              <span className="navbar-username">Hi, {user.username}</span>
-              <button className="btn-signin" onClick={handleLogout}>Sign Out</button>
-            </div>
-          ) : (
-            <Link to="/login" className="btn-signin">Sign in</Link>
-          )}
-        </div>
+        {isAuthenticated ? (
+          <div className={styles.userSection} ref={dropdownRef}>
+            <button
+              className={styles.avatarButton}
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              aria-label="User menu"
+            >
+              {userInitial}
+            </button>
+            {dropdownOpen && (
+              <div className={styles.dropdown}>
+                <Link
+                  to="/dashboard"
+                  className={styles.dropdownItem}
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Profile
+                </Link>
+                <button className={styles.dropdownItem} onClick={onLogout}>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={styles.authButtons}>
+            {onSignInClick ? (
+              <button className={styles.signInButton} onClick={onSignInClick}>Sign in</button>
+            ) : (
+              <Link to="/?auth=login" className={styles.signInButton}>Sign in</Link>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

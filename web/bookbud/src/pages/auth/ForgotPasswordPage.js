@@ -1,92 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 import Navbar from '../../components/Navbar/Navbar';
-import { useAuth } from '../../context/AuthContext';
-import './Auth.css';
-
-const AUTH_FEATURES = [
-  { icon: '🚚', title: 'Meet Up Friendly', desc: 'Safe and easy in-person exchange' },
-  { icon: '🕐', title: 'Support 24/7', desc: "We're here to help with your transactions" },
-  { icon: '🛡️', title: '100% Real Listings', desc: 'Posted by verified BookBud users' },
-];
+import AuthCard from '../../components/AuthCard/AuthCard';
+import FormInput from '../../components/FormInput/FormInput';
+import { validateEmail } from '../../utils/validators';
+import styles from './ForgotPasswordPage.module.css';
 
 const ForgotPasswordPage = () => {
-  const { forgotPassword, loading, error, clearError } = useAuth();
+  const { handleForgotPassword, isLoading, error, clearError } = useAuth();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [showError, setShowError] = useState(false);
 
-  const handleChange = (e) => {
-    setEmail(e.target.value);
-    if (emailError) setEmailError('');
-    if (error) clearError();
+  useEffect(() => {
+    if (error) setShowError(true);
+  }, [error]);
+
+  const dismissError = () => {
+    setShowError(false);
+    clearError();
   };
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Enter a valid email address');
+    const result = validateEmail(email);
+    if (!result.valid) {
+      setEmailError(result.message);
       return;
     }
-    try {
-      await forgotPassword({ email });
-      setSuccessMsg('A password reset link has been sent to your email address.');
-    } catch {
-      /* error handled by context */
+    const response = await handleForgotPassword(email);
+    if (!response.error) {
+      setSubmitted(true);
     }
   };
 
   return (
-    <div className="auth-page">
+    <div className={styles.page}>
       <Navbar />
-      <main className="auth-main">
-        <div className="auth-bg" />
-        <div className="auth-card" style={{ maxWidth: 380 }}>
-          <h2>Forgot Password?</h2>
-          <p className="auth-subtitle">Enter your email and we'll send you a reset link</p>
+      <main className={styles.main}>
+        <AuthCard>
+          {!submitted ? (
+            <>
+              <h2 className={styles.heading}>Forgot Password?</h2>
+              <p className={styles.subtitle}>
+                Enter your email and we&apos;ll send you a reset link.
+              </p>
 
-          {error && <div className="auth-alert error">{error}</div>}
-          {successMsg && <div className="auth-alert success">{successMsg}</div>}
+              {showError && error && (
+                <div className={styles.errorBanner}>
+                  <span>{error}</span>
+                  <button onClick={dismissError} className={styles.dismissButton} aria-label="Dismiss error">
+                    ×
+                  </button>
+                </div>
+              )}
 
-          {!successMsg && (
-            <form onSubmit={handleSubmit} noValidate>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
+              <form onSubmit={onSubmit} noValidate>
+                <FormInput
+                  id="forgot-email"
+                  label="Email"
                   type="email"
-                  name="email"
                   value={email}
-                  onChange={handleChange}
-                  placeholder="test1@gmail.com"
-                  className={emailError ? 'input-error' : ''}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError('');
+                    if (error) clearError();
+                  }}
+                  error={emailError}
+                  placeholder="you@example.com"
                 />
-                {emailError && <span className="input-error-msg">{emailError}</span>}
-              </div>
 
-              <button type="submit" className="btn-auth" disabled={loading}>
-                {loading ? 'Sending...' : <>SEND &nbsp;→</>}
-              </button>
-            </form>
+                <button type="submit" className={styles.submitButton} disabled={isLoading} aria-label="Send reset link">
+                  {isLoading ? (
+                    <span className={styles.spinner} />
+                  ) : (
+                    'Send Reset Link'
+                  )}
+                </button>
+              </form>
+            </>
+          ) : (
+            <div className={styles.successState}>
+              <div className={styles.checkIcon}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <p className={styles.successMessage}>
+                We&apos;ve sent a password reset link to <strong>{email}</strong>. Please check your inbox.
+              </p>
+            </div>
           )}
 
-          <p className="auth-footer-text">
-            Back to Login&nbsp;<Link to="/login">Sign in</Link>
-          </p>
-        </div>
+          <Link to="/login" className={styles.backLink}>
+            ← Back to Sign In
+          </Link>
+        </AuthCard>
       </main>
-
-      <div className="auth-features">
-        {AUTH_FEATURES.map((f) => (
-          <div key={f.title} className="auth-feature-item">
-            <span className="feat-icon">{f.icon}</span>
-            <div>
-              <strong>{f.title}</strong>
-              <p>{f.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
