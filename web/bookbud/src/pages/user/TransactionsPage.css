@@ -1,0 +1,139 @@
+.txn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.txn-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.txn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.txn-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.txn-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.txn-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+}
+
+.txn-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.txn-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.txn-value {
+  font-size: 14px;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.txn-value.amount-highlight {
+  font-weight: 700;
+  color: #ef6623;
+  font-size: 16px;
+}
+
+.txn-id {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  word-break: break-all;
+  color: #666;
+}
+
+.payment-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.payment-status.pending {
+  background-color: #fef0e6;
+  color: #d97706;
+}
+
+.payment-status.success {
+  background-color: #dcfce7;
+  color: #059669;
+}
+
+.payment-status.failed {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.txn-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  background-color: #fef0e6;
+  color: #d97706;
+}
+
+.status-badge.active {
+  background-color: #dbeafe;
+  color: #0284c7;
+}
+
+.status-badge.completed {
+  background-color: #dcfce7;
+  color: #059669;
+}
+
+.status-badge.cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+}

@@ -1,8 +1,16 @@
 package edu.cit.colo.bookbud.service;
 
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.cit.colo.bookbud.dto.PaginatedResponse;
 import edu.cit.colo.bookbud.dto.book.BookDTO;
 import edu.cit.colo.bookbud.dto.notification.NotificationDTO;
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
 import edu.cit.colo.bookbud.dto.transaction.TransactionDTO;
 import edu.cit.colo.bookbud.dto.user.UserProfileDTO;
 import edu.cit.colo.bookbud.entity.Book;
@@ -11,15 +19,11 @@ import edu.cit.colo.bookbud.entity.Transaction;
 import edu.cit.colo.bookbud.entity.User;
 import edu.cit.colo.bookbud.exception.BusinessException;
 import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
-import edu.cit.colo.bookbud.repository.*;
+import edu.cit.colo.bookbud.repository.BookRepository;
+import edu.cit.colo.bookbud.repository.NotificationRepository;
+import edu.cit.colo.bookbud.repository.TransactionRepository;
+import edu.cit.colo.bookbud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +62,19 @@ public class AdminService {
         }
 
         return mapBookToDTO(book);
+    }
+
+    @Transactional
+    public void deleteBook(String bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("DB-001", "Book not found"));
+
+        // Notify the owner that their book has been deleted
+        notificationService.createNotification(book.getOwner().getUserId(), 
+            "Your book listing has been removed by admin: " + book.getTitle());
+
+        // Hard delete the book
+        bookRepository.delete(book);
     }
 
     @Transactional(readOnly = true)
@@ -144,6 +161,7 @@ public class AdminService {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .genre(book.getGenre())
+            .description(book.getDescription())
                 .condition(book.getCondition() != null ? book.getCondition().name() : null)
                 .priceRent(book.getPriceRent())
                 .priceSale(book.getPriceSale())
@@ -169,8 +187,11 @@ public class AdminService {
         return TransactionDTO.builder()
                 .transactionId(transaction.getTransactionId())
                 .bookId(transaction.getBook().getBookId())
+            .bookTitle(transaction.getBook().getTitle())
                 .userId(transaction.getUser().getUserId())
+            .renterUsername(transaction.getUser().getUsername())
                 .ownerId(transaction.getOwner().getUserId())
+            .ownerUsername(transaction.getOwner().getUsername())
                 .startDate(transaction.getStartDate())
                 .endDate(transaction.getEndDate())
                 .status(transaction.getStatus().name())

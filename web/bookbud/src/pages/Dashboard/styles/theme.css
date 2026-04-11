@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #f47b16;
+  --primary-light: #fff0e6;
+  --primary-hover: #e06b0a;
+  --bg: #fef8f3;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border: #f0e8df;
+  --text: #1a1a1a;
+  --text-muted: #9a8a7a;
+  --text-light: #c4b8ad;
+  --green: #22c55e;
+  --green-bg: #dcfce7;
+  --amber: #f59e0b;
+  --amber-bg: #fef3c7;
+  --red: #ef4444;
+  --red-bg: #fee2e2;
+  --blue: #3b82f6;
+  --blue-bg: #dbeafe;
+  --purple: #8b5cf6;
+  --purple-bg: #ede9fe;
+  --sidebar-w: 210px;
+  --header-h: 72px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-shell,
+.dashboard-shell * {
+  box-sizing: border-box;
+}
+
+.dashboard-shell {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.dashboard-shell h1,
+.dashboard-shell h2,
+.dashboard-shell h3,
+.dashboard-shell h4,
+.dashboard-shell h5 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.dashboard-shell button {
+  font-family: inherit;
+  cursor: pointer;
+}

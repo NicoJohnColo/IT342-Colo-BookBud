@@ -10,7 +10,9 @@ import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -75,5 +77,22 @@ public class BookController {
         String requestingUserId = jwtUtil.extractUserId(authHeader.substring(7));
         bookService.deleteBook(bookId, requestingUserId);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @PostMapping(value = "/{bookId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<BookDTO>> uploadBookImage(
+            @PathVariable String bookId,
+            @RequestPart("image") MultipartFile image,
+            @RequestHeader("Authorization") String authHeader) {
+        String requestingUserId = jwtUtil.extractUserId(authHeader.substring(7));
+        return ResponseEntity.ok(ApiResponse.success(bookService.uploadBookImage(bookId, requestingUserId, image)));
+    }
+
+    @GetMapping(value = "/{bookId}/image")
+    public ResponseEntity<byte[]> getBookImage(@PathVariable String bookId) {
+        BookService.BookImageFile image = bookService.getBookImage(bookId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(image.contentType()))
+                .body(image.content());
     }
 }

@@ -20,6 +20,8 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    // ==================== BOOK MANAGEMENT ====================
+    
     @GetMapping("/books")
     public ResponseEntity<ApiResponse<PaginatedResponse<BookDTO>>> getAllBooks(
             @RequestParam(defaultValue = "0") int page,
@@ -34,6 +36,15 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(adminService.updateBookStatus(bookId, status)));
     }
 
+    @DeleteMapping("/books/{bookId}")
+    public ResponseEntity<ApiResponse<Void>> deleteBook(
+            @PathVariable String bookId) {
+        adminService.deleteBook(bookId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    // ==================== USER MANAGEMENT ====================
+    
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<PaginatedResponse<UserProfileDTO>>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -48,6 +59,8 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(adminService.updateUserStatus(userId, status)));
     }
 
+    // ==================== TRANSACTION MANAGEMENT ====================
+    
     @GetMapping("/transactions")
     public ResponseEntity<ApiResponse<PaginatedResponse<TransactionDTO>>> getAllTransactions(
             @RequestParam(defaultValue = "0") int page,
@@ -61,6 +74,8 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(adminService.cancelTransaction(transactionId)));
     }
 
+    // ==================== NOTIFICATION MANAGEMENT ====================
+    
     @GetMapping("/notifications")
     public ResponseEntity<ApiResponse<PaginatedResponse<NotificationDTO>>> getAllNotifications(
             @RequestParam(defaultValue = "0") int page,

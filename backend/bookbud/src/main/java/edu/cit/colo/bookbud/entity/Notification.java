@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class Notification {
 
     @Id
+    @GeneratedValue
     @UuidGenerator
     @Column(name = "notification_id")
     private String notificationId;

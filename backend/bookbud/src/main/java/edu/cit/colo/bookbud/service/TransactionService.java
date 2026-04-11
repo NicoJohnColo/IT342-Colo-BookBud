@@ -1,7 +1,20 @@
 package edu.cit.colo.bookbud.service;
 
-import edu.cit.colo.bookbud.dto.transaction.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.dto.transaction.CreateTransactionRequest;
+import edu.cit.colo.bookbud.dto.transaction.RatingResponse;
+import edu.cit.colo.bookbud.dto.transaction.TransactionDTO;
 import edu.cit.colo.bookbud.entity.Book;
 import edu.cit.colo.bookbud.entity.Transaction;
 import edu.cit.colo.bookbud.entity.User;
@@ -11,18 +24,6 @@ import edu.cit.colo.bookbud.repository.BookRepository;
 import edu.cit.colo.bookbud.repository.TransactionRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +51,6 @@ public class TransactionService {
         }
 
         Transaction transaction = Transaction.builder()
-                .transactionId(UUID.randomUUID().toString())
                 .book(book)
                 .user(user)
                 .owner(book.getOwner())
@@ -61,9 +61,8 @@ public class TransactionService {
 
         transaction = transactionRepository.save(transaction);
 
-        // Update book status
-        book.setStatus(Book.Status.Rented);
-        bookRepository.save(book);
+    // Book is managed in this transaction; dirty checking will persist the change.
+    book.setStatus(isPurchaseRequest(book, request) ? Book.Status.Unavailable : Book.Status.Rented);
 
         // Send notifications
         notificationService.createNotification(book.getOwner().getUserId(), 
@@ -153,9 +152,10 @@ public class TransactionService {
 
         // Update book status
         Book book = transaction.getBook();
-        if (status == Transaction.Status.Completed || status == Transaction.Status.Cancelled) {
+        if (status == Transaction.Status.Completed) {
+            book.setStatus(isPurchaseTransaction(transaction) ? Book.Status.Sold : Book.Status.Available);
+        } else if (status == Transaction.Status.Cancelled) {
             book.setStatus(Book.Status.Available);
-            bookRepository.save(book);
         }
 
         // Send notifications
@@ -233,18 +233,36 @@ public class TransactionService {
         return sum.divide(BigDecimal.valueOf(ratingCount), 2, RoundingMode.HALF_UP);
     }
 
+    private boolean isPurchaseRequest(Book book, CreateTransactionRequest request) {
+        if (book.getTransactionType() == Book.TransactionType.Sale) {
+            return true;
+        }
+        return request.getEndDate() == null;
+    }
+
+    private boolean isPurchaseTransaction(Transaction transaction) {
+        Book book = transaction.getBook();
+        if (book.getTransactionType() == Book.TransactionType.Sale) {
+            return true;
+        }
+        return transaction.getEndDate() == null;
+    }
+
     private TransactionDTO mapToDTO(Transaction transaction, String requestingUserId) {
         String role = transaction.getUser().getUserId().equals(requestingUserId) ? "renter" : "owner";
         
         return TransactionDTO.builder()
                 .transactionId(transaction.getTransactionId())
                 .bookId(transaction.getBook().getBookId())
+                .bookTitle(transaction.getBook().getTitle())
                 .userId(transaction.getUser().getUserId())
+                .renterUsername(transaction.getUser().getUsername())
                 .ownerId(transaction.getOwner().getUserId())
+                .ownerUsername(transaction.getOwner().getUsername())
                 .startDate(transaction.getStartDate())
                 .endDate(transaction.getEndDate())
                 .status(transaction.getStatus().name())
-                .createdAt(transaction.getCreatedAt().toString())
+            .createdAt(transaction.getCreatedAt() != null ? transaction.getCreatedAt().toString() : null)
                 .userRole(role)
                 .build();
     }

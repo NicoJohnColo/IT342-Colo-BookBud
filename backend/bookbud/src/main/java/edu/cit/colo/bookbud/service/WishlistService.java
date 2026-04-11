@@ -1,5 +1,12 @@
 package edu.cit.colo.bookbud.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.cit.colo.bookbud.dto.book.BookDTO;
 import edu.cit.colo.bookbud.dto.wishlist.AddToWishlistRequest;
 import edu.cit.colo.bookbud.dto.wishlist.WishlistDTO;
 import edu.cit.colo.bookbud.entity.Book;
@@ -11,12 +18,6 @@ import edu.cit.colo.bookbud.repository.BookRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import edu.cit.colo.bookbud.repository.WishlistRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +51,6 @@ public class WishlistService {
         }
 
         Wishlist wishlist = Wishlist.builder()
-                .wishlistId(UUID.randomUUID().toString())
                 .user(user)
                 .book(book)
                 .build();
@@ -68,11 +68,43 @@ public class WishlistService {
     }
 
     private WishlistDTO mapToDTO(Wishlist wishlist) {
+        String userId = wishlist.getUser() != null ? wishlist.getUser().getUserId() : null;
+        String bookId = wishlist.getBook() != null ? wishlist.getBook().getBookId() : null;
+        BookDTO book = mapBookToDTO(wishlist.getBook());
+
         return WishlistDTO.builder()
                 .wishlistId(wishlist.getWishlistId())
-                .userId(wishlist.getUser().getUserId())
-                .bookId(wishlist.getBook().getBookId())
-                .dateAdded(wishlist.getDateAdded().toString())
+            .userId(userId)
+            .bookId(bookId)
+            .book(book)
+            .dateAdded(wishlist.getDateAdded() != null ? wishlist.getDateAdded().toString() : null)
+                .build();
+    }
+
+    private BookDTO mapBookToDTO(Book book) {
+        if (book == null) {
+            return null;
+        }
+
+        String imageUrl = null;
+        if (book.getImageFileName() != null && !book.getImageFileName().isBlank() && book.getBookId() != null) {
+            imageUrl = "/api/v1/books/" + book.getBookId() + "/image";
+        }
+
+        return BookDTO.builder()
+                .bookId(book.getBookId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .genre(book.getGenre())
+                .description(book.getDescription())
+                .imageUrl(imageUrl)
+                .condition(book.getCondition() != null ? book.getCondition().name() : null)
+                .priceRent(book.getPriceRent())
+                .priceSale(book.getPriceSale())
+                .transactionType(book.getTransactionType() != null ? book.getTransactionType().name() : null)
+                .status(book.getStatus() != null ? book.getStatus().name() : null)
+                .ownerId(book.getOwner() != null ? book.getOwner().getUserId() : null)
+                .createdAt(book.getCreatedAt() != null ? book.getCreatedAt().toString() : null)
                 .build();
     }
 }

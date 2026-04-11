@@ -1,5 +1,11 @@
 package edu.cit.colo.bookbud.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.cit.colo.bookbud.dto.notification.NotificationDTO;
 import edu.cit.colo.bookbud.entity.Notification;
 import edu.cit.colo.bookbud.entity.User;
@@ -8,12 +14,6 @@ import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.repository.NotificationRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class NotificationService {
                 .orElseThrow(() -> new ResourceNotFoundException("DB-001", "User not found"));
 
         Notification notification = Notification.builder()
-                .notificationId(UUID.randomUUID().toString())
                 .user(user)
                 .message(message)
                 .isRead(false)

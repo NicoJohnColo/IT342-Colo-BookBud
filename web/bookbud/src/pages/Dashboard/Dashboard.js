@@ -1,308 +1,437 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import LogoImg from '../../components/imgs/logo.png';
+
 import bookService from '../../services/bookService';
-import './Dashboard.css';
+import transactionService from '../../services/transactionService';
+import wishlistService from '../../services/wishlistService';
+import notificationService from '../../services/notificationService';
+import userService from '../../services/userService';
+import adminService from '../../services/adminService';
+import paymentService from '../../services/paymentService';
 
-const TABS = ['Overview', 'Browse Books', 'My Listings', 'Wishlist'];
+import OverviewPage from '../user/OverviewPage';
+import BrowsePage from '../user/BrowsePage';
+import ListingsPage from '../user/ListingsPage';
+import TransactionsPage from '../user/TransactionsPage';
+import PaymentPage from '../user/PaymentPage';
+import WishlistPage from '../user/WishlistPage';
+import NotificationsPage from '../user/NotificationsPage';
+import ProfilePage from '../user/ProfilePage';
+import AdminDashboardPage from '../admin/AdminDashboardPage';
+import AdminBooksPage from '../admin/AdminBooksPage';
+import AdminTransactionsPage from '../admin/AdminTransactionsPage';
+import AdminNotificationsPage from '../admin/AdminNotificationsPage';
+import AdminUsersPage from '../admin/AdminUsersPage';
 
-const Dashboard = () => {
-  const { user, handleLogout: doLogout } = useAuth();
+import './styles/theme.css';
+import './styles/layout.css';
+import './styles/common.css';
+
+const USER_NAV_ITEMS = [
+  { key: 'dashboard', label: 'Overview', icon: '🏠' },
+  { key: 'browse', label: 'Browse', icon: '🌐' },
+  { key: 'listings', label: 'Listings', icon: '☰' },
+  { key: 'transactions', label: 'My Transactions', icon: '📋' },
+  { key: 'payments', label: 'Earnings & Payments', icon: '💰' },
+  { key: 'wishlist', label: 'Wishlist', icon: '❤️' },
+  { key: 'notifications', label: 'Notifications', icon: '🔔' },
+  { key: 'profile', label: 'My Profile', icon: '👤' },
+];
+
+const ADMIN_NAV_ITEMS = [
+  { key: 'admin-dashboard', label: 'Dashboard', icon: '🏠' },
+  { key: 'admin-books', label: 'Book Management', icon: '☰' },
+  { key: 'admin-transactions', label: 'Transactions', icon: '📋' },
+  { key: 'admin-notifications', label: 'Notification Logs', icon: '🔔' },
+  { key: 'admin-users', label: 'User Management', icon: '👤' },
+];
+
+const toArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (Array.isArray(value?.content)) return value.content;
+  return [];
+};
+
+const readBookList = (payload) => toArray(payload?.data || payload);
+
+const readPaginatedList = (payload) => toArray(payload);
+
+export default function Dashboard() {
+  const { user, handleLogout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('Overview');
-  const [books, setBooks] = useState([]);
-  const [booksLoading, setBooksLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [searching, setSearching] = useState(false);
 
-  const fetchBooks = useCallback(async () => {
-    setBooksLoading(true);
-    try {
-      const res = await bookService.getAllBooks({ size: 20 });
-      setBooks(res.data?.content || []);
-    } catch {
-      setBooks([]);
-    } finally {
-      setBooksLoading(false);
-    }
-  }, []);
+  const isAdmin = String(user?.role || '').toUpperCase() === 'ADMIN';
+  const navItems = isAdmin ? ADMIN_NAV_ITEMS : USER_NAV_ITEMS;
+
+  const [currentPage, setCurrentPage] = useState(isAdmin ? 'admin-dashboard' : 'dashboard');
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [listingSaving, setListingSaving] = useState(false);
+
+  const [books, setBooks] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [profile, setProfile] = useState(null);
+
+  const [adminBooks, setAdminBooks] = useState([]);
+  const [adminUsers, setAdminUsers] = useState([]);
+  const [adminTransactions, setAdminTransactions] = useState([]);
+  const [adminNotifications, setAdminNotifications] = useState([]);
 
   useEffect(() => {
-    if (!user) { navigate('/'); return; }
-    fetchBooks();
-  }, [user, navigate, fetchBooks]);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-    setSearching(true);
-    try {
-      const res = await bookService.getAllBooks({ q: searchQuery, size: 20 });
-      setSearchResults(res.data?.content || []);
-      setActiveTab('Browse Books');
-    } catch {
-      setSearchResults([]);
-    } finally {
-      setSearching(false);
+    if (!user) {
+      navigate('/');
+      return;
     }
-  };
+    setCurrentPage(isAdmin ? 'admin-dashboard' : 'dashboard');
+  }, [user, isAdmin, navigate]);
 
-  const handleLogout = async () => {
-    await doLogout();
+  const loadUserData = useCallback(async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const [booksResult, transactionsResult, wishlistResult, notificationsResult, profileResult] = await Promise.allSettled([
+        bookService.getAllBooks({ size: 100 }),
+        transactionService.getMyTransactions({ size: 100 }),
+        wishlistService.getMyWishlist(),
+        notificationService.getMyNotifications(),
+        user.userId ? userService.getUserProfile(user.userId) : Promise.resolve(null),
+      ]);
+
+      if (booksResult.status === 'fulfilled') {
+        setBooks(readBookList(booksResult.value));
+      }
+
+      if (transactionsResult.status === 'fulfilled') {
+        setTransactions(readPaginatedList(transactionsResult.value));
+      }
+
+      if (wishlistResult.status === 'fulfilled') {
+        setWishlist(toArray(wishlistResult.value));
+      }
+
+      if (notificationsResult.status === 'fulfilled') {
+        setNotifications(toArray(notificationsResult.value));
+      }
+
+      if (profileResult.status === 'fulfilled') {
+        setProfile(profileResult.value);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  const loadAdminData = useCallback(async () => {
+    if (!isAdmin) return;
+
+    const [booksResult, usersResult, transactionsResult, notificationsResult] = await Promise.allSettled([
+      adminService.getBooks({ size: 100 }),
+      adminService.getUsers({ size: 100 }),
+      adminService.getTransactions({ size: 100 }),
+      adminService.getNotifications({ size: 100 }),
+    ]);
+
+    if (booksResult.status === 'fulfilled') {
+      setAdminBooks(readPaginatedList(booksResult.value));
+    }
+    if (usersResult.status === 'fulfilled') {
+      setAdminUsers(readPaginatedList(usersResult.value));
+    }
+    if (transactionsResult.status === 'fulfilled') {
+      setAdminTransactions(readPaginatedList(transactionsResult.value));
+    }
+    if (notificationsResult.status === 'fulfilled') {
+      setAdminNotifications(readPaginatedList(notificationsResult.value));
+    }
+  }, [isAdmin]);
+
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
+
+  useEffect(() => {
+    loadAdminData();
+  }, [loadAdminData]);
+
+  const filteredBooks = useMemo(() => {
+    if (!search.trim()) return books;
+    const query = search.toLowerCase();
+    return books.filter((book) => [book.title, book.author, book.genre].some((v) => String(v || '').toLowerCase().includes(query)));
+  }, [books, search]);
+
+  const myListings = useMemo(
+    () => books.filter((book) => String(book.ownerId || '') === String(user?.userId || '')),
+    [books, user]
+  );
+
+  const unreadCount = useMemo(() => notifications.filter((n) => !n.isRead).length, [notifications]);
+
+  const onLogout = async () => {
+    await handleLogout();
     navigate('/');
   };
 
-  const displayedBooks = searchQuery && searchResults.length >= 0 && activeTab === 'Browse Books'
-    ? searchResults
-    : books;
+  const onMarkRead = async (notificationId) => {
+    try {
+      await notificationService.markAsRead(notificationId);
+      setNotifications((prev) => prev.map((n) => (n.notificationId === notificationId ? { ...n, isRead: true } : n)));
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
 
-  const myListings = books.filter((b) => b.ownerId === user?.userId || b.ownerUsername === user?.username);
+  const onMarkAllRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
 
-  const initials = user?.username
-    ? user.username.slice(0, 2).toUpperCase()
-    : 'BB';
+  const onDeleteNotification = async (notificationId) => {
+    try {
+      await notificationService.deleteNotification(notificationId);
+      setNotifications((prev) => prev.filter((n) => n.notificationId !== notificationId));
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
+
+  const onRemoveWishlist = async (wishlistId) => {
+    try {
+      await wishlistService.removeFromWishlist(wishlistId);
+      setWishlist((prev) => prev.filter((item) => item.wishlistId !== wishlistId));
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
+
+  const onUpdateProfile = async (formData) => {
+    if (!user?.userId) return;
+    try {
+      await userService.updateUserProfile(user.userId, formData);
+      await loadUserData();
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
+
+  const onCreateListing = async (payload, imageFile) => {
+    setListingSaving(true);
+    try {
+      const response = await bookService.createBook(payload);
+      const created = response?.data || null;
+
+      if (!created?.bookId) {
+        await loadUserData();
+        return null;
+      }
+
+      let finalBook = created;
+      if (imageFile) {
+        try {
+          const imageResponse = await bookService.uploadBookImage(created.bookId, imageFile);
+          finalBook = imageResponse?.data || created;
+        } catch {
+          // Keep listing created even if image upload fails.
+        }
+      }
+
+      setBooks((prev) => [finalBook, ...prev.filter((book) => book.bookId !== finalBook.bookId)]);
+      return finalBook;
+    } finally {
+      setListingSaving(false);
+    }
+  };
+
+  const onUpdateListing = async (bookId, payload, imageFile) => {
+    setListingSaving(true);
+    try {
+      const response = await bookService.updateBook(bookId, payload);
+      const updated = response?.data || null;
+
+      if (!updated?.bookId) {
+        await loadUserData();
+        return null;
+      }
+
+      let finalBook = updated;
+      if (imageFile) {
+        try {
+          const imageResponse = await bookService.uploadBookImage(bookId, imageFile);
+          finalBook = imageResponse?.data || updated;
+        } catch {
+          // Keep metadata update even if image upload fails.
+        }
+      }
+
+      setBooks((prev) => prev.map((book) => (book.bookId === finalBook.bookId ? finalBook : book)));
+      return finalBook;
+    } finally {
+      setListingSaving(false);
+    }
+  };
+
+  const onCreateTransaction = useCallback(
+    async (payload) => {
+      const created = await transactionService.createTransaction(payload);
+      await loadUserData();
+      return created;
+    },
+    [loadUserData]
+  );
+
+  const onUpdateTransactionStatus = useCallback(
+    async (transactionId, status) => {
+      const updated = await transactionService.updateTransactionStatus(transactionId, status);
+      await loadUserData();
+      return updated;
+    },
+    [loadUserData]
+  );
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return (
+          <OverviewPage
+            user={user}
+            books={filteredBooks}
+            myListings={myListings}
+            transactions={transactions}
+            onNavigate={setCurrentPage}
+            currentUserId={user?.userId}
+            onCreateTransaction={onCreateTransaction}
+            wishlist={wishlist}
+            onWishlistChange={loadUserData}
+          />
+        );
+      case 'browse':
+        return (
+          <BrowsePage
+            books={filteredBooks}
+            currentUserId={user?.userId}
+            onCreateTransaction={onCreateTransaction}
+            wishlist={wishlist}
+            onWishlistChange={loadUserData}
+          />
+        );
+      case 'listings':
+        return (
+          <ListingsPage
+            listings={myListings}
+            saving={listingSaving}
+            onCreateListing={onCreateListing}
+            onUpdateListing={onUpdateListing}
+          />
+        );
+      case 'transactions':
+        return <TransactionsPage transactions={transactions} onUpdateStatus={onUpdateTransactionStatus} />;
+      case 'payments':
+        return <PaymentPage transactions={transactions} books={books} />;
+      case 'wishlist':
+        return <WishlistPage wishlist={wishlist} onRemove={onRemoveWishlist} />;
+      case 'notifications':
+        return (
+          <NotificationsPage
+            notifications={notifications}
+            onMarkRead={onMarkRead}
+            onMarkAllRead={onMarkAllRead}
+            onDelete={onDeleteNotification}
+          />
+        );
+      case 'profile':
+        return (
+          <ProfilePage
+            user={user}
+            profile={profile}
+            myListingsCount={myListings.length}
+            transactionsCount={transactions.length}
+            onUpdateProfile={onUpdateProfile}
+          />
+        );
+      case 'admin-dashboard':
+        return (
+          <AdminDashboardPage
+            books={adminBooks}
+            users={adminUsers}
+            transactions={adminTransactions}
+            notifications={adminNotifications}
+          />
+        );
+      case 'admin-books':
+        return <AdminBooksPage books={adminBooks} />;
+      case 'admin-transactions':
+        return <AdminTransactionsPage transactions={adminTransactions} />;
+      case 'admin-notifications':
+        return <AdminNotificationsPage notifications={adminNotifications} />;
+      case 'admin-users':
+        return <AdminUsersPage users={adminUsers} />;
+      default:
+        return isAdmin ? (
+          <AdminDashboardPage books={adminBooks} users={adminUsers} transactions={adminTransactions} notifications={adminNotifications} />
+        ) : (
+          <OverviewPage
+            user={user}
+            books={filteredBooks}
+            myListings={myListings}
+            transactions={transactions}
+            onNavigate={setCurrentPage}
+            currentUserId={user?.userId}
+            onCreateTransaction={onCreateTransaction}
+          />
+        );
+    }
+  };
 
   return (
-    <div className="dashboard">
-      {/* ===== SIDEBAR ===== */}
-      <aside className={`dash-sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="dash-sidebar-header">
-          <span className="dash-logo"><span>B</span><span>B</span></span>
-          <span className="dash-logo-text">BookBud</span>
-        </div>
-
-        <nav className="dash-nav">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              className={`dash-nav-item ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => { setActiveTab(tab); setSidebarOpen(false); }}
-            >
-              <span className="dash-nav-icon">{tabIcon(tab)}</span>
-              {tab}
+    <div className="dashboard-shell">
+      <div className="app-layout">
+        <aside className="sidebar">
+          <div className="sidebar-logo">
+            <img src={LogoImg} alt="BookBud" className="logo-image" />
+          </div>
+          <nav className="sidebar-nav">
+            {navItems.map((item) => (
+              <button key={item.key} className={`nav-item ${currentPage === item.key ? 'active' : ''}`} onClick={() => setCurrentPage(item.key)}>
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+                {item.key === 'notifications' && unreadCount > 0 ? (
+                  <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700 }}>{unreadCount}</span>
+                ) : null}
+              </button>
+            ))}
+          </nav>
+          <div className="sidebar-footer">
+            <button className="logout-btn" onClick={onLogout}>
+              <span>↪</span>
+              <span>Logout</span>
             </button>
-          ))}
-        </nav>
+          </div>
+        </aside>
 
-        <div className="dash-sidebar-footer">
-          <button className="dash-nav-item dash-logout" onClick={handleLogout}>
-            <span className="dash-nav-icon">🚪</span>
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {/* ===== MAIN ===== */}
-      <div className="dash-main">
-        {/* Topbar */}
-        <header className="dash-topbar">
-          <button className="dash-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Menu">
-            <span /><span /><span />
-          </button>
-
-          <form className="dash-search" onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="Search books..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" disabled={searching}>
-              {searching ? '...' : '🔍'}
-            </button>
-          </form>
-
-          <div className="dash-topbar-right">
-            <div className="dash-avatar" title={user?.username}>{initials}</div>
-            <div className="dash-user-info">
-              <strong>{user?.username}</strong>
-              <span>{user?.email}</span>
+        <header className="header">
+          <div className="header-search">
+            <span>🔍</span>
+            <input placeholder="Search for books" value={search} onChange={(e) => setSearch(e.target.value)} />
+          </div>
+          <div className="header-user">
+            <div className="header-avatar">{String(user?.username || 'U').slice(0, 1).toUpperCase()}</div>
+            <div>
+              <div className="header-name">{user?.username || 'User'}</div>
+              <div className="header-email">{user?.email || 'No email'}</div>
             </div>
           </div>
         </header>
 
-        {/* Content */}
-        <main className="dash-content">
-          {activeTab === 'Overview' && (
-            <OverviewTab user={user} books={books} myListings={myListings} setActiveTab={setActiveTab} />
-          )}
-          {activeTab === 'Browse Books' && (
-            <BooksTab books={displayedBooks} loading={booksLoading} query={searchQuery} />
-          )}
-          {activeTab === 'My Listings' && (
-            <MyListingsTab listings={myListings} navigate={navigate} />
-          )}
-          {activeTab === 'Wishlist' && (
-            <WishlistTab />
-          )}
-        </main>
+        <main className="main-content">{loading ? <div className="empty-state">Loading dashboard data...</div> : renderPage()}</main>
       </div>
-
-      {/* Overlay for mobile sidebar */}
-      {sidebarOpen && <div className="dash-overlay" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
-};
-
-/* ===== TAB ICONS ===== */
-const tabIcon = (tab) => {
-  const icons = { Overview: '🏠', 'Browse Books': '📚', 'My Listings': '📋', Wishlist: '❤️' };
-  return icons[tab] || '📄';
-};
-
-/* ===== OVERVIEW TAB ===== */
-const OverviewTab = ({ user, books, myListings, setActiveTab }) => (
-  <div className="overview-tab">
-    <h1 className="dash-page-title">Welcome back, {user?.username}! 👋</h1>
-    <p className="dash-page-sub">Here's what's happening on BookBud today.</p>
-
-    <div className="overview-stats">
-      <StatCard icon="📚" label="Total Books" value={books.length} color="#f97316" />
-      <StatCard icon="📋" label="My Listings" value={myListings.length} color="#6366f1" />
-      <StatCard icon="❤️" label="Wishlist" value={0} color="#ec4899" />
-      <StatCard icon="💫" label="Transactions" value={0} color="#10b981" />
-    </div>
-
-    <div className="overview-sections">
-      <div className="overview-card">
-        <div className="overview-card-header">
-          <h3>Recent Books</h3>
-          <button className="link-btn" onClick={() => setActiveTab('Browse Books')}>View all</button>
-        </div>
-        <div className="recent-books-list">
-          {books.slice(0, 4).map((book) => (
-            <RecentBookRow key={book.bookId} book={book} />
-          ))}
-          {books.length === 0 && <p className="empty-msg">No books available.</p>}
-        </div>
-      </div>
-
-      <div className="overview-card profile-card">
-        <h3>My Profile</h3>
-        <div className="profile-avatar-l">{user?.username?.slice(0, 2).toUpperCase() || 'BB'}</div>
-        <div className="profile-fields">
-          <p><strong>Username:</strong> {user?.username}</p>
-          <p><strong>Email:</strong> {user?.email}</p>
-          <p><strong>Role:</strong> {user?.role}</p>
-          <p><strong>Member since:</strong> {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const StatCard = ({ icon, label, value, color }) => (
-  <div className="stat-card" style={{ '--accent': color }}>
-    <span className="stat-icon">{icon}</span>
-    <div>
-      <span className="stat-value">{value}</span>
-      <p className="stat-label">{label}</p>
-    </div>
-  </div>
-);
-
-const RecentBookRow = ({ book }) => (
-  <div className="recent-book-row">
-    <img
-      src={'https://covers.openlibrary.org/b/id/260-M.jpg'}
-      alt={book.title}
-      onError={(e) => { e.target.src = 'https://covers.openlibrary.org/b/id/260-M.jpg'; }}
-    />
-    <div className="recent-book-info">
-      <strong>{book.title}</strong>
-      <span>{book.author}</span>
-    </div>
-    <span className="recent-book-price">
-      {book.priceRent ? `₱${book.priceRent}/wk` : '—'}
-    </span>
-  </div>
-);
-
-/* ===== BROWSE BOOKS TAB ===== */
-const BooksTab = ({ books, loading, query }) => (
-  <div className="books-tab">
-    <h1 className="dash-page-title">Browse Books</h1>
-    <p className="dash-page-sub">{query ? `Results for "${query}"` : 'Discover books listed by our community.'}</p>
-    {loading ? (
-      <div className="loading-spinner">Loading books...</div>
-    ) : (
-      <div className="dash-books-grid">
-        {books.map((book) => (
-          <DashBookCard key={book.bookId} book={book} />
-        ))}
-        {!books.length && <p className="empty-msg">No books found.</p>}
-      </div>
-    )}
-  </div>
-);
-
-const DashBookCard = ({ book }) => (
-  <div className="dash-book-card">
-    <div className="dash-book-cover">
-      <img
-        src={'https://covers.openlibrary.org/b/id/260-M.jpg'}
-        alt={book.title}
-        onError={(e) => { e.target.src = 'https://covers.openlibrary.org/b/id/260-M.jpg'; }}
-      />
-      <span className="dash-book-status">{book.status || 'Available'}</span>
-    </div>
-    <div className="dash-book-body">
-      <h4>{book.title}</h4>
-      <p className="dash-book-author">{book.author}</p>
-      <div className="dash-book-meta">
-        {book.priceRent && (
-          <span className="price-tag rent">Rent ₱{book.priceRent}</span>
-        )}
-        {book.priceSale && (
-          <span className="price-tag buy">Buy ₱{book.priceSale}</span>
-        )}
-      </div>
-      <div className="dash-book-actions">
-        <button className="dash-btn-rent">Rent</button>
-        <button className="dash-btn-buy">Buy</button>
-      </div>
-    </div>
-  </div>
-);
-
-/* ===== MY LISTINGS TAB ===== */
-const MyListingsTab = ({ listings }) => (
-  <div className="listings-tab">
-    <div className="tab-header-row">
-      <div>
-        <h1 className="dash-page-title">My Listings</h1>
-        <p className="dash-page-sub">Books you have listed for rent or sale.</p>
-      </div>
-      <button className="btn-add-listing" onClick={() => alert('Coming soon!')}>+ Add Listing</button>
-    </div>
-    {listings.length === 0 ? (
-      <div className="empty-state">
-        <span>📚</span>
-        <p>You haven't listed any books yet.</p>
-        <button className="btn-add-listing" onClick={() => alert('Coming soon!')}>List a Book</button>
-      </div>
-    ) : (
-      <div className="dash-books-grid">
-        {listings.map((book) => (
-          <DashBookCard key={book.bookId} book={book} />
-        ))}
-      </div>
-    )}
-  </div>
-);
-
-/* ===== WISHLIST TAB ===== */
-const WishlistTab = () => (
-  <div className="wishlist-tab">
-    <h1 className="dash-page-title">My Wishlist</h1>
-    <p className="dash-page-sub">Books you've saved for later.</p>
-    <div className="empty-state">
-      <span>❤️</span>
-      <p>Your wishlist is empty. Browse books and save your favorites!</p>
-    </div>
-  </div>
-);
-
-export default Dashboard;
+}

@@ -12,7 +12,12 @@
 
 .section-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin: 0 auto 48px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .section-header h2 {
@@ -20,11 +25,14 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 8px;
+  margin: 0 0 8px 0;
 }
 
 .section-header p {
   font-size: 15px;
   color: #6b7280;
+  margin: 0;
+  max-width: 640px;
 }
 
 /* ===== BUTTONS ===== */
@@ -103,9 +111,9 @@
 }
 
 .hero-title {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 800;
-  color: #f97316;
+  color: #f97316 !important;
   line-height: 1.2;
   margin-bottom: 16px;
 }
@@ -665,11 +673,13 @@
 /* ===== BOOKS ===== */
 .books-section {
   background: #fff;
+  max-width: 1440px;
 }
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 300px));
+  justify-content: center;
   gap: 24px;
 }
 
@@ -677,6 +687,8 @@
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
+  width: 100%;
+  max-width: 300px;
   overflow: hidden;
   transition: box-shadow 0.2s, transform 0.2s;
 }
@@ -687,24 +699,26 @@
 }
 
 .book-cover {
-  height: 360px;
+  aspect-ratio: 3 / 4;
+  min-height: 360px;
   background: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 12px;
+  padding: 10px;
 }
 
 .book-cover img {
-  width: 100%;
+  width: 82%;
+  max-width: 240px;
   height: 100%;
   object-fit: contain;
   display: block;
 }
 
 .book-info {
-  padding: 16px;
+  padding: 20px;
 }
 
 .book-info h4 {
@@ -835,9 +849,13 @@
     height: 380px;
   }
 
-  .genres-grid,
-  .books-grid {
+  .genres-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(2, minmax(0, 300px));
+    justify-content: center;
   }
 
   .gallery-grid {
@@ -847,9 +865,13 @@
 
 @media (max-width: 600px) {
   .genres-grid,
-  .books-grid,
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+
+  .books-grid {
+    grid-template-columns: minmax(0, 300px);
+    justify-content: center;
   }
 
   .features-bar {
