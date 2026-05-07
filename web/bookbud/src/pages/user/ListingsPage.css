@@ -58,6 +58,8 @@
 
 .listing-actions {
   margin-top: 10px;
+  display: flex;
+  gap: 8px;
 }
 
 .listing-modal-overlay {

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bb_background_light">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="@android:color/white">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edit Profile"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/bb_text_dark" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bg_button_primary" />
+    </LinearLayout>
+
+    <!-- Content -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ProgressBar
+            android:id="@+id/progressEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+
+        <ScrollView
+            android:id="@+id/scrollEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Username -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username *"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/bb_text_dark"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/editUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/bb_text_dark"
+                    android:hint="Enter username" />
+
+                <!-- Mobile -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile Number"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/bb_text_dark"
+                    android:layout_marginTop="16dp" />
+
+                <EditText
+                    android:id="@+id/editMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/bb_text_dark"
+                    android:inputType="phone"
+                    android:hint="Enter mobile number" />
+
+                <!-- Facebook -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Facebook URL"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/bb_text_dark"
+                    android:layout_marginTop="16dp" />
+
+                <EditText
+                    android:id="@+id/editFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/bb_text_dark"
+                    android:hint="Enter Facebook URL" />
+
+                <!-- Messenger -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Messenger"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/bb_text_dark"
+                    android:layout_marginTop="16dp" />
+
+                <EditText
+                    android:id="@+id/editMessenger"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/bb_text_dark"
+                    android:hint="Enter Messenger ID" />
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>

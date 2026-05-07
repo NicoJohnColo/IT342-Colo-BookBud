@@ -19,8 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -60,6 +58,9 @@ public class Transaction implements Persistable<String> {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "amount")
+    private Double amount;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -90,12 +91,6 @@ public class Transaction implements Persistable<String> {
     @Override
     public boolean isNew() {
         return newEntity;
-    }
-
-    @PostPersist
-    @PostLoad
-    void markNotNew() {
-        this.newEntity = false;
     }
 
     public enum Status {

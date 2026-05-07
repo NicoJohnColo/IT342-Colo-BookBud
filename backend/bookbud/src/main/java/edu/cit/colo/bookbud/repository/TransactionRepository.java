@@ -1,13 +1,16 @@
 package edu.cit.colo.bookbud.repository;
 
-import edu.cit.colo.bookbud.entity.Transaction;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import edu.cit.colo.bookbud.entity.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
@@ -27,4 +30,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     Optional<Transaction> findByTransactionIdAndOwnerUserId(String transactionId, String ownerId);
     
     List<Transaction> findByBookBookId(String bookId);
+    
+    // Eagerly load the book relationship to avoid LazyInitializationException
+    @Query("SELECT t FROM Transaction t LEFT JOIN FETCH t.book WHERE t.transactionId = :transactionId")
+    Optional<Transaction> findByIdWithBook(@Param("transactionId") String transactionId);
 }

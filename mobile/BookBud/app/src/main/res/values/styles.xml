@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Font Families: Match web design (Playfair Display for headings, DM Sans for body) -->
+    <style name="TextAppearance.BookBud.Heading" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color_dark</item>
+    </style>
+
+    <style name="TextAppearance.BookBud.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color_dark</item>
+    </style>
+
     <!-- Text Appearances -->
     <style name="TextAppearance.BookBud.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/color_dark</item>
     </style>
 
     <style name="TextAppearance.BookBud.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/color_dark</item>
+    </style>
+
+    <style name="TextAppearance.BookBud.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/bb_text_muted</item>
     </style>
 
     <!-- Button Styles -->

@@ -31,6 +31,14 @@
     <color name="bb_nav_unselected">#AAAAAA</color>
     <color name="bb_nav_bg">#FFFFFF</color>
 
+    <!-- Profile -->
+    <color name="bb_dark_teal">#2D5F5F</color>
+
+    <!-- Status Colors -->
+    <color name="bb_success">#22C55E</color>
+    <color name="bb_warning">#F59E0B</color>
+    <color name="bb_error">#EF4444</color>
+
     <!-- Aliases for existing code compatibility -->
     <color name="color_primary">#F5821E</color>
     <color name="color_primary_hover">#D4650A</color>
