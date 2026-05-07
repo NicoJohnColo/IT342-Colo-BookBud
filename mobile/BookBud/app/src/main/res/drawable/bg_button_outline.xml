@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed/Hover state: orange background with white text -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bb_orange" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- Focused state: orange background -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bb_orange" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- Selected state: orange background -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bb_orange" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- Default state: transparent with orange border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke android:width="2dp" android:color="@color/bb_orange" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+</selector>

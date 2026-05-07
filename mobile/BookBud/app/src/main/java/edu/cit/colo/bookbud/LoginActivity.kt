@@ -82,10 +82,12 @@ class LoginActivity : ComponentActivity() {
                     buttonLogin.isEnabled = true
                     when (result) {
                         is AuthResult.Success -> {
-                            getSharedPreferences("bookbud_prefs", MODE_PRIVATE).edit()
+                            val prefs = getSharedPreferences("bookbud_prefs", MODE_PRIVATE)
+                            prefs.edit()
                                 .putString("access_token", result.accessToken)
                                 .putString("refresh_token", result.refreshToken)
                                 .putString("username", result.username)
+                                .putString("user_id", result.userId)
                                 .apply()
                             startActivity(Intent(this, DashboardActivity::class.java))
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

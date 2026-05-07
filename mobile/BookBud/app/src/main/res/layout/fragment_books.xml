@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bb_background_light">
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/searchBooks"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:hint="Search for books"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/bg_search"
+            android:textSize="14sp"
+            android:textColorHint="#BDBDBD"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp" />
+    </LinearLayout>
+
+    <!-- Filter Chips - Transaction Type -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/typeFilterContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filterAllTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="All Types"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_badge_hot"
+                android:paddingHorizontal="16dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterForRent"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="For Rent"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="16dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterForSale"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="For Sale"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="16dp"
+                android:gravity="center" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Filter Chips - Genres -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/genreFilterContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filterAllGenres"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="All"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_badge_hot"
+                android:paddingHorizontal="12dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterFantasy"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="Fantasy"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="12dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterFiction"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="Fiction"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="12dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterSelfHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="Self-Help"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="12dp"
+                android:gravity="center"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/filterMystery"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:text="Mystery"
+                android:textSize="12sp"
+                android:textColor="@color/bb_text_dark"
+                android:background="@drawable/bg_badge_gray"
+                android:paddingHorizontal="12dp"
+                android:gravity="center" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Results Count -->
+    <TextView
+        android:id="@+id/resultsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 results"
+        android:textSize="13sp"
+        android:textColor="@color/bb_text_muted"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="8dp" />
+
+    <!-- Progress -->
+    <ProgressBar
+        android:id="@+id/progressBooks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- RecyclerView for Books -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/booksRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:padding="12dp" />
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="No books found"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#999999"
+        android:visibility="gone" />
+</LinearLayout>
+
