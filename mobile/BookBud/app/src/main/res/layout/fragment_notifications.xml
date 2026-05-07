@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Header with Tabs/Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:spacing="8dp">
+
+        <Button
+            android:id="@+id/filterAll"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="All"
+            android:textSize="11sp"
+            android:background="@drawable/bg_button_primary"
+            android:textColor="@android:color/white"
+            style="?attr/borderlessButtonStyle" />
+
+        <Button
+            android:id="@+id/filterUnread"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="Unread"
+            android:textSize="11sp"
+            android:background="@drawable/bg_button_outline"
+            android:textColor="#F4622A"
+            style="?attr/borderlessButtonStyle" />
+
+        <Button
+            android:id="@+id/filterRead"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="Read"
+            android:textSize="11sp"
+            android:background="@drawable/bg_button_outline"
+            android:textColor="#F4622A"
+            style="?attr/borderlessButtonStyle" />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EFEFEF" />
+
+    <!-- Progress -->
+    <ProgressBar
+        android:id="@+id/progressNotifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+    <!-- RecyclerView for Notifications -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:padding="4dp" />
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="No notifications"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#999999"
+        android:visibility="gone" />
+</LinearLayout>
+

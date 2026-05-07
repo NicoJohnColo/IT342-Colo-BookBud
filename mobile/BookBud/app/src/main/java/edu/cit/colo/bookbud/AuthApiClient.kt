@@ -8,7 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 sealed class AuthResult {
-    data class Success(val message: String, val username: String?, val accessToken: String?, val refreshToken: String?) : AuthResult()
+    data class Success(val message: String, val username: String?, val accessToken: String?, val refreshToken: String?, val userId: String? = null) : AuthResult()
     data class Error(val message: String) : AuthResult()
 }
 
@@ -67,10 +67,11 @@ object AuthApiClient {
             if (success) {
                 val data = root.optJSONObject("data")
                 val user = data?.optJSONObject("user")
+                val userId = user?.optString("userId")
                 val username = user?.optString("username")
                 val accessToken = data?.optString("accessToken")
                 val refreshToken = data?.optString("refreshToken")
-                AuthResult.Success("Success", username, accessToken, refreshToken)
+                AuthResult.Success("Success", username, accessToken, refreshToken, userId)
             } else {
                 val error = root.optJSONObject("error")
                 val message = error?.optString("message") ?: "Request failed. Please try again."
