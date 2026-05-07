@@ -90,28 +90,6 @@
                     android:textColor="@color/bb_text_dark"
                     android:hint="Enter username" />
 
-                <!-- Email -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email *"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/bb_text_dark"
-                    android:layout_marginTop="16dp" />
-
-                <EditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/bg_input"
-                    android:padding="12dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/bb_text_dark"
-                    android:inputType="textEmailAddress"
-                    android:hint="Enter email" />
-
                 <!-- Mobile -->
                 <TextView
                     android:layout_width="wrap_content"

@@ -21,7 +21,6 @@ class EditProfileFragment : Fragment() {
     private lateinit var btnSave: Button
 
     private lateinit var editUsername: EditText
-    private lateinit var editEmail: EditText
     private lateinit var editMobile: EditText
     private lateinit var editFacebook: EditText
     private lateinit var editMessenger: EditText
@@ -46,7 +45,6 @@ class EditProfileFragment : Fragment() {
         btnSave = view.findViewById(R.id.btnSave)
 
         editUsername = view.findViewById(R.id.editUsername)
-        editEmail = view.findViewById(R.id.editEmail)
         editMobile = view.findViewById(R.id.editMobile)
         editFacebook = view.findViewById(R.id.editFacebook)
         editMessenger = view.findViewById(R.id.editMessenger)
@@ -56,7 +54,9 @@ class EditProfileFragment : Fragment() {
         userId = prefs.getString("user_id", null)
 
         btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, ProfileFragment())
+                .commit()
         }
 
         btnSave.setOnClickListener {
@@ -84,7 +84,6 @@ class EditProfileFragment : Fragment() {
 
                     user?.let {
                         editUsername.setText(it.username ?: "")
-                        editEmail.setText(it.email ?: "")
                         editMobile.setText(it.mobileNumber ?: "")
                         editFacebook.setText(it.facebookUrl ?: "")
                         editMessenger.setText(it.messenger ?: "")
@@ -102,13 +101,12 @@ class EditProfileFragment : Fragment() {
 
     private fun saveProfile() {
         val username = editUsername.text.toString().trim()
-        val email = editEmail.text.toString().trim()
         val mobile = editMobile.text.toString().trim()
         val facebook = editFacebook.text.toString().trim()
         val messenger = editMessenger.text.toString().trim()
 
-        if (username.isEmpty() || email.isEmpty()) {
-            Toast.makeText(requireContext(), "Username and Email are required", Toast.LENGTH_SHORT).show()
+        if (username.isEmpty()) {
+            Toast.makeText(requireContext(), "Username is required", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -122,10 +120,9 @@ class EditProfileFragment : Fragment() {
 
                 val updateRequest = UpdateUserRequest(
                     username = username,
-                    email = email,
-                    mobile = mobile,
-                    facebook = facebook,
-                    messenger = messenger
+                    facebookUrl = facebook,
+                    messenger = messenger,
+                    mobileNumber = mobile
                 )
 
                 val result = UserApiClient.updateUserProfile(
@@ -144,7 +141,9 @@ class EditProfileFragment : Fragment() {
                         prefs.edit().putString("username", username).apply()
 
                         Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                        parentFragmentManager.popBackStack()
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, ProfileFragment())
+                            .commit()
                     } else {
                         Toast.makeText(requireContext(), "Failed to update: ${result.message}", Toast.LENGTH_SHORT).show()
                     }

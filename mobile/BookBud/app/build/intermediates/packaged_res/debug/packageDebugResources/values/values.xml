@@ -8,6 +8,8 @@
     <color name="bb_badge_topseller_bg">#E8F5E9</color>
     <color name="bb_badge_topseller_text">#388E3C</color>
     <color name="bb_card_white">#FFFFFF</color>
+    <color name="bb_dark_teal">#2D5F5F</color>
+    <color name="bb_error">#EF4444</color>
     <color name="bb_input_bg">#FFFFFF</color>
     <color name="bb_input_border">#E4DDD5</color>
     <color name="bb_nav_bg">#FFFFFF</color>
@@ -16,9 +18,11 @@
     <color name="bb_orange">#F5821E</color>
     <color name="bb_orange_dark">#D4650A</color>
     <color name="bb_orange_light">#FFF0E3</color>
+    <color name="bb_success">#22C55E</color>
     <color name="bb_text_dark">#2D2D2D</color>
     <color name="bb_text_light">#FFFFFF</color>
     <color name="bb_text_muted">#9E9E9E</color>
+    <color name="bb_warning">#F59E0B</color>
     <color name="color_dark">#2D2D2D</color>
     <color name="color_gray_200">#E4DDD5</color>
     <color name="color_gray_400">#9E9E9E</color>
@@ -101,11 +105,33 @@
         <item name="android:textColorHint">@color/color_gray_400</item>
     </style>
     <style name="TextAppearance.BookBud.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/color_dark</item>
     </style>
+    <style name="TextAppearance.BookBud.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/bb_text_muted</item>
+    </style>
+    <style name="TextAppearance.BookBud.Heading" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color_dark</item>
+    </style>
     <style name="TextAppearance.BookBud.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/color_dark</item>
+    </style>
+    <style name="TextAppearance.BookBud.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/color_dark</item>
     </style>

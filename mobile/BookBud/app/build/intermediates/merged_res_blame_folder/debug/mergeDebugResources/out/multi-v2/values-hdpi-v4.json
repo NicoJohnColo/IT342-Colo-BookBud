@@ -4,7 +4,7 @@
             "outputFile": "edu.cit.colo.bookbud.app-mergeDebugResources-33:/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\transforms-3\\4d13dbf58aad9a77903d78a725d596f1\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\51d9ba1c9c207caa017b1d1bbfdfdf00\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

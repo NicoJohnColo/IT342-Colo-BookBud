@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminPages.css';
+import paymentService from '../../services/paymentService';
 
 export default function AdminDashboardPage({ 
   books = [], 
@@ -8,12 +9,44 @@ export default function AdminDashboardPage({
   notifications = [],
   onNavigate = () => {}
 }) {
+  const [platformStats, setPlatformStats] = useState(null);
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  // Fetch platform-wide payment statistics
+  useEffect(() => {
+    const fetchPlatformStats = async () => {
+      try {
+        // Note: This would need a backend endpoint for platform-wide stats
+        // For now, calculate from transactions
+        const totalRevenue = transactions
+          .filter((t) => String(t.status || '').toLowerCase() === 'completed')
+          .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+        
+        setPlatformStats({
+          totalRevenue: totalRevenue || 0,
+          totalTransactions: transactions.length,
+        });
+      } catch (error) {
+        console.error('Error fetching platform stats:', error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    if (transactions.length > 0) {
+      fetchPlatformStats();
+    } else {
+      setLoadingStats(false);
+    }
+  }, [transactions]);
+
   const activeTransactions = transactions.filter((t) => String(t.status || '').toLowerCase() === 'active').length;
   const pendingTransactions = transactions.filter((t) => String(t.status || '').toLowerCase() === 'pending').length;
   const completedTransactions = transactions.filter((t) => String(t.status || '').toLowerCase() === 'completed').length;
   const unreadNotifications = notifications.filter((n) => !n.isRead).length;
   const flaggedListings = books.filter((b) => b.status === 'Unavailable').length;
   const suspendedUsers = users.filter((u) => u.accountStatus === 'Suspended' || u.accountStatus === 'Banned').length;
+  const totalRevenue = platformStats?.totalRevenue || 0;
 
   return (
     <div className="admin-page">
@@ -38,6 +71,12 @@ export default function AdminDashboardPage({
           <div className="admin-stat-label">Active Transactions</div>
           <div className="admin-stat-value">{activeTransactions}</div>
           <div className="admin-stat-subtitle text-muted text-small">{pendingTransactions} pending</div>
+        </div>
+
+        <div className="admin-stat">
+          <div className="admin-stat-label">Platform Revenue</div>
+          <div className="admin-stat-value">PHP {Number(totalRevenue || 0).toFixed(0)}</div>
+          <div className="admin-stat-subtitle text-muted text-small">{completedTransactions} completed</div>
         </div>
         
         <div className="admin-stat">

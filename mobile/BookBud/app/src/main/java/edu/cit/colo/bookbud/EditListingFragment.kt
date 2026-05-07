@@ -59,15 +59,11 @@ class EditListingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_create_listing, container, false)
+        return inflater.inflate(R.layout.fragment_edit_listing, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Reuse the create listing layout but change the title
-        view.findViewById<TextView>(R.id.textCreateListingTitle)?.text = "Edit Listing"
-        view.findViewById<TextView>(R.id.textCreateListingSubtitle)?.text = "Update your book details"
 
         editTitle = view.findViewById(R.id.editTitle)
         editAuthor = view.findViewById(R.id.editAuthor)
@@ -79,9 +75,6 @@ class EditListingFragment : Fragment() {
         editDescription = view.findViewById(R.id.editDescription)
         errorMessage = view.findViewById(R.id.errorMessage)
         btnSubmit = view.findViewById(R.id.btnSubmit)
-
-        // Change submit button text
-        btnSubmit.text = "Update Listing"
 
         // Add delete button
         btnDelete = Button(requireContext()).apply {
@@ -100,10 +93,6 @@ class EditListingFragment : Fragment() {
         // Add delete button to the form container
         val formContainer = view.findViewById<LinearLayout>(R.id.formContainer)
         formContainer?.addView(btnDelete)
-
-        // Hide image selection elements since we won't handle image update in edit
-        view.findViewById<Button>(R.id.btnSelectImage)?.visibility = View.GONE
-        view.findViewById<View>(R.id.imagePreview)?.visibility = View.GONE
 
         val prefs = requireContext().getSharedPreferences("bookbud_prefs", 0)
         accessToken = prefs.getString("access_token", null)

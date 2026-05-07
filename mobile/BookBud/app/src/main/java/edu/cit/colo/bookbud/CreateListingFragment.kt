@@ -211,8 +211,8 @@ class CreateListingFragment : Fragment() {
                     description = description.ifEmpty { null },
                     condition = condition,
                     transactionType = selectedTransactionType,
-                    priceRent = priceRent?.toBigDecimal(),
-                    priceSale = priceSale?.toBigDecimal()
+                    priceRent = priceRent,
+                    priceSale = priceSale
                 )
 
                 // Create book
@@ -231,9 +231,10 @@ class CreateListingFragment : Fragment() {
                 // Upload image if selected
                 if (selectedImageUri != null) {
                     try {
+                        val bookId = createdBook.bookId ?: throw Exception("Book ID is null")
                         val inputStream = requireContext().contentResolver.openInputStream(selectedImageUri!!)
                         val imageFile = inputStream?.readBytes() ?: byteArrayOf()
-                        BookApiClient.uploadBookImage(accessToken, createdBook.bookId, imageFile)
+                        BookApiClient.uploadBookImage(accessToken, bookId, imageFile)
                     } catch (e: Exception) {
                         // Image upload failed but book was created - continue
                     }
