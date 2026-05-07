@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import LogoImg from '../../components/imgs/logo.png';
+import { FaHome, FaGlobe, FaListUl, FaFileAlt, FaWallet, FaHeart, FaBell, FaUser, FaSignOutAlt, FaSearch } from 'react-icons/fa';
 
 import bookService from '../../services/bookService';
 import transactionService from '../../services/transactionService';
@@ -30,23 +31,38 @@ import './styles/layout.css';
 import './styles/common.css';
 
 const USER_NAV_ITEMS = [
-  { key: 'dashboard', label: 'Overview', icon: '🏠' },
-  { key: 'browse', label: 'Browse', icon: '🌐' },
-  { key: 'listings', label: 'Listings', icon: '☰' },
-  { key: 'transactions', label: 'My Transactions', icon: '📋' },
-  { key: 'payments', label: 'Earnings & Payments', icon: '💰' },
-  { key: 'wishlist', label: 'Wishlist', icon: '❤️' },
-  { key: 'notifications', label: 'Notifications', icon: '🔔' },
-  { key: 'profile', label: 'My Profile', icon: '👤' },
+  { key: 'dashboard', label: 'Overview', icon: 'FaHome' },
+  { key: 'browse', label: 'Browse', icon: 'FaGlobe' },
+  { key: 'listings', label: 'Listings', icon: 'FaListUl' },
+  { key: 'transactions', label: 'My Transactions', icon: 'FaFileAlt' },
+  { key: 'payments', label: 'Earnings & Payments', icon: 'FaWallet' },
+  { key: 'wishlist', label: 'Wishlist', icon: 'FaHeart' },
+  { key: 'notifications', label: 'Notifications', icon: 'FaBell' },
+  { key: 'profile', label: 'My Profile', icon: 'FaUser' },
 ];
 
 const ADMIN_NAV_ITEMS = [
-  { key: 'admin-dashboard', label: 'Dashboard', icon: '🏠' },
-  { key: 'admin-books', label: 'Book Management', icon: '☰' },
-  { key: 'admin-transactions', label: 'Transactions', icon: '📋' },
-  { key: 'admin-notifications', label: 'Notification Logs', icon: '🔔' },
-  { key: 'admin-users', label: 'User Management', icon: '👤' },
+  { key: 'admin-dashboard', label: 'Dashboard', icon: 'FaHome' },
+  { key: 'admin-books', label: 'Book Management', icon: 'FaListUl' },
+  { key: 'admin-transactions', label: 'Transactions', icon: 'FaFileAlt' },
+  { key: 'admin-notifications', label: 'Notification Logs', icon: 'FaBell' },
+  { key: 'admin-users', label: 'User Management', icon: 'FaUser' },
 ];
+
+  const getIcon = (iconName) => {
+    const iconMap = {
+      FaHome,
+      FaGlobe,
+      FaListUl,
+      FaFileAlt,
+      FaWallet,
+      FaHeart,
+      FaBell,
+      FaUser,
+    };
+    const IconComponent = iconMap[iconName];
+    return IconComponent ? <IconComponent /> : null;
+  };
 
 const toArray = (value) => {
   if (Array.isArray(value)) return value;
@@ -169,6 +185,19 @@ export default function Dashboard() {
     [books, user]
   );
 
+  // Debug logging for data - moved after myListings definition
+  useEffect(() => {
+    if (!user) return;
+    console.log('Dashboard Data Summary:', {
+      userId: user?.userId,
+      username: user?.username,
+      booksCount: books.length,
+      myListingsCount: myListings.length,
+      transactionsCount: transactions.length,
+      wishlistCount: wishlist.length,
+    });
+  }, [books, myListings, transactions, wishlist, user]);
+
   const unreadCount = useMemo(() => notifications.filter((n) => !n.isRead).length, [notifications]);
 
   const onLogout = async () => {
@@ -287,11 +316,32 @@ export default function Dashboard() {
     [loadUserData]
   );
 
+  const onDeleteListing = async (bookId) => {
+    try {
+      await bookService.deleteBook(bookId);
+      setBooks((prev) => prev.filter((book) => book.bookId !== bookId));
+    } catch {
+      // Keep UI stable if API call fails.
+    }
+  };
+
   const onUpdateTransactionStatus = useCallback(
     async (transactionId, status) => {
       const updated = await transactionService.updateTransactionStatus(transactionId, status);
       await loadUserData();
+      // Force refresh all related data
+      window.dispatchEvent(new CustomEvent('refreshPayments'));
+      window.dispatchEvent(new CustomEvent('refreshDashboard'));
       return updated;
+    },
+    [loadUserData]
+  );
+
+  const onSubmitRating = useCallback(
+    async (transactionId, rating) => {
+      const result = await transactionService.submitRating(transactionId, rating);
+      await loadUserData();
+      return result;
     },
     [loadUserData]
   );
@@ -329,10 +379,17 @@ export default function Dashboard() {
             saving={listingSaving}
             onCreateListing={onCreateListing}
             onUpdateListing={onUpdateListing}
+            onDeleteListing={onDeleteListing}
           />
         );
       case 'transactions':
-        return <TransactionsPage transactions={transactions} onUpdateStatus={onUpdateTransactionStatus} />;
+        return (
+          <TransactionsPage
+            transactions={transactions}
+            onUpdateStatus={onUpdateTransactionStatus}
+            onSubmitRating={onSubmitRating}
+          />
+        );
       case 'payments':
         return <PaymentPage transactions={transactions} books={books} />;
       case 'wishlist':
@@ -400,7 +457,7 @@ export default function Dashboard() {
           <nav className="sidebar-nav">
             {navItems.map((item) => (
               <button key={item.key} className={`nav-item ${currentPage === item.key ? 'active' : ''}`} onClick={() => setCurrentPage(item.key)}>
-                <span>{item.icon}</span>
+                <span className="nav-icon">{getIcon(item.icon)}</span>
                 <span>{item.label}</span>
                 {item.key === 'notifications' && unreadCount > 0 ? (
                   <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700 }}>{unreadCount}</span>
@@ -410,17 +467,14 @@ export default function Dashboard() {
           </nav>
           <div className="sidebar-footer">
             <button className="logout-btn" onClick={onLogout}>
-              <span>↪</span>
+              <FaSignOutAlt />
               <span>Logout</span>
             </button>
           </div>
         </aside>
 
         <header className="header">
-          <div className="header-search">
-            <span>🔍</span>
-            <input placeholder="Search for books" value={search} onChange={(e) => setSearch(e.target.value)} />
-          </div>
+          <div></div>
           <div className="header-user">
             <div className="header-avatar">{String(user?.username || 'U').slice(0, 1).toUpperCase()}</div>
             <div>

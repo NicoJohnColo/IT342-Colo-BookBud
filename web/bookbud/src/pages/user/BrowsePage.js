@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import './BrowsePage.css';
 import { resolveBookImageUrl } from '../../utils/bookImage';
 import wishlistService from '../../services/wishlistService';
@@ -8,6 +8,11 @@ const toLower = (value) => String(value || '').toLowerCase();
 
 const isOwnedByCurrentUser = (book, currentUserId) => String(book?.ownerId || '') === String(currentUserId || '');
 const isAvailable = (book) => toLower(book?.status) === 'available';
+const PAYMENT_METHODS = [
+  { value: 'cash', label: 'Cash', apiValue: 'Cash' },
+  { value: 'gcash', label: 'GCash', apiValue: 'GCash' },
+  { value: 'bank_transfer', label: 'Bank Transfer', apiValue: 'Bank Transfer' },
+];
 const availabilityLabel = (book) => {
   const status = toLower(book?.status);
   if (status === 'sold') return 'Purchased';
@@ -25,6 +30,11 @@ const supportsBuy = (book) => {
 
 export default function BrowsePage({ books = [], currentUserId, onCreateTransaction, wishlist = [], onWishlistChange }) {
   const [query, setQuery] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedGenre, setSelectedGenre] = useState('all');
+  const [selectedCondition, setSelectedCondition] = useState('all');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedMode, setSelectedMode] = useState('rent');
   const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -34,6 +44,43 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
   const [modalError, setModalError] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [wishlistLoading, setWishlistLoading] = useState({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bookbud-browse-filters');
+    if (!saved) return;
+    try {
+      const parsed = JSON.parse(saved);
+      setQuery(parsed.query || '');
+      setSelectedType(parsed.selectedType || 'all');
+      setSelectedGenre(parsed.selectedGenre || 'all');
+      setSelectedCondition(parsed.selectedCondition || 'all');
+      setMinPrice(parsed.minPrice || '');
+      setMaxPrice(parsed.maxPrice || '');
+    } catch {
+      // Ignore malformed saved state.
+    }
+  }, []);
+
+  useEffect(() => {
+    const payload = {
+      query,
+      selectedType,
+      selectedGenre,
+      selectedCondition,
+      minPrice,
+      maxPrice,
+    };
+    localStorage.setItem('bookbud-browse-filters', JSON.stringify(payload));
+  }, [maxPrice, minPrice, query, selectedCondition, selectedGenre, selectedType]);
+
+  const clearFilters = () => {
+    setQuery('');
+    setSelectedType('all');
+    setSelectedGenre('all');
+    setSelectedCondition('all');
+    setMinPrice('');
+    setMaxPrice('');
+  };
 
   const isBookInWishlist = useCallback((bookId) => {
     return wishlist.some((item) => item.bookId === bookId || item.book?.bookId === bookId);
@@ -72,10 +119,42 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
   };
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return books;
     const q = query.toLowerCase();
-    return books.filter((b) => [b.title, b.author, b.genre].some((v) => String(v || '').toLowerCase().includes(q)));
-  }, [books, query]);
+    const min = minPrice ? Number(minPrice) : null;
+    const max = maxPrice ? Number(maxPrice) : null;
+
+    return books.filter((book) => {
+      const matchesQuery = !q || [book.title, book.author, book.genre].some((v) => String(v || '').toLowerCase().includes(q));
+      if (!matchesQuery) return false;
+
+      const type = toLower(book?.transactionType);
+      const supportsType =
+        selectedType === 'all' ||
+        (selectedType === 'rent' && (type === 'rent' || type === 'both')) ||
+        (selectedType === 'sale' && (type === 'sale' || type === 'both'));
+      if (!supportsType) return false;
+
+      const matchesGenre = selectedGenre === 'all' || toLower(book?.genre) === selectedGenre;
+      if (!matchesGenre) return false;
+
+      const matchesCondition = selectedCondition === 'all' || toLower(book?.condition) === selectedCondition;
+      if (!matchesCondition) return false;
+
+      const rentPrice = Number(book?.priceRent || 0);
+      const salePrice = Number(book?.priceSale || 0);
+      const availablePrices = [rentPrice, salePrice].filter((value) => value > 0);
+      const priceValue = selectedType === 'rent'
+        ? rentPrice
+        : selectedType === 'sale'
+          ? salePrice
+          : (availablePrices.length ? Math.min(...availablePrices) : 0);
+
+      if (min !== null && priceValue < min) return false;
+      if (max !== null && priceValue > max) return false;
+
+      return true;
+    });
+  }, [books, maxPrice, minPrice, query, selectedCondition, selectedGenre, selectedType]);
 
   const todayIso = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
@@ -139,7 +218,7 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
       await onCreateTransaction?.(payload);
       setFeedback({
         type: 'success',
-        message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted. Please wait for the owner to confirm.`,
+        message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted successfully.`,
       });
       closeModal();
     } catch (error) {
@@ -170,6 +249,75 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
           <span>🔍</span>
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search books" />
         </div>
+      </div>
+
+      <div className="browse-filters">
+        <div className="filter-group">
+          <span className="filter-label">Type</span>
+          {['all', 'rent', 'sale'].map((type) => (
+            <button
+              key={type}
+              type="button"
+              className={`filter-chip ${selectedType === type ? 'active' : ''}`}
+              onClick={() => setSelectedType(type)}
+            >
+              {type === 'all' ? 'All' : type === 'rent' ? 'For Rent' : 'For Sale'}
+            </button>
+          ))}
+        </div>
+
+        <div className="filter-group">
+          <span className="filter-label">Genre</span>
+          {['all', 'fiction', 'fantasy', 'drama', 'mystery', 'thriller', 'biography', 'self-help', 'classic'].map((genre) => (
+            <button
+              key={genre}
+              type="button"
+              className={`filter-chip ${selectedGenre === genre ? 'active' : ''}`}
+              onClick={() => setSelectedGenre(genre)}
+            >
+              {genre === 'all' ? 'All' : genre.replace('-', ' ')}
+            </button>
+          ))}
+        </div>
+
+        <div className="filter-group">
+          <span className="filter-label">Condition</span>
+          {['all', 'new', 'like new', 'good', 'fair', 'poor'].map((condition) => (
+            <button
+              key={condition}
+              type="button"
+              className={`filter-chip ${selectedCondition === condition ? 'active' : ''}`}
+              onClick={() => setSelectedCondition(condition)}
+            >
+              {condition === 'all' ? 'All' : condition}
+            </button>
+          ))}
+        </div>
+
+        <div className="filter-group filter-prices">
+          <span className="filter-label">Price Range</span>
+          <div className="filter-price-inputs">
+            <input
+              type="number"
+              min="0"
+              placeholder="Min"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <span className="filter-range-sep">-</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="Max"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <button type="button" className="filter-clear" onClick={clearFilters}>
+          Clear Filters
+        </button>
       </div>
 
       {feedback ? <div className={`browse-feedback ${feedback.type}`}>{feedback.message}</div> : null}
@@ -311,14 +459,14 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
             <div className="modal-field">
               <label>Payment Method</label>
               <div className="browse-type-toggle">
-                {['cash', 'gcash', 'bank_transfer'].map((method) => (
+                {PAYMENT_METHODS.map((method) => (
                   <button
-                    key={method}
+                    key={method.value}
                     type="button"
-                    className={`type-btn ${paymentMethod === method ? 'active' : ''}`}
-                    onClick={() => setPaymentMethod(method)}
+                    className={`type-btn ${paymentMethod === method.value ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod(method.value)}
                   >
-                    {method === 'bank_transfer' ? 'Bank Transfer' : method.toUpperCase()}
+                    {method.label}
                   </button>
                 ))}
               </div>

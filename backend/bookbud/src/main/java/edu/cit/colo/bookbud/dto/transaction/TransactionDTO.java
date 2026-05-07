@@ -21,7 +21,12 @@ public class TransactionDTO {
     private String ownerUsername;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Double amount;
     private String status;
     private String createdAt;
     private String userRole;
+    private String paymentStatus;
+    private String paymentMethod;
+    private Boolean ownerRated;
+    private Boolean renterRated;
 }
