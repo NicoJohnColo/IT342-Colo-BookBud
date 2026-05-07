@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import bothDieCover from '../../components/imgs/bothdie.png';
 import harryCover from '../../components/imgs/harry.png';
 import neverCover from '../../components/imgs/never.png';
@@ -24,6 +24,12 @@ const supportsBuy = (book) => {
   const type = toLower(book?.transactionType);
   return type === 'sale' || type === 'both';
 };
+
+const PAYMENT_METHODS = [
+  { value: 'cash', label: 'Cash', apiValue: 'Cash' },
+  { value: 'gcash', label: 'GCash', apiValue: 'GCash' },
+  { value: 'bank_transfer', label: 'Bank Transfer', apiValue: 'Bank Transfer' },
+];
 
 const isAvailable = (book) => toLower(book?.status) === 'available';
 const availabilityLabel = (book) => {
@@ -71,24 +77,83 @@ export default function OverviewPage({
   wishlist = [],
   onWishlistChange,
 }) {
+  // State for fetching earnings data from backend
+  const [earnings, setEarnings] = useState(null);
+  const [loadingEarnings, setLoadingEarnings] = useState(true);
+
+  // Fetch earnings summary from backend
+  const fetchEarnings = useCallback(async () => {
+    try {
+      setLoadingEarnings(true);
+      const data = await paymentService.getEarningsSummary();
+      setEarnings(data);
+      console.log('Fetched earnings summary:', data);
+    } catch (error) {
+      console.error('Error fetching earnings:', error);
+      setEarnings(null);
+    } finally {
+      setLoadingEarnings(false);
+    }
+  }, []);
+
+  // Initial load
+  useEffect(() => {
+    fetchEarnings();
+  }, [fetchEarnings]);
+
+  // Listen for refresh events from Dashboard/Transactions
+  useEffect(() => {
+    const handleRefresh = () => {
+      console.log('Refreshing earnings data...');
+      fetchEarnings();
+    };
+    window.addEventListener('refreshPayments', handleRefresh);
+    window.addEventListener('refreshDashboard', handleRefresh);
+    return () => {
+      window.removeEventListener('refreshPayments', handleRefresh);
+      window.removeEventListener('refreshDashboard', handleRefresh);
+    };
+  }, [fetchEarnings]);
+
+  // Refetch earnings when transactions change (e.g., after status update)
+  useEffect(() => {
+    if (transactions.length > 0) {
+      fetchEarnings();
+    }
+  }, [transactions.length, fetchEarnings]);
+
+  // Debug logging for component data
+  useEffect(() => {
+    console.log('OverviewPage Data:', {
+      myListingsCount: myListings.length,
+      transactionsCount: transactions.length,
+      booksCount: books.length,
+      currentUserId: currentUserId,
+      earnings,
+      activeRentals,
+      totalEarned,
+      pendingPayments,
+      successfulPayments,
+    });
+  }, [myListings, transactions, books, earnings]);
+
   const activeRentals = transactions.filter((t) => String(t.status || '').toLowerCase() === 'active').length;
   const soldBooks = myListings.filter((b) => String(b.status || '').toLowerCase() === 'sold').length;
-  const totalEarned = transactions
+  
+  // Use backend earnings data if available, otherwise fallback to transaction-based calculation
+  const totalEarned = earnings?.totalEarnings ?? transactions
     .filter((t) => String(t.status || '').toLowerCase() === 'completed')
-    .reduce((sum, t) => sum + asNumber(t.amount), 0);
+    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
-  // Payment tracking
-  const pendingPayments = useMemo(() => {
-    return transactions.filter(
+  // For pending/successful payments, use earnings data if available, otherwise fallback
+  const pendingPayments = earnings?.pendingPayments ?? transactions.filter(
       (t) => String(t.paymentStatus || t.status || '').toLowerCase() === 'pending'
     ).length;
-  }, [transactions]);
 
-  const successfulPayments = useMemo(() => {
-    return transactions.filter(
-      (t) => String(t.paymentStatus || '').toLowerCase() === 'successful'
+  const successfulPayments = earnings?.successfulPayments ?? transactions.filter(
+      (t) => String(t.paymentStatus || '').toLowerCase() === 'successful' || 
+             String(t.paymentStatus || '').toLowerCase() === 'paid'
     ).length;
-  }, [transactions]);
 
   const featured = books[0];
   const recentListings = books.slice(0, 4);
@@ -237,7 +302,7 @@ export default function OverviewPage({
         <div className="stat-card"><span className="stat-badge active">Active</span><div className="stat-value">{myListings.length}</div><div className="stat-label">My Listings</div></div>
         <div className="stat-card"><span className="stat-badge active">Active</span><div className="stat-value">{activeRentals}</div><div className="stat-label">Active Rentals</div></div>
         <div className="stat-card"><span className="stat-badge active">Active</span><div className="stat-value">{soldBooks}</div><div className="stat-label">Books Sold</div></div>
-        <div className="stat-card highlighted"><span className="stat-badge income">💰</span><div className="stat-value">PHP {totalEarned}</div><div className="stat-label">Total Earned</div></div>
+        <div className="stat-card highlighted"><span className="stat-badge income">💰</span><div className="stat-value">PHP {Number(totalEarned || 0).toFixed(2)}</div><div className="stat-label">Total Earned</div></div>
         <div className="stat-card"><span className="stat-badge pending">⏳</span><div className="stat-value">{pendingPayments}</div><div className="stat-label">Pending Payments</div></div>
         <div className="stat-card"><span className="stat-badge success">✓</span><div className="stat-value">{successfulPayments}</div><div className="stat-label">Successful Payments</div></div>
       </div>
@@ -415,14 +480,14 @@ export default function OverviewPage({
             <div className="modal-field">
               <label>Payment Method</label>
               <div className="browse-type-toggle">
-                {['cash', 'gcash', 'bank_transfer'].map((method) => (
+                {PAYMENT_METHODS.map((method) => (
                   <button
-                    key={method}
+                    key={method.value}
                     type="button"
-                    className={`type-btn ${paymentMethod === method ? 'active' : ''}`}
-                    onClick={() => setPaymentMethod(method)}
+                    className={`type-btn ${paymentMethod === method.value ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod(method.value)}
                   >
-                    {method === 'bank_transfer' ? 'Bank Transfer' : method.toUpperCase()}
+                    {method.label}
                   </button>
                 ))}
               </div>

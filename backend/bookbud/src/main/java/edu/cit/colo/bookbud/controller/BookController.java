@@ -1,5 +1,23 @@
 package edu.cit.colo.bookbud.controller;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import edu.cit.colo.bookbud.dto.ApiResponse;
 import edu.cit.colo.bookbud.dto.PaginatedResponse;
 import edu.cit.colo.bookbud.dto.book.BookDTO;
@@ -10,13 +28,6 @@ import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -91,8 +102,9 @@ public class BookController {
     @GetMapping(value = "/{bookId}/image")
     public ResponseEntity<byte[]> getBookImage(@PathVariable String bookId) {
         BookService.BookImageFile image = bookService.getBookImage(bookId);
+        String contentType = image.contentType() != null ? image.contentType() : MediaType.APPLICATION_OCTET_STREAM_VALUE;
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(image.contentType()))
+                .contentType(MediaType.parseMediaType(contentType))
                 .body(image.content());
     }
 }

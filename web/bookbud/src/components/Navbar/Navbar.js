@@ -47,12 +47,6 @@ const Navbar = ({ onSignInClick }) => {
     return location.hash === target || (target === '#home' && location.pathname === '/' && !location.hash);
   };
 
-  const userInitial = user?.username
-    ? user.username.charAt(0).toUpperCase()
-    : user?.name
-      ? user.name.charAt(0).toUpperCase()
-      : 'U';
-
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
@@ -81,7 +75,17 @@ const Navbar = ({ onSignInClick }) => {
               onClick={() => setDropdownOpen((prev) => !prev)}
               aria-label="User menu"
             >
-              {userInitial}
+              {/* Single-color orange person icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+              </svg>
             </button>
             {dropdownOpen && (
               <div className={styles.dropdown}>

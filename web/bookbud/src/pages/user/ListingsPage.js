@@ -15,7 +15,7 @@ const INITIAL_FORM = {
   priceSale: '',
 };
 
-export default function ListingsPage({ listings = [], onCreateListing, onUpdateListing, saving = false }) {
+export default function ListingsPage({ listings = [], onCreateListing, onUpdateListing, onDeleteListing, saving = false }) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingBook, setEditingBook] = useState(null);
   const [form, setForm] = useState(INITIAL_FORM);
@@ -130,6 +130,15 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
     }
   };
 
+  const handleDelete = async (bookId) => {
+    if (!window.confirm('Delete this listing? This cannot be undone.')) return;
+    try {
+      await onDeleteListing?.(bookId);
+    } catch {
+      setFormError('Could not delete listing. Please try again.');
+    }
+  };
+
   return (
     <div>
       <div className="top-bar">
@@ -156,6 +165,7 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
               <span className={`status-badge ${String(book.status || '').toLowerCase()}`}>{book.status || 'available'}</span>
               <div className="listing-actions">
                 <button className="btn btn-outline btn-sm" onClick={() => openEditModal(book)}>Edit</button>
+                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(book.bookId)}>Delete</button>
               </div>
             </div>
           </div>

@@ -1,21 +1,22 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import './PaymentPage.css';
+import paymentService from '../../services/paymentService';
 
 const PAYMENT_TABS = ['All', 'Pending', 'Successful', 'Failed'];
 
 const getPaymentStatusColor = (status) => {
   if (!status) return 'pending';
   const lower = String(status).toLowerCase();
-  if (lower === 'successful' || lower === 'success' || lower === 'completed') return 'success';
-  if (lower === 'failed' || lower === 'cancelled') return 'failed';
-  if (lower === 'active') return 'success';
+  if (lower === 'paid') return 'success';
+  if (lower === 'failed') return 'failed';
+  if (lower === 'pending') return 'pending';
   return 'pending';
 };
 
 const formatPaymentStatus = (status) => {
   if (!status) return 'PENDING';
   const lower = String(status).toLowerCase();
-  if (lower === 'completed' || lower === 'active') return 'SUCCESSFUL';
+  if (lower === 'paid') return 'SUCCESSFUL';
   return String(status).toUpperCase();
 };
 
@@ -25,110 +26,135 @@ const formatCurrency = (amount) => {
 
 export default function PaymentPage({ transactions = [], books = [] }) {
   const [tab, setTab] = useState('All');
+  const [payments, setPayments] = useState([]);
+  const [earnings, setEarnings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Create a map of books by ID for quick lookup
-  const bookMap = useMemo(() => {
-    const map = {};
-    books.forEach((book) => {
-      map[book.bookId] = book;
-    });
-    return map;
-  }, [books]);
-
-  // Transform transactions into payment records
-  const payments = useMemo(() => {
-    console.log('Transaction data:', transactions); // Debug: see what data we're getting
-    console.log('Books available:', books.length); // Debug
-    
-    return transactions.map((txn) => {
-      // Get the book to find its price
-      const book = bookMap[txn.bookId];
+  // Fetch earnings summary and payments from backend
+  const fetchPaymentData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
       
-      // Determine the price based on transaction type
-      let amount = 0;
-      if (book) {
-        if (String(txn.type || '').toUpperCase() === 'RENT') {
-          amount = book.priceRent || book.rentalPrice || 0;
+      // Fetch earnings summary
+      const summaryData = await paymentService.getEarningsSummary();
+      setEarnings(summaryData || {
+        totalEarnings: 0,
+        pendingPayments: 0,
+        successfulPayments: 0,
+        failedPayments: 0,
+      });
+      
+      // Fetch all payments received by user
+      try {
+        const paymentsData = await paymentService.getPaymentsReceived({ page: 0, size: 100 });
+        if (paymentsData?.content) {
+          setPayments(paymentsData.content);
+        } else if (Array.isArray(paymentsData)) {
+          setPayments(paymentsData);
         } else {
-          amount = book.priceSale || book.salePrice || book.price || 0;
+          setPayments([]);
         }
+      } catch (paymentErr) {
+        console.warn('Could not fetch payments, showing empty list:', paymentErr.message);
+        setPayments([]);
       }
+    } catch (err) {
+      console.error('Error fetching earnings summary:', err);
+      // Still show empty data state instead of error
+      setEarnings({
+        totalEarnings: 0,
+        pendingPayments: 0,
+        successfulPayments: 0,
+        failedPayments: 0,
+      });
+      setPayments([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial load
+  useEffect(() => {
+    fetchPaymentData();
+  }, [fetchPaymentData]);
+
+  // Listen for refresh events from Dashboard
+  useEffect(() => {
+    const handleRefresh = () => {
+      console.log('Refreshing payments data...');
+      fetchPaymentData();
+    };
+    window.addEventListener('refreshPayments', handleRefresh);
+    return () => window.removeEventListener('refreshPayments', handleRefresh);
+  }, [fetchPaymentData]);
+
+  // Transform and enrich payment records with transaction info
+  const enrichedPayments = useMemo(() => {
+    return payments.map((payment) => {
+      // Find corresponding transaction for additional details
+      const txn = transactions.find((t) => t.transactionId === payment.transactionId);
       
-      // Fallback to transaction amount if available
-      amount = amount || txn.amount || txn.transactionAmount || 0;
-      
-      console.log('Transaction amount:', amount, 'Book:', book); // Debug
+      // Use transaction amount, then payment amount, then 0
+      const actualAmount = txn?.amount ?? payment.amount ?? 0;
       
       return {
-        paymentId: txn.transactionId,
-        transactionId: txn.transactionId,
-        amount: Number(amount) || 0,
-        paymentMethod: txn.paymentMethod || txn.method || 'Cash',
-        status: txn.paymentStatus || txn.status || 'pending',
-        paymentDate: txn.paymentDate || txn.updatedAt || txn.createdAt,
-        type: String(txn.type || '').toUpperCase() === 'RENT' ? 'Rental' : 'Purchase',
-        transactionType: txn.type,
-        bookTitle: txn.bookTitle || book?.title || 'Book',
-        otherPartyName: txn.ownerUsername || txn.renterUsername || txn.userName || 'User',
-        createdAt: txn.createdAt,
+        paymentId: payment.paymentId,
+        transactionId: payment.transactionId,
+        amount: Number(actualAmount) || 0,
+        paymentMethod: payment.paymentMethod || 'Cash',
+        status: payment.paymentStatus || 'Pending',
+        paymentDate: payment.paymentDate,
+        bookTitle: txn?.bookTitle || 'Book',
+        otherPartyName: txn?.renterUsername || txn?.buyerUsername || 'User',
+        type: txn?.type === 'RENT' ? 'Rental' : 'Purchase',
+        transactionType: txn?.type || 'SALE',
       };
     });
-  }, [transactions, bookMap]);
+  }, [payments, transactions]);
 
   // Filter payments by tab
   const filtered = useMemo(() => {
-    if (tab === 'All') return payments;
-    return payments.filter((p) => {
+    if (tab === 'All') return enrichedPayments;
+    return enrichedPayments.filter((p) => {
       const status = String(p.status || '').toLowerCase();
       if (tab === 'Pending') return status === 'pending';
-      if (tab === 'Successful') return status === 'completed' || status === 'active' || status === 'successful';
-      if (tab === 'Failed') return status === 'cancelled' || status === 'failed';
+      if (tab === 'Successful') return status === 'paid';
+      if (tab === 'Failed') return status === 'failed';
       return false;
     });
-  }, [payments, tab]);
+  }, [enrichedPayments, tab]);
 
-  // Calculate summaries
-  const totalEarnings = useMemo(
-    () => payments
-      .filter((p) => {
-        const status = String(p.status || '').toLowerCase();
-        return status === 'completed' || status === 'active' || status === 'successful';
-      })
-      .reduce((sum, p) => sum + (p.amount || 0), 0),
-    [payments]
-  );
+  const totalEarnings = earnings?.totalEarnings || 0;
+  const pendingPaymentCount = earnings?.pendingPayments || 0;
+  const successfulPaymentCount = earnings?.successfulPayments || 0;
 
-  const totalPending = useMemo(
-    () => payments
-      .filter((p) => String(p.status || '').toLowerCase() === 'pending')
-      .reduce((sum, p) => sum + (p.amount || 0), 0),
-    [payments]
-  );
-
-  const totalSuccessful = useMemo(
-    () => payments
-      .filter((p) => {
-        const status = String(p.status || '').toLowerCase();
-        return status === 'completed' || status === 'active' || status === 'successful';
-      })
-      .reduce((sum, p) => sum + (p.amount || 0), 0),
-    [payments]
-  );
+  // Handler to mark payment as received (Paid)
+  const handleMarkAsReceived = async (paymentId) => {
+    try {
+      await paymentService.updatePaymentStatus(paymentId, 'Paid');
+      // Refresh payment data after status update
+      const summaryData = await paymentService.getEarningsSummary();
+      setEarnings(summaryData);
+      const paymentsData = await paymentService.getPaymentsReceived({ page: 0, size: 100 });
+      if (paymentsData?.content) {
+        setPayments(paymentsData.content);
+      } else if (Array.isArray(paymentsData)) {
+        setPayments(paymentsData);
+      }
+    } catch (error) {
+      console.error('Error marking payment as received:', error);
+      alert('Failed to confirm payment. Please try again.');
+    }
+  };
 
   const countFor = (name) => {
-    if (name === 'All') return payments.length;
+    if (name === 'All') return enrichedPayments.length;
     const lower = name.toLowerCase();
-    if (lower === 'pending') return payments.filter((p) => String(p.status || '').toLowerCase() === 'pending').length;
-    if (lower === 'successful') return payments.filter((p) => {
-      const status = String(p.status || '').toLowerCase();
-      return status === 'completed' || status === 'active' || status === 'successful';
-    }).length;
-    if (lower === 'failed') {
-      return payments.filter((p) => {
-        const status = String(p.status || '').toLowerCase();
-        return status === 'cancelled' || status === 'failed';
-      }).length;
-    }
+    if (lower === 'pending') return enrichedPayments.filter((p) => String(p.status || '').toLowerCase() === 'pending').length;
+    if (lower === 'successful') return enrichedPayments.filter((p) => String(p.status || '').toLowerCase() === 'paid').length;
+    if (lower === 'failed') return enrichedPayments.filter((p) => String(p.status || '').toLowerCase() === 'failed').length;
     return 0;
   };
 
@@ -147,13 +173,13 @@ export default function PaymentPage({ transactions = [], books = [] }) {
 
         <div className="summary-card warning">
           <div className="summary-label">Pending Payments</div>
-          <div className="summary-value">{formatCurrency(totalPending)}</div>
+          <div className="summary-value">{pendingPaymentCount}</div>
           <div className="summary-description">Awaiting confirmation</div>
         </div>
 
         <div className="summary-card success">
           <div className="summary-label">Confirmed Payments</div>
-          <div className="summary-value">{formatCurrency(totalSuccessful)}</div>
+          <div className="summary-value">{successfulPaymentCount}</div>
           <div className="summary-description">Successfully received</div>
         </div>
       </div>
@@ -161,17 +187,7 @@ export default function PaymentPage({ transactions = [], books = [] }) {
       {/* Tabs */}
       <div className="tabs">
         {PAYMENT_TABS.map((name) => {
-          const count = name === 'All' ? payments.length :
-            name === 'Pending' ? payments.filter((p) => String(p.status || '').toLowerCase() === 'pending').length :
-            name === 'Successful' ? payments.filter((p) => {
-              const status = String(p.status || '').toLowerCase();
-              return status === 'completed' || status === 'active' || status === 'successful';
-            }).length :
-            payments.filter((p) => {
-              const status = String(p.status || '').toLowerCase();
-              return status === 'cancelled' || status === 'failed';
-            }).length;
-          
+          const count = countFor(name);
           return (
             <button key={name} className={`tab ${tab === name ? 'active' : ''}`} onClick={() => setTab(name)}>
               {name} <span className="tab-count">{count}</span>
@@ -181,7 +197,8 @@ export default function PaymentPage({ transactions = [], books = [] }) {
       </div>
 
       {/* Payment List */}
-      {!filtered.length && <div className="empty-state">No payments here.</div>}
+      {loading && <div className="loading-state">Loading payments...</div>}
+      {!loading && !filtered.length && <div className="empty-state">No payments here.</div>}
 
       <div className="payment-list">
         {filtered.map((payment) => (
@@ -189,11 +206,11 @@ export default function PaymentPage({ transactions = [], books = [] }) {
             <div className="payment-header">
               <div className="payment-info">
                 <div className="payment-title">
-                  {payment.transactionType === 'RENT' ? '📦 Book Rental' : '🛒 Book Purchase'}
+                  {payment.type === 'Rental' ? '📦 Book Rental' : '🛒 Book Purchase'}
                 </div>
                 <div className="payment-meta">
                   <span>{payment.bookTitle}</span>
-                  {payment.otherPartyName && <span>From/To: {payment.otherPartyName}</span>}
+                  {payment.otherPartyName && <span>From: {payment.otherPartyName}</span>}
                   {payment.transactionId && <span>TXN: {String(payment.transactionId).slice(0, 8)}...</span>}
                 </div>
               </div>
@@ -208,12 +225,8 @@ export default function PaymentPage({ transactions = [], books = [] }) {
                 <span className="detail-value amount">{formatCurrency(payment.amount)}</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Method:</span>
-                <span className="detail-value">{payment.paymentMethod || 'Not specified'}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Type:</span>
-                <span className="detail-value">{payment.type}</span>
+                <span className="detail-label">Payment Method:</span>
+                <span className="detail-value">{payment.paymentMethod}</span>
               </div>
               {payment.paymentDate && (
                 <div className="detail-row">
@@ -222,6 +235,19 @@ export default function PaymentPage({ transactions = [], books = [] }) {
                 </div>
               )}
             </div>
+
+            {/* Action button for pending payments */}
+            {String(payment.status || '').toLowerCase() === 'pending' && (
+              <div className="payment-actions">
+                <button
+                  className="btn-confirm-payment"
+                  onClick={() => handleMarkAsReceived(payment.paymentId)}
+                >
+                  ✅ Mark as Received
+                </button>
+                <span className="payment-hint">Click to confirm you received this payment</span>
+              </div>
+            )}
           </div>
         ))}
       </div>

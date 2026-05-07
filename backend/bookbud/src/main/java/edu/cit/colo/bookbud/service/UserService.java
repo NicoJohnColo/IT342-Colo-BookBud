@@ -1,5 +1,8 @@
 package edu.cit.colo.bookbud.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.cit.colo.bookbud.dto.user.UpdateUserRequest;
 import edu.cit.colo.bookbud.dto.user.UserProfileDTO;
 import edu.cit.colo.bookbud.entity.Transaction;
@@ -9,8 +12,6 @@ import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.repository.TransactionRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,11 +77,16 @@ public class UserService {
             return true;
         }
         
+        // Check if there's any active transaction between the users (Pending, Active, or Completed)
         return transactionRepository.findByUserUserId(requestingUserId).stream()
                 .anyMatch(t -> t.getOwner().getUserId().equals(userId) && 
-                    t.getStatus() == Transaction.Status.Completed) ||
+                    (t.getStatus() == Transaction.Status.Pending || 
+                     t.getStatus() == Transaction.Status.Active || 
+                     t.getStatus() == Transaction.Status.Completed)) ||
                transactionRepository.findByOwnerUserId(requestingUserId).stream()
                 .anyMatch(t -> t.getUser().getUserId().equals(userId) && 
-                    t.getStatus() == Transaction.Status.Completed);
+                    (t.getStatus() == Transaction.Status.Pending || 
+                     t.getStatus() == Transaction.Status.Active || 
+                     t.getStatus() == Transaction.Status.Completed));
     }
 }

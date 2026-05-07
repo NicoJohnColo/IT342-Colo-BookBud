@@ -1,13 +1,29 @@
 package edu.cit.colo.bookbud.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.payment.*;
+import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.dto.payment.CreatePaymentRequest;
+import edu.cit.colo.bookbud.dto.payment.InitiatePaymentRequest;
+import edu.cit.colo.bookbud.dto.payment.PaymentDTO;
+import edu.cit.colo.bookbud.dto.payment.PaymentInitiateResponse;
+import edu.cit.colo.bookbud.dto.payment.PaymentStatsDTO;
 import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -25,12 +41,64 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success(paymentService.recordPayment(userId, request)));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<PaginatedResponse<PaymentDTO>>> getAllPayments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        return ResponseEntity.ok(ApiResponse.success(paymentService.getAllPaymentsForUser(userId, page, size)));
+    }
+
+    @GetMapping("/{paymentId}")
+    public ResponseEntity<ApiResponse<PaymentDTO>> getPaymentById(
+            @PathVariable String paymentId,
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentById(paymentId, userId)));
+    }
+
+    @GetMapping("/received")
+    public ResponseEntity<ApiResponse<PaginatedResponse<PaymentDTO>>> getPaymentsReceived(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(ApiResponse.error("AUTH-001", "Missing or invalid authorization header", null));
+        }
+        try {
+            String userId = jwtUtil.extractUserId(authHeader.substring(7));
+            return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentsReceivedByUser(userId, page, size)));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(ApiResponse.error("AUTH-002", "Invalid or expired token", null));
+        }
+    }
+
+    @GetMapping("/made")
+    public ResponseEntity<ApiResponse<PaginatedResponse<PaymentDTO>>> getPaymentsMade(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentsMadeByUser(userId, page, size)));
+    }
+
     @GetMapping("/transactions/{transactionId}/payment")
     public ResponseEntity<ApiResponse<PaymentDTO>> getPaymentByTransaction(
             @PathVariable String transactionId,
             @RequestHeader("Authorization") String authHeader) {
         String userId = jwtUtil.extractUserId(authHeader.substring(7));
         return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentByTransaction(transactionId, userId)));
+    }
+
+    @PutMapping("/{paymentId}/status")
+    public ResponseEntity<ApiResponse<PaymentDTO>> updatePaymentStatus(
+            @PathVariable String paymentId,
+            @RequestBody Map<String, String> request,
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        String newStatus = request.get("status");
+        return ResponseEntity.ok(ApiResponse.success(paymentService.updatePaymentStatus(paymentId, userId, newStatus)));
     }
 
     @PostMapping("/initiate")
@@ -46,4 +114,12 @@ public class PaymentController {
         // TODO: Implement PayMongo webhook handling
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<PaymentStatsDTO>> getPaymentStats(
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentStats(userId)));
+    }
 }
+
