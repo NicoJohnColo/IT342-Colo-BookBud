@@ -54,8 +54,7 @@ public class BookController {
 
     @GetMapping("/search-external")
     public ResponseEntity<ApiResponse<List<ExternalBookDTO>>> searchExternalBooks(
-            @RequestParam String q,
-            @RequestHeader("Authorization") String authHeader) {
+            @RequestParam String q) {
         return ResponseEntity.ok(ApiResponse.success(bookService.searchExternalBooks(q)));
     }
 

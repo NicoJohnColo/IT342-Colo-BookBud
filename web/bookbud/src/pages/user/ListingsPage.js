@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import bookService from '../../services/bookService';
 import './ListingsPage.css';
 import { resolveBookImageUrl } from '../../utils/bookImage';
 
@@ -13,6 +14,7 @@ const INITIAL_FORM = {
   transactionType: 'both',
   priceRent: '',
   priceSale: '',
+  isbn: '',
 };
 
 export default function ListingsPage({ listings = [], onCreateListing, onUpdateListing, onDeleteListing, saving = false }) {
@@ -22,6 +24,7 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
   const [formError, setFormError] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [autoFilling, setAutoFilling] = useState(false);
 
   const isEditing = useMemo(() => !!editingBook, [editingBook]);
 
@@ -77,6 +80,31 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
     const reader = new FileReader();
     reader.onload = () => setImagePreview(String(reader.result || ''));
     reader.readAsDataURL(file);
+  };
+
+  const handleAutoFill = async () => {
+    if (!form.isbn || autoFilling) return;
+    
+    setAutoFilling(true);
+    try {
+      const bookData = await bookService.searchExternalBooks(form.isbn);
+      if (bookData && bookData.length > 0) {
+        const book = bookData[0];
+        setForm(prev => ({
+          ...prev,
+          title: book.title || prev.title,
+          author: book.authors?.join(', ') || prev.author,
+          description: book.description || prev.description,
+          genre: book.categories?.[0] || prev.genre,
+        }));
+      } else {
+        setFormError('No book found for this ISBN. Please enter details manually.');
+      }
+    } catch (error) {
+      setFormError('Failed to fetch book details. Please try again.');
+    } finally {
+      setAutoFilling(false);
+    }
   };
 
   const validate = () => {
@@ -185,6 +213,25 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
             <div className="modal-field">
               <label>Author</label>
               <input value={form.author} onChange={(e) => setField('author', e.target.value)} placeholder="Author name" />
+            </div>
+
+            <div className="modal-field">
+              <label>ISBN (optional)</label>
+              <div className="isbn-input-group">
+                <input 
+                  value={form.isbn || ''} 
+                  onChange={(e) => setField('isbn', e.target.value)} 
+                  placeholder="Enter ISBN to auto-fill book details" 
+                />
+                <button 
+                  type="button" 
+                  className="btn btn-outline btn-sm" 
+                  onClick={handleAutoFill}
+                  disabled={!form.isbn || autoFilling}
+                >
+                  {autoFilling ? 'Loading...' : 'Auto-Fill'}
+                </button>
+              </div>
             </div>
 
             <div className="modal-field">

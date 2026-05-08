@@ -89,6 +89,46 @@
                 android:inputType="text"
                 android:layout_marginBottom="16dp" />
 
+            <!-- ISBN Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ISBN (optional)"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/bb_text_dark"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/editISBN"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="Enter ISBN to auto-fill"
+                    android:padding="12dp"
+                    android:background="@color/bb_card_white"
+                    android:textSize="14sp"
+                    android:inputType="text"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnAutoFill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Auto-Fill"
+                    android:textSize="12sp"
+                    android:textColor="@color/bb_text_white"
+                    android:background="@color/bb_primary"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp" />
+            </LinearLayout>
+
             <!-- Genre Field -->
             <TextView
                 android:layout_width="wrap_content"

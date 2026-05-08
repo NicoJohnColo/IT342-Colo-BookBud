@@ -25,6 +25,8 @@ class CreateListingFragment : Fragment() {
 
     private lateinit var editTitle: EditText
     private lateinit var editAuthor: EditText
+    private lateinit var editISBN: EditText
+    private lateinit var btnAutoFill: Button
     private lateinit var spinnerGenre: Spinner
     private lateinit var spinnerCondition: Spinner
     private lateinit var transactionTypeContainer: LinearLayout
@@ -97,6 +99,10 @@ class CreateListingFragment : Fragment() {
 
         btnSubmit.setOnClickListener {
             submitListing()
+        }
+
+        btnAutoFill.setOnClickListener {
+            autoFillBookDetails()
         }
     }
 
@@ -255,13 +261,7 @@ class CreateListingFragment : Fragment() {
         }.start()
     }
 
-    private fun validateForm(
-        title: String,
-        author: String,
-        condition: String,
-        priceRent: String,
-        priceSale: String
-    ): String? {
+    private fun validateForm(title: String, author: String, condition: String, priceRentStr: String, priceSaleStr: String): String? {
         if (title.isEmpty()) return "Title is required"
         if (author.isEmpty()) return "Author is required"
         if (condition.isEmpty()) return "Condition is required"
@@ -269,15 +269,63 @@ class CreateListingFragment : Fragment() {
         val needsRent = selectedTransactionType == "rent" || selectedTransactionType == "both"
         val needsSale = selectedTransactionType == "sale" || selectedTransactionType == "both"
 
-        if (needsRent && (priceRent.isEmpty() || priceRent.toDoubleOrNull() ?: 0.0 <= 0)) {
-            return "Rental price must be greater than 0"
+        if (needsRent && priceRentStr.isEmpty()) return "Rental price is required"
+        if (needsSale && priceSaleStr.isEmpty()) return "Sale price is required"
+
+        if (needsRent) {
+            val rentPrice = priceRentStr.toDoubleOrNull()
+            if (rentPrice == null || rentPrice <= 0.0) return "Rental price must be greater than 0"
         }
 
-        if (needsSale && (priceSale.isEmpty() || priceSale.toDoubleOrNull() ?: 0.0 <= 0)) {
-            return "Sale price must be greater than 0"
+        if (needsSale) {
+            val salePrice = priceSaleStr.toDoubleOrNull()
+            if (salePrice == null || salePrice <= 0.0) return "Sale price must be greater than 0"
         }
 
         return null
+    }
+
+    private fun autoFillBookDetails() {
+        val isbn = editISBN.text.toString().trim()
+        if (isbn.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter ISBN to auto-fill", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Thread {
+            try {
+                val bookData = searchExternalBooks(isbn)
+                requireActivity().runOnUiThread {
+                    if (bookData.isNotEmpty()) {
+                        val book = bookData[0]
+                        editTitle.setText(book.title ?: "")
+                        editAuthor.setText(book.authors?.join(", ") ?: "")
+                        editDescription.setText(book.description ?: "")
+                        // Try to set genre if available
+                        book.categories?.firstOrNull()?.let { genre ->
+                            val genreArray = resources.getStringArray(android.R.array.book_genres)
+                            val genreIndex = genreArray.indexOf(genre)
+                            if (genreIndex >= 0) {
+                                spinnerGenre.setSelection(genreIndex)
+                            }
+                        }
+                        Toast.makeText(requireContext(), "Book details filled successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "No book found for this ISBN", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Failed to fetch book details: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
+    }
+
+    private fun searchExternalBooks(isbn: String): List<Map<String, Any>> {
+        // This would call the backend API for Google Books
+        // For now, return empty list as placeholder
+        return emptyList()
     }
 
     private fun clearForm() {

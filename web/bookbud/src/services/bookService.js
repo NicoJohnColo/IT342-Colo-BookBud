@@ -40,7 +40,7 @@ const bookService = {
 
   searchExternalBooks: async (q) => {
     const response = await api.get('/books/search-external', { params: { q } });
-    return response.data;
+    return response.data?.data || response.data || [];
   },
 };
 
