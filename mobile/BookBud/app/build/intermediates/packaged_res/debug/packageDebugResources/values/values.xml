@@ -18,10 +18,12 @@
     <color name="bb_orange">#F5821E</color>
     <color name="bb_orange_dark">#D4650A</color>
     <color name="bb_orange_light">#FFF0E3</color>
+    <color name="bb_primary">#F5821E</color>
     <color name="bb_success">#22C55E</color>
     <color name="bb_text_dark">#2D2D2D</color>
     <color name="bb_text_light">#FFFFFF</color>
     <color name="bb_text_muted">#9E9E9E</color>
+    <color name="bb_text_white">#FFFFFF</color>
     <color name="bb_warning">#F59E0B</color>
     <color name="color_dark">#2D2D2D</color>
     <color name="color_gray_200">#E4DDD5</color>

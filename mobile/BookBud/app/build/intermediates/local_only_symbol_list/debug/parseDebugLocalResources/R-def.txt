@@ -22,10 +22,12 @@ color bb_nav_unselected
 color bb_orange
 color bb_orange_dark
 color bb_orange_light
+color bb_primary
 color bb_success
 color bb_text_dark
 color bb_text_light
 color bb_text_muted
+color bb_text_white
 color bb_warning
 color bottom_nav_selector
 color color_dark
@@ -125,6 +127,7 @@ id booksRecycler
 id bottomNavigation
 id btnAdminDashboard
 id btnAdminLogout
+id btnAutoFill
 id btnBack
 id btnBan
 id btnCancelTransaction
@@ -152,6 +155,7 @@ id editDescription
 id editEmail
 id editFacebook
 id editForgotEmail
+id editISBN
 id editLoginEmail
 id editLoginPassword
 id editMessenger

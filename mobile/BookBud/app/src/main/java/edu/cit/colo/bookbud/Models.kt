@@ -147,3 +147,16 @@ data class PaginatedResponse<T>(
     val size: Int = 0,
     val totalElements: Long = 0
 )
+
+// External Book API Models
+data class ExternalBookDTO(
+    val title: String? = null,
+    val authors: List<String>? = null,
+    val description: String? = null,
+    val categories: List<String>? = null,
+    val imageLinks: Map<String, String>? = null,
+    val publisher: String? = null,
+    val publishedDate: String? = null,
+    val pageCount: Int? = null,
+    val isbn: String? = null
+)

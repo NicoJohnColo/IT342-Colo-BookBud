@@ -47,4 +47,8 @@
     <color name="color_white">#FFFFFF</color>
     <color name="color_gray_200">#E4DDD5</color>
     <color name="color_gray_400">#9E9E9E</color>
+
+    <!-- Additional aliases for layout compatibility -->
+    <color name="bb_primary">#F5821E</color>
+    <color name="bb_text_white">#FFFFFF</color>
 </resources>
