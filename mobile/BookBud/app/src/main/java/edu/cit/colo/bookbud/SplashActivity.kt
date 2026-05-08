@@ -46,7 +46,12 @@ class SplashActivity : ComponentActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, GetStartedActivity::class.java))
+            val nextActivity = when {
+                TokenManager.isAdmin(this) -> AdminDashboardActivity::class.java
+                TokenManager.isLoggedIn(this) -> DashboardActivity::class.java
+                else -> GetStartedActivity::class.java
+            }
+            startActivity(Intent(this, nextActivity))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 2200L)

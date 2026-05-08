@@ -1,12 +1,23 @@
 package edu.cit.colo.bookbud.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+
 import edu.cit.colo.bookbud.dto.auth.AuthResponse;
+import edu.cit.colo.bookbud.dto.auth.GoogleAuthRequest;
 import edu.cit.colo.bookbud.dto.auth.LoginRequest;
 import edu.cit.colo.bookbud.dto.auth.RefreshTokenRequest;
 import edu.cit.colo.bookbud.dto.auth.RegisterRequest;
@@ -18,16 +29,36 @@ import edu.cit.colo.bookbud.repository.RefreshTokenRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import edu.cit.colo.bookbud.security.JwtUtil;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final GoogleIdTokenVerifier googleIdTokenVerifier;
+
+    @Autowired
+    public AuthService(UserRepository userRepository,
+                       RefreshTokenRepository refreshTokenRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtUtil jwtUtil,
+                       @Value("${app.google.oauth.client-id}") String googleClientId) {
+        this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+
+        try {
+            this.googleIdTokenVerifier = new GoogleIdTokenVerifier.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    JacksonFactory.getDefaultInstance())
+                    .setAudience(java.util.List.of(googleClientId))
+                    .build();
+        } catch (GeneralSecurityException | IOException e) {
+            throw new IllegalStateException("Unable to initialize Google ID token verifier", e);
+        }
+    }
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -78,6 +109,37 @@ public class AuthService {
         return buildAuthResponse(user, accessToken, refreshToken);
     }
 
+    @Transactional
+    public AuthResponse googleAuth(GoogleAuthRequest request) {
+        GoogleIdToken idToken = verifyGoogleToken(request.getIdToken());
+        GoogleIdToken.Payload payload = idToken.getPayload();
+
+        String email = payload.getEmail();
+        if (email == null || email.isBlank()) {
+            throw new AuthenticationException("AUTH-006", "Google account email is missing");
+        }
+
+        User user = userRepository.findByEmail(email)
+                .map(existing -> {
+                    if (!"Active".equals(existing.getAccountStatus())) {
+                        throw new AuthenticationException("AUTH-004", "Account is suspended or banned");
+                    }
+                    return existing;
+                })
+                .orElseGet(() -> userRepository.saveAndFlush(User.builder()
+                        .username(resolveUniqueUsername(payload))
+                        .email(email)
+                        .passwordHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                        .role(User.Role.USER)
+                        .accountStatus("Active")
+                        .build()));
+
+        String accessToken = jwtUtil.generateAccessToken(user.getUserId(), user.getEmail(), user.getRole().name());
+        String refreshToken = createRefreshToken(user);
+
+        return buildAuthResponse(user, accessToken, refreshToken);
+    }
+
     @Transactional(readOnly = true)
     public User getCurrentUser(String token) {
         String userId = jwtUtil.extractUserId(token);
@@ -119,6 +181,60 @@ public class AuthService {
         
         refreshTokenRepository.save(refreshToken);
         return token;
+    }
+
+    private GoogleIdToken verifyGoogleToken(String idTokenString) {
+        try {
+            GoogleIdToken token = googleIdTokenVerifier.verify(idTokenString);
+            if (token == null) {
+                throw new AuthenticationException("AUTH-006", "Invalid Google token");
+            }
+
+            GoogleIdToken.Payload payload = token.getPayload();
+            Object emailVerified = payload.get("email_verified");
+            if (emailVerified instanceof Boolean && !((Boolean) emailVerified)) {
+                throw new AuthenticationException("AUTH-006", "Google email is not verified");
+            }
+
+            return token;
+        } catch (AuthenticationException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AuthenticationException("AUTH-006", "Unable to verify Google sign-in");
+        }
+    }
+
+    private String resolveUniqueUsername(GoogleIdToken.Payload payload) {
+        String baseUsername = sanitizeUsername(resolveDisplayName(payload));
+        if (baseUsername.isBlank()) {
+            baseUsername = sanitizeUsername(payload.getEmail().split("@")[0]);
+        }
+
+        String candidate = baseUsername;
+        int suffix = 1;
+        while (userRepository.existsByUsername(candidate)) {
+            candidate = baseUsername + suffix;
+            suffix++;
+        }
+        return candidate;
+    }
+
+    private String resolveDisplayName(GoogleIdToken.Payload payload) {
+        Object name = payload.get("name");
+        if (name instanceof String && !((String) name).isBlank()) {
+            return (String) name;
+        }
+
+        Object givenName = payload.get("given_name");
+        if (givenName instanceof String && !((String) givenName).isBlank()) {
+            return (String) givenName;
+        }
+
+        return payload.getEmail() != null ? payload.getEmail().split("@")[0] : "bookbud-user";
+    }
+
+    private String sanitizeUsername(String value) {
+        return value == null ? "" : value.toLowerCase().replaceAll("[^a-z0-9]+", "");
     }
 
     private AuthResponse buildAuthResponse(User user, String accessToken, String refreshToken) {

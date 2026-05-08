@@ -62,7 +62,12 @@ object TokenManager {
     }
 
     fun isAdmin(context: Context): Boolean {
-        return getRole(context)?.equals("ADMIN", ignoreCase = true) == true
+        val normalized = getRole(context)
+            ?.trim()
+            ?.uppercase()
+            ?.removePrefix("ROLE_")
+
+        return normalized == "ADMIN"
     }
 }
 

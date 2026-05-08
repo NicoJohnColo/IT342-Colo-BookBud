@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../context/AuthContext';
+import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
 import './Auth.css';
 
 const AUTH_FEATURES = [
@@ -12,7 +13,7 @@ const AUTH_FEATURES = [
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { register, loading, error, clearError } = useAuth();
+  const { register, googleAuth, loading, error, clearError } = useAuth();
 
   const [form, setForm] = useState({
     username: '',
@@ -62,6 +63,16 @@ const RegisterPage = () => {
       setTimeout(() => navigate('/login'), 1500);
     } catch {
       /* error handled by context */
+    }
+  };
+
+  const handleGoogleSuccess = async (idToken) => {
+    try {
+      await googleAuth({ idToken });
+      setSuccessMsg('Google account connected! Redirecting...');
+      setTimeout(() => navigate('/dashboard'), 1000);
+    } catch {
+      /* handled by context */
     }
   };
 
@@ -157,6 +168,9 @@ const RegisterPage = () => {
               {loading ? 'Creating account...' : <>CREATE &nbsp;→</>}
             </button>
           </form>
+
+          <div className="auth-divider">or</div>
+          <GoogleAuthButton onSuccess={handleGoogleSuccess} text="signup_with" label="Sign up with Google" />
 
           <p className="auth-footer-text">
             Already have an account?&nbsp;<Link to="/login">Sign in</Link>

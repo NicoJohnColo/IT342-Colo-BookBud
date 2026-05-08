@@ -190,8 +190,8 @@
   position: relative;
   background: #fff;
   border-radius: 20px;
-  padding: 44px 40px;
-  width: 520px;
+  padding: 48px 44px;
+  width: min(640px, calc(100vw - 48px));
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
@@ -352,7 +352,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 14px;
+  margin: 18px 0 14px;
 }
 
 .auth-divider::before,

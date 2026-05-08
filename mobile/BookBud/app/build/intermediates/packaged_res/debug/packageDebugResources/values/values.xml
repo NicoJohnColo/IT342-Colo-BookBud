@@ -58,6 +58,7 @@
     <string name="forgot_password_description">Enter your email and we\'ll send you a reset link</string>
     <string name="get_started_image_description">Stack of books with plant decoration</string>
     <string name="good_morning">Good morning ☀️</string>
+    <string name="google_web_client_id">219267074951-l7rubl8hm9v4edpfcakd0sbrhl485sag.apps.googleusercontent.com</string>
     <string name="have_account_login">Already have an account?</string>
     <string name="login">Login</string>
     <string name="no_account_register">Don\'t have an account?</string>

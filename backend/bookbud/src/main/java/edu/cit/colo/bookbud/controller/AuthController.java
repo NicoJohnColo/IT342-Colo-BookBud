@@ -1,14 +1,25 @@
 package edu.cit.colo.bookbud.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.auth.*;
+import edu.cit.colo.bookbud.dto.auth.AuthResponse;
+import edu.cit.colo.bookbud.dto.auth.ForgotPasswordRequest;
+import edu.cit.colo.bookbud.dto.auth.GoogleAuthRequest;
+import edu.cit.colo.bookbud.dto.auth.LoginRequest;
+import edu.cit.colo.bookbud.dto.auth.RefreshTokenRequest;
+import edu.cit.colo.bookbud.dto.auth.RegisterRequest;
 import edu.cit.colo.bookbud.entity.User;
 import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,6 +37,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse<AuthResponse>> googleAuth(@Valid @RequestBody GoogleAuthRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.googleAuth(request)));
     }
 
     @PostMapping("/forgot-password")

@@ -63,7 +63,7 @@ class TransactionAdapter(
             }
 
             val btn2 = Button(itemView.context).apply {
-                text = "Details"
+                text = "Contact Info"
                 setOnClickListener { onActionClick(txn, 1) }
             }
             actionsContainer.addView(btn2)
@@ -119,12 +119,19 @@ class BookAdapter(
 
             // Show edit/delete buttons if callbacks are provided
             if (onEditClick != null || onDeleteClick != null) {
-                wishlistIcon.visibility = View.GONE
-                // Long press for edit, double tap for delete - or we can add buttons
+                wishlistIcon.visibility = View.VISIBLE
+                wishlistIcon.text = "⋮"
+                wishlistIcon.setOnClickListener {
+                    showBookActions(book)
+                }
                 itemView.setOnLongClickListener {
                     showBookActions(book)
                     true
                 }
+            } else {
+                wishlistIcon.text = "♡"
+                wishlistIcon.setOnClickListener(null)
+                itemView.setOnLongClickListener(null)
             }
 
             itemView.setOnClickListener { onBookClick(book) }

@@ -8,10 +8,69 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 
 class LoginActivity : ComponentActivity() {
 
     private var isPasswordVisible = false
+    private lateinit var googleSignInButton: Button
+    private lateinit var googleSignInClient: com.google.android.gms.auth.api.signin.GoogleSignInClient
+
+    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data = result.data ?: return@registerForActivityResult
+        try {
+            val accountTask = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = accountTask.getResult(ApiException::class.java)
+            val idToken = account.idToken
+            
+            if (idToken.isNullOrBlank()) {
+                Toast.makeText(this, "Unable to get Google token", Toast.LENGTH_LONG).show()
+                println("Google Auth Error: idToken is null or blank")
+                return@registerForActivityResult
+            }
+
+            println("Google Auth: Got idToken successfully")
+
+            googleSignInButton.isEnabled = false
+            findViewById<ProgressBar>(R.id.progressLogin).visibility = View.VISIBLE
+
+            Thread {
+                try {
+                    val resultAuth = AuthApiClient.googleAuth(idToken)
+                    runOnUiThread {
+                        findViewById<ProgressBar>(R.id.progressLogin).visibility = View.GONE
+                        googleSignInButton.isEnabled = true
+                        handleAuthResult(resultAuth)
+                    }
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        findViewById<ProgressBar>(R.id.progressLogin).visibility = View.GONE
+                        googleSignInButton.isEnabled = true
+                        Toast.makeText(this, "Auth request failed: ${e.message}", Toast.LENGTH_LONG).show()
+                        println("Google Auth API Error: ${e.message}")
+                    }
+                }
+            }.start()
+        } catch (e: ApiException) {
+            val errorMessage = when (e.statusCode) {
+                10 -> "Google sign-in failed. Please try email/password login."
+                12501 -> "Google Play Services not available or outdated."
+                12502 -> "Google Play Services missing on device."
+                else -> "Google sign-in failed: ${e.message}"
+            }
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+            println("Google Sign-In API Exception: Status=${e.statusCode}, Message=${e.message}")
+            e.printStackTrace()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Unexpected error during Google sign-in: ${e.message}", Toast.LENGTH_LONG).show()
+            println("Google Sign-In Unexpected Exception: ${e.message}")
+            e.printStackTrace()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +81,15 @@ class LoginActivity : ComponentActivity() {
         val togglePassword: ImageView = findViewById(R.id.toggleLoginPassword)
         val progress: ProgressBar = findViewById(R.id.progressLogin)
         val buttonLogin: Button = findViewById(R.id.buttonLogin)
+        googleSignInButton = findViewById(R.id.buttonGoogleLogin)
         val textNoAccount: TextView = findViewById(R.id.textNoAccount)
         val textForgotPassword: TextView = findViewById(R.id.textForgotPassword)
+
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
         // Password toggle
         togglePassword.setOnClickListener {
@@ -82,13 +148,24 @@ class LoginActivity : ComponentActivity() {
                     buttonLogin.isEnabled = true
                     when (result) {
                         is AuthResult.Success -> {
-                            val prefs = getSharedPreferences("bookbud_prefs", MODE_PRIVATE)
-                            prefs.edit()
-                                .putString("access_token", result.accessToken)
-                                .putString("refresh_token", result.refreshToken)
-                                .putString("username", result.username)
-                                .putString("user_id", result.userId)
-                                .apply()
+                            if (!result.accessToken.isNullOrBlank() && !result.refreshToken.isNullOrBlank()) {
+                                TokenManager.saveTokens(this, result.accessToken, result.refreshToken)
+                            }
+
+                            if (!result.userId.isNullOrBlank()) {
+                                TokenManager.saveUser(
+                                    context = this,
+                                    userId = result.userId,
+                                    username = result.username ?: "",
+                                    email = "",
+                                    role = result.role ?: ""
+                                )
+                            } else {
+                                val prefs = getSharedPreferences("bookbud_prefs", MODE_PRIVATE)
+                                prefs.edit().putString("role", result.role ?: "").apply()
+                            }
+
+                            // Always navigate to DashboardActivity, admin access shown in ProfileFragment
                             startActivity(Intent(this, DashboardActivity::class.java))
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                             finish()
@@ -97,6 +174,55 @@ class LoginActivity : ComponentActivity() {
                     }
                 }
             }.start()
+        }
+
+        googleSignInButton.setOnClickListener {
+            googleSignInButton.isEnabled = false
+            googleSignInLauncher.launch(googleSignInClient.signInIntent)
+        }
+        
+        // Test backend connection on app start
+        Thread {
+            val backendConnected = TestConnection.testBackendConnection()
+            val googleEndpointExists = TestConnection.testGoogleAuthEndpoint()
+            runOnUiThread {
+                println("Backend Connection Test: $backendConnected")
+                println("Google Auth Endpoint Test: $googleEndpointExists")
+                
+                if (!backendConnected) {
+                    Toast.makeText(this, "Backend server not accessible. Check your connection.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }.start()
+    }
+
+    
+    private fun handleAuthResult(result: AuthResult) {
+        when (result) {
+            is AuthResult.Success -> {
+                if (!result.accessToken.isNullOrBlank() && !result.refreshToken.isNullOrBlank()) {
+                    TokenManager.saveTokens(this, result.accessToken, result.refreshToken)
+                }
+
+                if (!result.userId.isNullOrBlank()) {
+                    TokenManager.saveUser(
+                        context = this,
+                        userId = result.userId,
+                        username = result.username ?: "",
+                        email = "",
+                        role = result.role ?: ""
+                    )
+                } else {
+                    val prefs = getSharedPreferences("bookbud_prefs", MODE_PRIVATE)
+                    prefs.edit().putString("role", result.role ?: "").apply()
+                }
+
+                // Always navigate to DashboardActivity, admin access shown in ProfileFragment
+                startActivity(Intent(this, DashboardActivity::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            }
+            is AuthResult.Error -> Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -22,6 +22,17 @@ const authService = {
     return response.data;
   },
 
+  googleAuth: async ({ idToken }) => {
+    const response = await api.post('/auth/google', { idToken });
+    const { data } = response.data;
+    if (data) {
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
+    return response.data;
+  },
+
   forgotPassword: async ({ email }) => {
     const response = await api.post('/auth/forgot-password', { email });
     return response.data;

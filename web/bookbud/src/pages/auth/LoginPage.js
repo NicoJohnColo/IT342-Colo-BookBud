@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../context/AuthContext';
+import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
 import './Auth.css';
 
 const AUTH_FEATURES = [
@@ -12,7 +13,7 @@ const AUTH_FEATURES = [
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, loading, error, clearError } = useAuth();
+  const { login, googleAuth, loading, error, clearError } = useAuth();
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [formErrors, setFormErrors] = useState({});
@@ -43,6 +44,16 @@ const LoginPage = () => {
       setTimeout(() => navigate('/dashboard'), 1000);
     } catch {
       /* error handled by context */
+    }
+  };
+
+  const handleGoogleSuccess = async (idToken) => {
+    try {
+      await googleAuth({ idToken });
+      setSuccessMsg('Google sign-in successful! Redirecting...');
+      setTimeout(() => navigate('/dashboard'), 1000);
+    } catch {
+      /* handled by context */
     }
   };
 
@@ -94,6 +105,9 @@ const LoginPage = () => {
               {loading ? 'Signing in...' : <>SIGN IN &nbsp;→</>}
             </button>
           </form>
+
+          <div className="auth-divider">or</div>
+          <GoogleAuthButton onSuccess={handleGoogleSuccess} label="Sign in with Google" />
 
           <p className="auth-footer-text">
             I don't have an account ?&nbsp;<Link to="/register">Sign up</Link>

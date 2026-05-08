@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "edu.cit.colo.bookbud.app-mergeDebugResources-33:/values-night-v8/values-night-v8.xml",
+            "outputFile": "edu.cit.colo.bookbud.app-mergeDebugResources-35:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\7e85ceb9853d74c486dbd5be5e729523\\transformed\\material-1.12.0\\res\\values-night-v8\\values-night-v8.xml",

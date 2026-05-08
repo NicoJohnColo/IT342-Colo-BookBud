@@ -107,7 +107,7 @@ const Navbar = ({ onSignInClick }) => {
             {onSignInClick ? (
               <button className={styles.signInButton} onClick={onSignInClick}>Sign in</button>
             ) : (
-              <Link to="/" className={styles.signInButton}>Sign in</Link>
+              <Link to="/login" className={styles.signInButton}>Sign in</Link>
             )}
           </div>
         )}

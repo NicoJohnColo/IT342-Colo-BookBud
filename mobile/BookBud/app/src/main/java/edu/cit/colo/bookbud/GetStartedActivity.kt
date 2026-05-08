@@ -61,7 +61,7 @@ class GetStartedActivity : ComponentActivity() {
                 .setDuration(80)
                 .withEndAction {
                     it.animate().scaleX(1f).scaleY(1f).setDuration(80).withEndAction {
-                        startActivity(Intent(this, RegisterActivity::class.java))
+                        startActivity(Intent(this, LoginActivity::class.java))
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()
                     }.start()
