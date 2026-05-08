@@ -270,9 +270,81 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<ExternalBookDTO> searchExternalBooks(String query) {
-        // TODO: Implement Google Books API integration
-        // For now, return empty list or mock data
-        return List.of();
+        try {
+            // Google Books API endpoint
+            String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=5";
+            
+            // Make HTTP request to Google Books API
+            java.net.URL url = new java.net.URL(apiUrl);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "BookBud/1.0");
+            
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                // Read response
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(connection.getInputStream())
+                );
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+                
+                // Parse JSON response
+                return parseGoogleBooksResponse(response.toString());
+            } else {
+                System.err.println("Google Books API error: " + responseCode);
+                return List.of();
+            }
+        } catch (Exception e) {
+            System.err.println("Error calling Google Books API: " + e.getMessage());
+            return List.of();
+        }
+    }
+    
+    private List<ExternalBookDTO> parseGoogleBooksResponse(String jsonResponse) {
+        List<ExternalBookDTO> books = new ArrayList<>();
+        try {
+            // Simple JSON parsing (you might want to use a proper JSON library)
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(jsonResponse);
+            
+            if (root.has("items")) {
+                for (com.fasterxml.jackson.databind.JsonNode item : root.get("items")) {
+                    com.fasterxml.jackson.databind.JsonNode volumeInfo = item.get("volumeInfo");
+                    
+                    String title = volumeInfo.has("title") ? volumeInfo.get("title").asText() : "";
+                    List<String> authors = new ArrayList<>();
+                    if (volumeInfo.has("authors")) {
+                        for (com.fasterxml.jackson.databind.JsonNode author : volumeInfo.get("authors")) {
+                            authors.add(author.asText());
+                        }
+                    }
+                    String description = volumeInfo.has("description") ? volumeInfo.get("description").asText() : "";
+                    List<String> categories = new ArrayList<>();
+                    if (volumeInfo.has("categories")) {
+                        for (com.fasterxml.jackson.databind.JsonNode category : volumeInfo.get("categories")) {
+                            categories.add(category.asText());
+                        }
+                    }
+                    
+                    ExternalBookDTO book = ExternalBookDTO.builder()
+                        .title(title)
+                        .authors(authors)
+                        .description(description)
+                        .categories(categories)
+                        .build();
+                    
+                    books.add(book);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error parsing Google Books response: " + e.getMessage());
+        }
+        return books;
     }
 
     private BookDTO mapToDTO(Book book) {
@@ -281,7 +353,7 @@ public class BookService {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .genre(book.getGenre())
-            .description(book.getDescription())
+                .description(book.getDescription())
                 .imageUrl(buildImageUrl(book))
                 .condition(book.getCondition() != null ? book.getCondition().name() : null)
                 .priceRent(book.getPriceRent())
