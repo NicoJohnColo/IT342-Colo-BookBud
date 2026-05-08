@@ -18,6 +18,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.net.HttpURLConnection
+import java.net.URL
 import androidx.fragment.app.Fragment
 import java.io.InputStream
 
@@ -71,6 +75,8 @@ class CreateListingFragment : Fragment() {
 
         editTitle = view.findViewById(R.id.editTitle)
         editAuthor = view.findViewById(R.id.editAuthor)
+        editISBN = view.findViewById(R.id.editISBN)
+        btnAutoFill = view.findViewById(R.id.btnAutoFill)
         spinnerGenre = view.findViewById(R.id.spinnerGenre)
         spinnerCondition = view.findViewById(R.id.spinnerCondition)
         transactionTypeContainer = view.findViewById(R.id.transactionTypeContainer)
@@ -299,14 +305,18 @@ class CreateListingFragment : Fragment() {
                     if (bookData.isNotEmpty()) {
                         val book = bookData[0]
                         editTitle.setText(book.title ?: "")
-                        editAuthor.setText(book.authors?.join(", ") ?: "")
+                        editAuthor.setText(book.authors?.joinToString(", ") ?: "")
                         editDescription.setText(book.description ?: "")
                         // Try to set genre if available
                         book.categories?.firstOrNull()?.let { genre ->
-                            val genreArray = resources.getStringArray(android.R.array.book_genres)
-                            val genreIndex = genreArray.indexOf(genre)
-                            if (genreIndex >= 0) {
-                                spinnerGenre.setSelection(genreIndex)
+                            val adapter = spinnerGenre.adapter
+                            if (adapter != null) {
+                                for (i in 0 until adapter.count) {
+                                    if (adapter.getItem(i).toString().equals(genre, ignoreCase = true)) {
+                                        spinnerGenre.setSelection(i)
+                                        break
+                                    }
+                                }
                             }
                         }
                         Toast.makeText(requireContext(), "Book details filled successfully", Toast.LENGTH_SHORT).show()
@@ -320,12 +330,31 @@ class CreateListingFragment : Fragment() {
                 }
             }
         }.start()
-    }
+    }9780451524935
 
-    private fun searchExternalBooks(isbn: String): List<Map<String, Any>> {
-        // This would call the backend API for Google Books
-        // For now, return empty list as placeholder
-        return emptyList()
+    private fun searchExternalBooks(isbn: String): List<ExternalBookDTO> {
+        return try {
+            // Call the backend API for Google Books
+            val url = URL("http://10.0.2.2:8080/api/v1/books/search-external?q=$isbn")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.setRequestProperty("Content-Type", "application/json")
+            
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().readText()
+                // Parse the JSON response
+                val gson = Gson()
+                val responseType = object : TypeToken<ApiResponse<List<ExternalBookDTO>>>() {}.type
+                val apiResponse = gson.fromJson(response, responseType) as ApiResponse<List<ExternalBookDTO>>
+                apiResponse.data ?: emptyList()
+            } else {
+                emptyList()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
     }
 
     private fun clearForm() {
