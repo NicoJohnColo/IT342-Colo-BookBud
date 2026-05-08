@@ -41,12 +41,14 @@
   font-weight: 800;
   color: #f97316;
   margin-bottom: 6px;
+  text-align: center;
 }
 
 .auth-card .auth-subtitle {
   font-size: 14px;
   color: #6b7280;
   margin-bottom: 28px;
+  text-align: center;
 }
 
 .form-group {
@@ -178,6 +180,31 @@
   background: #dcfce7;
   color: #166534;
   border: 1px solid #86efac;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.google-auth-wrap {
+  width: 100%;
+  margin-bottom: 14px;
 }
 
 .checkbox-group {

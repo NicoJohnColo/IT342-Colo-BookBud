@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
@@ -42,11 +41,6 @@ class AdminDashboardFragment : Fragment() {
 
         val prefs = requireContext().getSharedPreferences("bookbud_prefs", 0)
         accessToken = prefs.getString("access_token", null)
-
-        // Back button
-        view.findViewById<ImageButton>(R.id.btnBack)?.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
 
         // Logout button
         view.findViewById<Button>(R.id.btnAdminLogout)?.setOnClickListener {
@@ -161,7 +155,7 @@ class AdminDashboardFragment : Fragment() {
             subtitle = "All books • Set unavailable • Delete",
             onClick = {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminBookFragment())
+                    .replace(R.id.adminFragmentContainer, AdminBookFragment())
                     .addToBackStack(null)
                     .commit()
             }
@@ -174,7 +168,7 @@ class AdminDashboardFragment : Fragment() {
             subtitle = "All users • Suspend • Ban",
             onClick = {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminUserFragment())
+                    .replace(R.id.adminFragmentContainer, AdminUserFragment())
                     .addToBackStack(null)
                     .commit()
             }
@@ -187,7 +181,7 @@ class AdminDashboardFragment : Fragment() {
             subtitle = "All transactions • Cancel",
             onClick = {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminTransactionFragment())
+                    .replace(R.id.adminFragmentContainer, AdminTransactionFragment())
                     .addToBackStack(null)
                     .commit()
             }
@@ -200,7 +194,7 @@ class AdminDashboardFragment : Fragment() {
             subtitle = "All notifications",
             onClick = {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, AdminNotificationFragment())
+                    .replace(R.id.adminFragmentContainer, AdminNotificationFragment())
                     .addToBackStack(null)
                     .commit()
             }

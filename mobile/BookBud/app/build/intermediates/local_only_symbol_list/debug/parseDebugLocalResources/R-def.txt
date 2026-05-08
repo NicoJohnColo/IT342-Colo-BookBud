@@ -69,6 +69,7 @@ drawable bg_button_secondary
 drawable bg_earnings_card
 drawable bg_forgot_card
 drawable bg_genre_chip
+drawable bg_google_button
 drawable bg_info_banner
 drawable bg_input
 drawable bg_input_field
@@ -93,6 +94,7 @@ drawable ic_arrow_back
 drawable ic_edit
 drawable ic_eye_off
 drawable ic_eye_on
+drawable ic_google_logo
 drawable ic_nav_chats
 drawable ic_nav_explore
 drawable ic_nav_home
@@ -102,8 +104,15 @@ drawable ic_nav_profile
 drawable login_forget_bg
 drawable logo
 drawable register_bg
+id adminBottomNavigation
 id adminDashboardScroll
+id adminFragmentContainer
 id adminStatsContainer
+id admin_nav_books
+id admin_nav_dashboard
+id admin_nav_notifications
+id admin_nav_transactions
+id admin_nav_users
 id avatarInitial
 id bookAuthor
 id bookAvatar
@@ -130,6 +139,8 @@ id btnSelectImage
 id btnSubmit
 id btnSuspend
 id btnUnavailable
+id buttonGoogleLogin
+id buttonGoogleRegister
 id buttonLogin
 id buttonRegister
 id buttonSendReset
@@ -255,8 +266,6 @@ id textAdminDate
 id textBackToLogin
 id textEarningsSubtitle
 id textEarningsTitle
-id textEditListingSubtitle
-id textEditListingTitle
 id textEmailLabel
 id textFacebookUrl
 id textForgotDescription
@@ -307,6 +316,7 @@ id userStatus
 id userUsername
 id usersRecycler
 id wishlistRecycler
+layout activity_admin_dashboard
 layout activity_dashboard
 layout activity_dashboard_new
 layout activity_forgot_password
@@ -337,6 +347,7 @@ layout item_admin_user
 layout item_book
 layout item_notification
 layout item_transaction
+menu admin_bottom_navigation_menu
 menu bottom_nav_menu
 menu bottom_navigation_menu
 string app_name
@@ -347,6 +358,7 @@ string forgot_password
 string forgot_password_description
 string get_started_image_description
 string good_morning
+string google_web_client_id
 string have_account_login
 string login
 string no_account_register

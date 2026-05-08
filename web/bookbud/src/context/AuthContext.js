@@ -28,6 +28,22 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const googleAuth = useCallback(async (payload) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await authService.googleAuth(payload);
+      setUser(res.data.user);
+      return res;
+    } catch (err) {
+      const msg = err.response?.data?.error?.message || err.response?.data?.message || 'Google sign-in failed.';
+      setError(msg);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const login = useCallback(async (credentials) => {
     setLoading(true);
     setError(null);
@@ -72,7 +88,7 @@ export const AuthProvider = ({ children }) => {
   const clearError = useCallback(() => setError(null), []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, register, login, logout, forgotPassword, clearError, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, loading, error, register, login, googleAuth, logout, forgotPassword, clearError, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

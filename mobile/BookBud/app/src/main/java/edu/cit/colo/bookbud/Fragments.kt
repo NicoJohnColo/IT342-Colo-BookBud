@@ -704,6 +704,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun displayProfile(user: UserProfileDTO) {
+        user.role?.takeIf { it.isNotBlank() }?.let { role ->
+            requireContext().getSharedPreferences("bookbud_prefs", 0)
+                .edit()
+                .putString("role", role)
+                .apply()
+        }
+
+        if (TokenManager.isAdmin(requireContext())) {
+            btnAdminDashboard.visibility = View.VISIBLE
+            btnAdminDashboard.setOnClickListener {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, AdminDashboardFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        } else {
+            btnAdminDashboard.visibility = View.GONE
+        }
+
         // Update header
         avatarInitial.text = user.username?.take(1)?.uppercase() ?: "U"
         textProfileUsername.text = user.username ?: "User"

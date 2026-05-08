@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { useAuth } from '../../context/AuthContext';
+import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
 import './LandingPage.css';
 
 import { validateEmail } from '../../utils/validators';
@@ -81,7 +82,7 @@ const LandingPage = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'register' | 'forgot'
 
-  const { login, register, forgotPassword, loading, error, clearError } = useAuth();
+  const { login, register, googleAuth, forgotPassword, loading, error, clearError } = useAuth();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({});
 
@@ -205,6 +206,17 @@ const LandingPage = () => {
       setRegisterErrors({});
     } catch {
       /* error handled by context */
+    }
+  };
+
+  const handleGoogleSuccess = async (idToken) => {
+    try {
+      await googleAuth({ idToken });
+      setAuthSuccess('Google sign-in successful! Redirecting...');
+      setShowLogin(false);
+      setTimeout(() => navigate('/dashboard'), 1000);
+    } catch {
+      /* handled by context */
     }
   };
 
@@ -512,6 +524,17 @@ const LandingPage = () => {
                     {loading ? 'Creating account...' : <><span>Create</span><span className="auth-arrow">→</span></>}
                   </button>
                 </form>
+              )}
+
+              {(authMode === 'login' || authMode === 'register') && (
+                <>
+                  <div className="auth-divider">or</div>
+                  <GoogleAuthButton
+                    onSuccess={handleGoogleSuccess}
+                    text={authMode === 'login' ? 'signin_with' : 'signup_with'}
+                    label={authMode === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
+                  />
+                </>
               )}
 
               {authMode === 'forgot' && (
