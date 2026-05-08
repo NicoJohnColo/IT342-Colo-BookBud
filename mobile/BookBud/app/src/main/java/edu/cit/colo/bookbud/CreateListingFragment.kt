@@ -330,7 +330,7 @@ class CreateListingFragment : Fragment() {
                 }
             }
         }.start()
-    }9780451524935
+    }
 
     private fun searchExternalBooks(isbn: String): List<ExternalBookDTO> {
         return try {
