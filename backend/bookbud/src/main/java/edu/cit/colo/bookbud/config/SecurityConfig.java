@@ -18,8 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import edu.cit.colo.bookbud.security.JwtAuthenticationFilter;
-
+import edu.cit.colo.bookbud.features.users.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
