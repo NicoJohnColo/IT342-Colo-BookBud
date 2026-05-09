@@ -430,7 +430,7 @@ public class TransactionService {
                     new java.math.BigDecimal(transaction.getAmount()) : java.math.BigDecimal.ZERO)
                 .paymentMethod(Payment.PaymentMethod.Cash)
                 .paymentDate(java.time.LocalDate.now())
-                .paymentStatus(Payment.PaymentStatus.Pending)
+                .paymentStatus(Payment.PaymentStatus.Paid)
                 .build();
 
         try {
@@ -442,7 +442,7 @@ public class TransactionService {
             return;
         }
 
-        // Notify owner about the pending payment (with null-check for book and owner)
+        // Notify owner about the paid payment (with null-check for book and owner)
         try {
             String bookTitle = (transaction.getBook() != null && transaction.getBook().getTitle() != null)
                 ? transaction.getBook().getTitle()
@@ -451,7 +451,7 @@ public class TransactionService {
             if (owner != null && owner.getUserId() != null) {
                 notificationService.createNotification(
                     owner.getUserId(),
-                    "Payment recorded for completed transaction: " + bookTitle
+                    "Payment received for completed transaction: " + bookTitle
                 );
             }
         } catch (Exception e) {

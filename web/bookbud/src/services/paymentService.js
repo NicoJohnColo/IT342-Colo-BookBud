@@ -4,7 +4,7 @@ const paymentService = {
   // Get all payments for the current user (as payer and receiver)
   getMyPayments: async (params = {}) => {
     try {
-      const response = await api.get('/payments', { params });
+      const response = await api.get('/api/v1/payments', { params });
       return response.data?.data || response.data || [];
     } catch (error) {
       console.error('Error fetching payments:', error);
@@ -15,7 +15,7 @@ const paymentService = {
   // Get single payment details
   getPaymentById: async (paymentId) => {
     try {
-      const response = await api.get(`/payments/${paymentId}`);
+      const response = await api.get(`/api/v1/payments/${paymentId}`);
       return response.data?.data || response.data;
     } catch (error) {
       console.error('Error fetching payment details:', error);
@@ -26,7 +26,7 @@ const paymentService = {
   // Get payments received by current user (earnings)
   getPaymentsReceived: async (params = {}) => {
     try {
-      const response = await api.get('/payments/received', { params });
+      const response = await api.get('/api/v1/payments/received', { params });
       return response.data?.data || response.data || [];
     } catch (error) {
       console.error('Error fetching received payments:', error);
@@ -37,7 +37,7 @@ const paymentService = {
   // Get payments made by current user (spending)
   getPaymentsMade: async (params = {}) => {
     try {
-      const response = await api.get('/payments/made', { params });
+      const response = await api.get('/api/v1/payments/made', { params });
       return response.data?.data || response.data || [];
     } catch (error) {
       console.error('Error fetching made payments:', error);
@@ -48,7 +48,7 @@ const paymentService = {
   // Get total earnings summary
   getEarningsSummary: async () => {
     try {
-      const response = await api.get('/earnings/summary');
+      const response = await api.get('/api/v1/earnings/summary');
       return response.data?.data || response.data || {};
     } catch (error) {
       console.error('Error fetching earnings summary:', error);
@@ -59,7 +59,7 @@ const paymentService = {
   // Update payment status (mark as received, etc.)
   updatePaymentStatus: async (paymentId, status) => {
     try {
-      const response = await api.put(`/payments/${paymentId}/status`, { status });
+      const response = await api.put(`/api/v1/payments/${paymentId}/status`, { status });
       return response.data?.data || response.data;
     } catch (error) {
       console.error('Error updating payment status:', error);
@@ -70,7 +70,7 @@ const paymentService = {
   // Create payment for a transaction
   createPayment: async (transactionId, paymentData) => {
     try {
-      const response = await api.post(`/payments`, {
+      const response = await api.post(`/api/v1/payments`, {
         transactionId,
         ...paymentData,
       });
@@ -84,7 +84,7 @@ const paymentService = {
   // Get payment statistics (for dashboard)
   getPaymentStats: async () => {
     try {
-      const response = await api.get('/payments/stats');
+      const response = await api.get('/api/v1/payments/stats');
       return response.data?.data || response.data || {};
     } catch (error) {
       console.error('Error fetching payment stats:', error);
@@ -100,7 +100,7 @@ const paymentService = {
   // Get earnings by date range
   getEarningsByDateRange: async (startDate, endDate) => {
     try {
-      const response = await api.get('/earnings/range', {
+      const response = await api.get('/api/v1/earnings/range', {
         params: { startDate, endDate },
       });
       return response.data?.data || response.data || [];

@@ -1,6 +1,7 @@
 package edu.cit.colo.bookbud.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,9 +27,11 @@ import edu.cit.colo.bookbud.repository.PaymentRepository;
 import edu.cit.colo.bookbud.repository.TransactionRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -221,6 +224,21 @@ public class PaymentService {
                 .checkoutUrl("https://paymongo.com/checkout/mock")
                 .paymentStatus("Pending")
                 .build();
+    }
+
+    @Transactional
+    public void updatePaymentsForCompletedTransactions() {
+        // Find all payments with Pending status where the transaction is Completed
+        List<Payment> pendingPayments = paymentRepository.findAll().stream()
+                .filter(p -> p.getPaymentStatus() == Payment.PaymentStatus.Pending)
+                .filter(p -> p.getTransaction() != null && p.getTransaction().getStatus() == Transaction.Status.Completed)
+                .collect(Collectors.toList());
+
+        for (Payment payment : pendingPayments) {
+            payment.setPaymentStatus(Payment.PaymentStatus.Paid);
+            paymentRepository.save(payment);
+            log.info("Updated payment status to Paid for transaction: {}", payment.getTransaction().getTransactionId());
+        }
     }
 
     private PaymentDTO mapToDTO(Payment payment) {
