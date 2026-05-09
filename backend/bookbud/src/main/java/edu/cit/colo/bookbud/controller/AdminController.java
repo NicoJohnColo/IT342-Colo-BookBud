@@ -1,16 +1,24 @@
 package edu.cit.colo.bookbud.controller;
 
-import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.dto.book.BookDTO;
-import edu.cit.colo.bookbud.dto.notification.NotificationDTO;
-import edu.cit.colo.bookbud.dto.transaction.TransactionDTO;
-import edu.cit.colo.bookbud.dto.user.UserProfileDTO;
-import edu.cit.colo.bookbud.service.AdminService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.cit.colo.bookbud.dto.ApiResponse;
+import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.features.books.dto.BookDTO;
+import edu.cit.colo.bookbud.features.notifications.dto.NotificationDTO;
+import edu.cit.colo.bookbud.features.transactions.dto.TransactionDTO;
+import edu.cit.colo.bookbud.features.users.dto.UserProfileDTO;
+import edu.cit.colo.bookbud.service.AdminService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/admin")

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './AdminPages.css';
-import paymentService from '../../services/paymentService';
+import paymentService from '../../features/payments/services/paymentService';
 
 export default function AdminDashboardPage({ 
   books = [], 

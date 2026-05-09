@@ -9,20 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.cit.colo.bookbud.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.dto.book.BookDTO;
-import edu.cit.colo.bookbud.dto.notification.NotificationDTO;
-import edu.cit.colo.bookbud.dto.transaction.TransactionDTO;
-import edu.cit.colo.bookbud.dto.user.UserProfileDTO;
-import edu.cit.colo.bookbud.entity.Book;
-import edu.cit.colo.bookbud.entity.Notification;
-import edu.cit.colo.bookbud.entity.Transaction;
-import edu.cit.colo.bookbud.entity.User;
 import edu.cit.colo.bookbud.exception.BusinessException;
 import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
-import edu.cit.colo.bookbud.repository.BookRepository;
-import edu.cit.colo.bookbud.repository.NotificationRepository;
-import edu.cit.colo.bookbud.repository.TransactionRepository;
-import edu.cit.colo.bookbud.repository.UserRepository;
+import edu.cit.colo.bookbud.features.books.dto.BookDTO;
+import edu.cit.colo.bookbud.features.books.entity.Book;
+import edu.cit.colo.bookbud.features.books.repository.BookRepository;
+import edu.cit.colo.bookbud.features.notifications.dto.NotificationDTO;
+import edu.cit.colo.bookbud.features.notifications.entity.Notification;
+import edu.cit.colo.bookbud.features.notifications.repository.NotificationRepository;
+import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
+import edu.cit.colo.bookbud.features.transactions.dto.TransactionDTO;
+import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
+import edu.cit.colo.bookbud.features.transactions.repository.TransactionRepository;
+import edu.cit.colo.bookbud.features.users.dto.UserProfileDTO;
+import edu.cit.colo.bookbud.features.users.entity.User;
+import edu.cit.colo.bookbud.features.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
