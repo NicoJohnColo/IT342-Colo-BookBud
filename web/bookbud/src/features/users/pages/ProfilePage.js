@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import './ProfilePage.css';
+import Navbar from '../../../components/Navbar/Navbar';
 import { FaPencilAlt, FaSave, FaTimes } from 'react-icons/fa';
 
 export default function ProfilePage({ user, profile, myListingsCount, transactionsCount, onUpdateProfile }) {
@@ -48,6 +49,7 @@ export default function ProfilePage({ user, profile, myListingsCount, transactio
 
   return (
     <div>
+      <Navbar />
       <div className="profile-header-row">
         <div>
           <h2 className="page-title">Profile</h2>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import bookService from '../../../features/books/services/bookService';
 import './ListingsPage.css';
+import Navbar from '../../../components/Navbar/Navbar';
 import { resolveBookImageUrl } from '../../../features/books/utils/bookImage';
 
 const asNumber = (value) => Number(value || 0);
@@ -169,6 +170,7 @@ export default function ListingsPage({ listings = [], onCreateListing, onUpdateL
 
   return (
     <div>
+      <Navbar />
       <div className="top-bar">
         <div>
           <h2 className="page-title">My Listings</h2>

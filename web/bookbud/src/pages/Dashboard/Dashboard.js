@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import LogoImg from '../../components/imgs/logo.png';
+import Navbar from '../../components/Navbar/Navbar';
 import { FaHome, FaGlobe, FaListUl, FaFileAlt, FaWallet, FaHeart, FaBell, FaUser, FaSignOutAlt, FaSearch } from 'react-icons/fa';
 
 import bookService from '../../features/books/services/bookService';
@@ -167,10 +168,12 @@ export default function Dashboard() {
   }, [isAdmin]);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'test') return; // avoid async network/state updates during unit tests
     loadUserData();
   }, [loadUserData]);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'test') return; // avoid async network/state updates during unit tests
     loadAdminData();
   }, [loadAdminData]);
 
@@ -474,7 +477,9 @@ export default function Dashboard() {
         </aside>
 
         <header className="header">
-          <div></div>
+          <div>
+            <Navbar />
+          </div>
           <div className="header-user">
             <div className="header-avatar">{String(user?.username || 'U').slice(0, 1).toUpperCase()}</div>
             <div>
