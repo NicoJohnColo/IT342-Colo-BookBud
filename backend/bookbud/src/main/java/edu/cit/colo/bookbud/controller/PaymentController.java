@@ -20,6 +20,8 @@ import edu.cit.colo.bookbud.dto.payment.InitiatePaymentRequest;
 import edu.cit.colo.bookbud.dto.payment.PaymentDTO;
 import edu.cit.colo.bookbud.dto.payment.PaymentInitiateResponse;
 import edu.cit.colo.bookbud.dto.payment.PaymentStatsDTO;
+import edu.cit.colo.bookbud.entity.User;
+import edu.cit.colo.bookbud.repository.UserRepository;
 import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.PaymentService;
 import jakarta.validation.Valid;
@@ -32,6 +34,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentDTO>> recordPayment(
@@ -120,6 +123,20 @@ public class PaymentController {
             @RequestHeader("Authorization") String authHeader) {
         String userId = jwtUtil.extractUserId(authHeader.substring(7));
         return ResponseEntity.ok(ApiResponse.success(paymentService.getPaymentStats(userId)));
+    }
+
+    @PostMapping("/sync-completed-transactions")
+    public ResponseEntity<ApiResponse<String>> syncCompletedTransactions(
+            @RequestHeader("Authorization") String authHeader) {
+        String userId = jwtUtil.extractUserId(authHeader.substring(7));
+        // Check if user is admin
+        userRepository.findById(userId).ifPresent(user -> {
+            if (user.getRole() != User.Role.ADMIN) {
+                throw new RuntimeException("Admin access required");
+            }
+        });
+        paymentService.updatePaymentsForCompletedTransactions();
+        return ResponseEntity.ok(ApiResponse.success("Payment statuses updated for completed transactions"));
     }
 }
 

@@ -15,6 +15,7 @@ import edu.cit.colo.bookbud.dto.auth.GoogleAuthRequest;
 import edu.cit.colo.bookbud.dto.auth.LoginRequest;
 import edu.cit.colo.bookbud.dto.auth.RefreshTokenRequest;
 import edu.cit.colo.bookbud.dto.auth.RegisterRequest;
+import edu.cit.colo.bookbud.dto.auth.ResetPasswordRequest;
 import edu.cit.colo.bookbud.entity.User;
 import edu.cit.colo.bookbud.security.JwtUtil;
 import edu.cit.colo.bookbud.service.AuthService;
@@ -46,7 +47,13 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        // TODO: Implement password reset logic
+        authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

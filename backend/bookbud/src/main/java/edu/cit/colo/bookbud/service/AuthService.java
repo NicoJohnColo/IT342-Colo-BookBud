@@ -17,14 +17,18 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import edu.cit.colo.bookbud.dto.auth.AuthResponse;
+import edu.cit.colo.bookbud.dto.auth.ForgotPasswordRequest;
 import edu.cit.colo.bookbud.dto.auth.GoogleAuthRequest;
 import edu.cit.colo.bookbud.dto.auth.LoginRequest;
 import edu.cit.colo.bookbud.dto.auth.RefreshTokenRequest;
 import edu.cit.colo.bookbud.dto.auth.RegisterRequest;
+import edu.cit.colo.bookbud.dto.auth.ResetPasswordRequest;
+import edu.cit.colo.bookbud.entity.PasswordResetToken;
 import edu.cit.colo.bookbud.entity.RefreshToken;
 import edu.cit.colo.bookbud.entity.User;
 import edu.cit.colo.bookbud.exception.AuthenticationException;
 import edu.cit.colo.bookbud.exception.BusinessException;
+import edu.cit.colo.bookbud.repository.PasswordResetTokenRepository;
 import edu.cit.colo.bookbud.repository.RefreshTokenRepository;
 import edu.cit.colo.bookbud.repository.UserRepository;
 import edu.cit.colo.bookbud.security.JwtUtil;
@@ -34,6 +38,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final GoogleIdTokenVerifier googleIdTokenVerifier;
@@ -41,11 +46,13 @@ public class AuthService {
     @Autowired
     public AuthService(UserRepository userRepository,
                        RefreshTokenRepository refreshTokenRepository,
+                       PasswordResetTokenRepository passwordResetTokenRepository,
                        PasswordEncoder passwordEncoder,
                        JwtUtil jwtUtil,
                        @Value("${app.google.oauth.client-id}") String googleClientId) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
 
@@ -168,6 +175,54 @@ public class AuthService {
     @Transactional
     public void logout(String refreshToken) {
         refreshTokenRepository.deleteByToken(refreshToken);
+    }
+
+    @Transactional
+    public void forgotPassword(ForgotPasswordRequest request) {
+        // Check if user with this email exists
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AuthenticationException("AUTH-007", "User not found"));
+
+        // Check if user account is active
+        if (!"Active".equals(user.getAccountStatus())) {
+            throw new AuthenticationException("AUTH-004", "Account is suspended or banned");
+        }
+
+        // Generate reset token
+        String resetToken = UUID.randomUUID().toString();
+        
+        PasswordResetToken token = PasswordResetToken.builder()
+                .token(resetToken)
+                .user(user)
+                .expiresAt(LocalDateTime.now().plusHours(1))
+                .build();
+        
+        passwordResetTokenRepository.save(token);
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new BusinessException("VALID-001", "Passwords do not match");
+        }
+
+        // Find the reset token
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByTokenAndUsedAtIsNull(request.getToken())
+                .orElseThrow(() -> new AuthenticationException("AUTH-008", "Invalid or expired reset token"));
+
+        // Check if token has expired
+        if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new AuthenticationException("AUTH-008", "Reset token has expired");
+        }
+
+        // Update user password
+        User user = resetToken.getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        // Mark token as used
+        resetToken.setUsedAt(LocalDateTime.now());
+        passwordResetTokenRepository.save(resetToken);
     }
 
     private String createRefreshToken(User user) {
