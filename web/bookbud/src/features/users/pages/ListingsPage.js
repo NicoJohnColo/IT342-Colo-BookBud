@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import bookService from '../../../features/books/services/bookService';
 import './ListingsPage.css';
-import Navbar from '../../../components/Navbar/Navbar';
-import { resolveBookImageUrl } from '../../../features/books/utils/bookImage';
+import bookService from '../../books/services/bookService';
+import Navbar from '../../../shared/components/Navbar/Navbar';
+import { resolveBookImageUrl } from '../../books/utils/bookImage';
 
 const asNumber = (value) => Number(value || 0);
 

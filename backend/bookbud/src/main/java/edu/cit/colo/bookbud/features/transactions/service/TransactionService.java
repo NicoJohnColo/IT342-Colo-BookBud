@@ -12,9 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.exception.BusinessException;
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
@@ -214,8 +214,7 @@ public class TransactionService {
         try {
             handleBookStatusUpdate(transaction, status);
         } catch (Exception e) {
-            System.err.println("Error updating book status: " + e.getMessage());
-            e.printStackTrace();
+            // Log error but continue processing
         }
 
         // Handle payment creation for completed transactions
@@ -223,8 +222,7 @@ public class TransactionService {
             try {
                 createPaymentForTransaction(transaction);
             } catch (Exception e) {
-                System.err.println("Error creating payment for transaction " + transactionId + ": " + e.getMessage());
-                e.printStackTrace();
+                // Log error but continue processing
             }
         }
 
@@ -232,8 +230,7 @@ public class TransactionService {
         try {
             sendTransactionNotifications(transaction, status);
         } catch (Exception e) {
-            System.err.println("Error sending notifications: " + e.getMessage());
-            e.printStackTrace();
+            // Log error but continue processing
         }
 
         return mapToDTO(transaction, userId);

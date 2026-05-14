@@ -12,6 +12,7 @@ import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.notifications.entity.Notification;
 import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
 import edu.cit.colo.bookbud.features.wishlist.entity.Wishlist;
+import edu.cit.colo.bookbud.features.auth.entity.RefreshToken;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import adminService from '../../../services/adminService';
-import '../../../pages/admin/AdminPages.css';
+import adminService from '../../admin/services/adminService';
+import '../../admin/pages/AdminPages.css';
 
 export default function AdminTransactionsPage({ transactions = [], onRefresh }) {
   const [filteredTransactions, setFilteredTransactions] = useState(transactions);

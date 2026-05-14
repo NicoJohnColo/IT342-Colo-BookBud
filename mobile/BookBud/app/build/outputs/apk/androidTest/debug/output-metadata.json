@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "edu.cit.colo.bookbud.test",
+  "applicationId": "com.example.bookbud.test",
   "variantName": "debugAndroidTest",
   "elements": [
     {

@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import bothDieCover from '../../../components/imgs/bothdie.png';
-import harryCover from '../../../components/imgs/harry.png';
-import neverCover from '../../../components/imgs/never.png';
-import mangaCover from '../../../components/imgs/manga.png';
+import bothDieCover from '../../../shared/components/imgs/bothdie.png';
+import harryCover from '../../../shared/components/imgs/harry.png';
+import neverCover from '../../../shared/components/imgs/never.png';
+import mangaCover from '../../../shared/components/imgs/manga.png';
 import './OverviewPage.css';
 import './BrowsePage.css';
-import { resolveBookImageUrl } from '../../../features/books/utils/bookImage';
+import { resolveBookImageUrl } from '../../books/utils/bookImage';
 import wishlistService from '../../wishlist/services/wishlistService';
 import paymentService from '../../payments/services/paymentService';
-import Navbar from '../../../components/Navbar/Navbar';
+import Navbar from '../../../shared/components/Navbar/Navbar';
 
 const HERO_COVERS = [bothDieCover, harryCover, neverCover, mangaCover];
 

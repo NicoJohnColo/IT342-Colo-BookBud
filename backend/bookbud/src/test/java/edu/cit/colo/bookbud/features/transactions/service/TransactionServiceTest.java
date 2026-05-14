@@ -22,8 +22,6 @@ import org.springframework.data.domain.PageRequest;
 
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
-import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
-import edu.cit.colo.bookbud.features.payments.repository.PaymentRepository;
 import edu.cit.colo.bookbud.features.transactions.dto.CreateTransactionRequest;
 import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
 import edu.cit.colo.bookbud.features.transactions.repository.TransactionRepository;
@@ -39,10 +37,6 @@ class TransactionServiceTest {
     private BookRepository bookRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private PaymentRepository paymentRepository;
-    @Mock
-    private NotificationService notificationService;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -50,6 +44,7 @@ class TransactionServiceTest {
     private Transaction testTransaction;
 
     @BeforeEach
+    @SuppressWarnings("unused")
     void setUp() {
         testTransaction = Transaction.builder()
                 .transactionId("test-transaction-id")
@@ -122,8 +117,10 @@ class TransactionServiceTest {
         when(userRepository.findById("test-user-id")).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             transactionService.createTransaction("test-user-id", new CreateTransactionRequest("test-book-id", null, null));
         });
+        assertNotNull(exception);
+        verify(userRepository, times(1)).findById("test-user-id");
     }
 }

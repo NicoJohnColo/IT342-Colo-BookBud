@@ -22,7 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.features.admin.service.AdminService;
 import edu.cit.colo.bookbud.features.books.dto.BookDTO;
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
@@ -127,3 +128,4 @@ class AdminServiceTest {
         verify(bookRepository, never()).delete(any(Book.class));
     }
 }
+

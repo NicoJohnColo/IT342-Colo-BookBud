@@ -78,7 +78,11 @@
     </style>
 
     <!-- Divider Styles -->
-    <style name="DividerStyle" parent="DividerStyle.BookBud" />
+    <style name="DividerStyle">
+        <item name="android:background">@color/color_gray_200</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
 
     <style name="DividerStyle.BookBud">
         <item name="android:background">@color/color_gray_200</item>

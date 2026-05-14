@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import './ProfilePage.css';
-import Navbar from '../../../components/Navbar/Navbar';
+import Navbar from '../../../shared/components/Navbar/Navbar';
 import { FaPencilAlt, FaSave, FaTimes } from 'react-icons/fa';
 
 export default function ProfilePage({ user, profile, myListingsCount, transactionsCount, onUpdateProfile }) {

@@ -22,8 +22,7 @@ import edu.cit.colo.bookbud.features.notifications.entity.Notification;
 import edu.cit.colo.bookbud.features.notifications.repository.NotificationRepository;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
-import edu.cit.colo.bookbud.exception.BusinessException;
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationServiceTest {
@@ -109,3 +108,4 @@ class NotificationServiceTest {
         verify(notificationRepository, never()).save(any(Notification.class));
     }
 }
+

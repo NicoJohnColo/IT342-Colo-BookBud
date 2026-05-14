@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import adminService from '../../../services/adminService';
+import adminService from '../../admin/services/adminService';
 import './AdminPages.css';
 
 export default function AdminBooksPage({ books = [], onRefresh }) {

@@ -51,11 +51,15 @@
         <item name="android:textColor">@color/color_dark</item>
         <item name="android:hint">@string/app_name</item>
         <item name="android:textColorHint">@color/color_gray_400</item>
-    </style><style name="DividerStyle" parent="DividerStyle.BookBud"/><style name="DividerStyle.BookBud">
+    </style><style name="DividerStyle.BookBud">
         <item name="android:background">@color/color_gray_200</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
-    </style><dimen name="padding_extra_small">4dp</dimen><dimen name="padding_small">8dp</dimen><dimen name="padding_medium">12dp</dimen><dimen name="padding_large">16dp</dimen><dimen name="padding_extra_large">24dp</dimen><dimen name="elevation_sm">2dp</dimen><dimen name="elevation_md">4dp</dimen><dimen name="elevation_lg">8dp</dimen><dimen name="elevation_xl">16dp</dimen></file><file path="C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\src\main\res\values\themes.xml" qualifiers=""><style name="Theme.BookBud" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    </style><dimen name="padding_extra_small">4dp</dimen><dimen name="padding_small">8dp</dimen><dimen name="padding_medium">12dp</dimen><dimen name="padding_large">16dp</dimen><dimen name="padding_extra_large">24dp</dimen><dimen name="elevation_sm">2dp</dimen><dimen name="elevation_md">4dp</dimen><dimen name="elevation_lg">8dp</dimen><dimen name="elevation_xl">16dp</dimen><style name="DividerStyle">
+        <item name="android:background">@color/color_gray_200</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style></file><file path="C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\src\main\res\values\themes.xml" qualifiers=""><style name="Theme.BookBud" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/bb_orange</item>
         <item name="colorPrimaryVariant">@color/bb_orange_dark</item>
         <item name="colorOnPrimary">@color/bb_text_light</item>

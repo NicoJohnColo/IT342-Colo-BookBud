@@ -20,9 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.exception.BusinessException;
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.books.dto.BookDTO;
 import edu.cit.colo.bookbud.features.books.dto.CreateBookRequest;
 import edu.cit.colo.bookbud.features.books.dto.ExternalBookDTO;
@@ -34,6 +31,9 @@ import edu.cit.colo.bookbud.features.transactions.repository.TransactionReposito
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
 import edu.cit.colo.bookbud.features.wishlist.repository.WishlistRepository;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 
@@ -282,25 +282,21 @@ public class BookService {
             
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
-                // Read response
-                java.io.BufferedReader reader = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(connection.getInputStream())
-                );
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
+                // Read response with try-with-resources
+                try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(connection.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    // Parse JSON response
+                    return parseGoogleBooksResponse(response.toString());
                 }
-                reader.close();
-                
-                // Parse JSON response
-                return parseGoogleBooksResponse(response.toString());
             } else {
-                System.err.println("Google Books API error: " + responseCode);
                 return List.of();
             }
         } catch (Exception e) {
-            System.err.println("Error calling Google Books API: " + e.getMessage());
             return List.of();
         }
     }

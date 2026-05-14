@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.cit.colo.bookbud.exception.BusinessException;
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.notifications.dto.NotificationDTO;
 import edu.cit.colo.bookbud.features.notifications.entity.Notification;
 import edu.cit.colo.bookbud.features.notifications.repository.NotificationRepository;

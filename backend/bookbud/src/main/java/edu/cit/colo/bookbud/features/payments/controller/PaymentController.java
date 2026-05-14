@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.features.auth.security.JwtUtil;
 import edu.cit.colo.bookbud.features.payments.dto.CreatePaymentRequest;
 import edu.cit.colo.bookbud.features.payments.dto.InitiatePaymentRequest;
 import edu.cit.colo.bookbud.features.payments.dto.PaymentDTO;
 import edu.cit.colo.bookbud.features.payments.dto.PaymentInitiateResponse;
 import edu.cit.colo.bookbud.features.payments.dto.PaymentStatsDTO;
+import edu.cit.colo.bookbud.features.payments.service.PaymentService;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
-import edu.cit.colo.bookbud.features.users.security.JwtUtil;
-import edu.cit.colo.bookbud.features.payments.service.PaymentService;
+import edu.cit.colo.bookbud.shared.dto.ApiResponse;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

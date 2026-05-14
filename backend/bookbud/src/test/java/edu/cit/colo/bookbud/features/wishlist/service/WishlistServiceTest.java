@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.cit.colo.bookbud.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
 import edu.cit.colo.bookbud.features.users.entity.User;
@@ -123,3 +123,4 @@ class WishlistServiceTest {
         verify(wishlistRepository, never()).delete(any(Wishlist.class));
     }
 }
+

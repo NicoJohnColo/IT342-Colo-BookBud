@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "edu.cit.colo.bookbud.app-mergeDebugResources-35:/values-xlarge-v4/values-xlarge-v4.xml",
+            "outputFile": "com.example.bookbud.app-mergeDebugResources-36:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\51d9ba1c9c207caa017b1d1bbfdfdf00\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\4bc35e322248fd862359303fabe397fa\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

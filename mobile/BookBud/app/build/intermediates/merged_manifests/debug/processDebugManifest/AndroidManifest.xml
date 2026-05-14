@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.cit.colo.bookbud"
+    package="com.example.bookbud"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -11,12 +11,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
-        android:name="edu.cit.colo.bookbud.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.example.bookbud.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="edu.cit.colo.bookbud.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.example.bookbud.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
+        android:name="com.example.bookbud.BookbudApplication"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
@@ -24,11 +25,10 @@
         android:icon="@android:drawable/sym_def_app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:testOnly="true"
         android:theme="@style/Theme.BookBud"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="edu.cit.colo.bookbud.SplashActivity"
+            android:name="com.example.bookbud.SplashActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,22 +37,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.cit.colo.bookbud.ForgotPasswordActivity"
+            android:name="com.example.bookbud.features.auth.presentation.activity.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name="edu.cit.colo.bookbud.DashboardActivity"
+            android:name="com.example.bookbud.features.dashboard.presentation.activity.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name="edu.cit.colo.bookbud.AdminDashboardActivity"
+            android:name="com.example.bookbud.features.admin.presentation.activity.AdminDashboardActivity"
             android:exported="false" />
         <activity
-            android:name="edu.cit.colo.bookbud.LoginActivity"
+            android:name="com.example.bookbud.features.auth.presentation.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name="edu.cit.colo.bookbud.RegisterActivity"
+            android:name="com.example.bookbud.features.auth.presentation.activity.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name="edu.cit.colo.bookbud.GetStartedActivity"
+            android:name="com.example.bookbud.features.auth.presentation.activity.GetStartedActivity"
             android:exported="false" />
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
@@ -80,7 +80,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="edu.cit.colo.bookbud.androidx-startup"
+            android:authorities="com.example.bookbud.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"

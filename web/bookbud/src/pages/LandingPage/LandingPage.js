@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
-import { useAuth } from '../../context/AuthContext';
-import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
+import Navbar from '../../shared/components/Navbar/Navbar';
+import Footer from '../../shared/components/Footer/Footer';
+import { useAuth } from '../../shared/context/AuthContext';
+import GoogleAuthButton from '../../shared/components/GoogleAuthButton/GoogleAuthButton';
 import './LandingPage.css';
 
-import { validateEmail } from '../../utils/validators';
+import { validateEmail } from '../../shared/utils/validators';
 
 // Local image assets
-import LandingBg from '../../components/imgs/landingBg.png';
+import LandingBg from '../../shared/components/imgs/landingBg.png';
 
-import About1 from '../../components/imgs/About1.png';
-import About2 from '../../components/imgs/About2.png';
-import About3 from '../../components/imgs/About3.png';
-import BuildReadImg from '../../components/imgs/BuildReadImg.png';
+import About1 from '../../shared/components/imgs/About1.png';
+import About2 from '../../shared/components/imgs/About2.png';
+import About3 from '../../shared/components/imgs/About3.png';
+import BuildReadImg from '../../shared/components/imgs/BuildReadImg.png';
 
-import BothDieImg from '../../components/imgs/bothdie.png';
-import HarryImg from '../../components/imgs/harry.png';
-import NeverImg from '../../components/imgs/never.png';
+import BothDieImg from '../../shared/components/imgs/bothdie.png';
+import HarryImg from '../../shared/components/imgs/harry.png';
+import NeverImg from '../../shared/components/imgs/never.png';
 
-import ComicImg from '../../components/imgs/comic.png';
-import FictionImg from '../../components/imgs/fiction.png';
-import MangaImg from '../../components/imgs/manga.png';
+import ComicImg from '../../shared/components/imgs/comic.png';
+import FictionImg from '../../shared/components/imgs/fiction.png';
+import MangaImg from '../../shared/components/imgs/manga.png';
 
-import Genre1 from '../../components/imgs/genre1.png';
-import Genre2 from '../../components/imgs/genre2.png';
-import Genre3 from '../../components/imgs/genre3.png';
-import Genre4 from '../../components/imgs/genre4.png';
+import Genre1 from '../../shared/components/imgs/genre1.png';
+import Genre2 from '../../shared/components/imgs/genre2.png';
+import Genre3 from '../../shared/components/imgs/genre3.png';
+import Genre4 from '../../shared/components/imgs/genre4.png';
 
 const GENRES = [
   {

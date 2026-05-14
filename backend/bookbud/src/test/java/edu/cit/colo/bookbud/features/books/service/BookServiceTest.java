@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
 
@@ -72,3 +72,4 @@ class BookServiceTest {
         verify(bookRepository, times(1)).findById("non-existent-id");
     }
 }
+

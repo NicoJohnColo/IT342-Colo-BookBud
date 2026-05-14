@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".BookbudApplication"
         android:allowBackup="true"
         android:icon="@android:drawable/sym_def_app_icon"
         android:label="@string/app_name"
@@ -21,27 +22,27 @@
         </activity>
 
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".features.auth.presentation.activity.ForgotPasswordActivity"
             android:exported="false" />
 
         <activity
-            android:name=".DashboardActivity"
+            android:name=".features.dashboard.presentation.activity.DashboardActivity"
             android:exported="false" />
 
         <activity
-            android:name=".AdminDashboardActivity"
+            android:name=".features.admin.presentation.activity.AdminDashboardActivity"
             android:exported="false" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".features.auth.presentation.activity.LoginActivity"
             android:exported="false" />
 
         <activity
-            android:name=".RegisterActivity"
+            android:name=".features.auth.presentation.activity.RegisterActivity"
             android:exported="false" />
 
         <activity
-            android:name=".GetStartedActivity"
+            android:name=".features.auth.presentation.activity.GetStartedActivity"
             android:exported="false" />
 
     </application>
