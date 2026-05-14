@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.payments.entity.Payment;
 import edu.cit.colo.bookbud.features.payments.repository.PaymentRepository;
 import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
@@ -121,3 +121,4 @@ class PaymentServiceTest {
         verify(paymentRepository, times(1)).findPaymentsReceivedByUser("test-user-id", PageRequest.of(0, 10));
     }
 }
+

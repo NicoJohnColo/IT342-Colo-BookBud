@@ -4,7 +4,7 @@
     "type": "COMPATIBLE_SCREEN_MANIFEST",
     "kind": "Directory"
   },
-  "applicationId": "edu.cit.colo.bookbud",
+  "applicationId": "com.example.bookbud",
   "variantName": "debug",
   "elements": []
 }

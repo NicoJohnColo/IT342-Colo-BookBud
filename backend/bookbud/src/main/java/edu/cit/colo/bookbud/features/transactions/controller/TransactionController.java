@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.features.auth.security.JwtUtil;
 import edu.cit.colo.bookbud.features.transactions.dto.CreateTransactionRequest;
 import edu.cit.colo.bookbud.features.transactions.dto.RatingResponse;
 import edu.cit.colo.bookbud.features.transactions.dto.SubmitRatingRequest;
 import edu.cit.colo.bookbud.features.transactions.dto.TransactionDTO;
 import edu.cit.colo.bookbud.features.transactions.dto.UpdateTransactionStatusRequest;
-import edu.cit.colo.bookbud.features.users.security.JwtUtil;
 import edu.cit.colo.bookbud.features.transactions.service.TransactionService;
+import edu.cit.colo.bookbud.shared.dto.ApiResponse;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

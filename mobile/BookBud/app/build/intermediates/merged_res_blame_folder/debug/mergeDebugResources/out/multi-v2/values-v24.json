@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "edu.cit.colo.bookbud.app-mergeDebugResources-35:/values-v24/values-v24.xml",
+            "outputFile": "com.example.bookbud.app-mergeDebugResources-36:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\7e85ceb9853d74c486dbd5be5e729523\\transformed\\material-1.12.0\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\492bc396bb405ec87a593e58bdee22c7\\transformed\\material-1.12.0\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,9,12,15",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\51d9ba1c9c207caa017b1d1bbfdfdf00\\transformed\\appcompat-1.7.0\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\4bc35e322248fd862359303fabe397fa\\transformed\\appcompat-1.7.0\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

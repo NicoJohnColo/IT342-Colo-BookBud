@@ -1,6 +1,6 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.updateBuildConfiguration": "automatic",
     "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-23",
     "java.debug.settings.forceBuildBeforeLaunch": true,
     "java.import.gradle.java.home": "C:\\Users\\Nicoj\\.vscode\\extensions\\redhat.java-1.53.0-win32-x64\\jre\\21.0.10-win32-x86_64",
@@ -15,5 +15,24 @@
             "path": "C:\\Program Files\\Java\\jdk-1.8"
         }
     ],
-    "maven.terminal.useJavaHome": true
+    "maven.terminal.useJavaHome": true,
+    "java.debug.settings.onBuildFailureProceed": true,
+    "files.exclude": {
+        "**/mobile/BookBud/app/build/generated/**": true,
+        "**/mobile/BookBud/app/build/intermediates/**": true
+    },
+    "search.exclude": {
+        "**/mobile/BookBud/app/build/generated/**": true,
+        "**/mobile/BookBud/app/build/intermediates/**": true
+    },
+    "java.import.exclusions": [
+        "**/mobile/BookBud/app/build/generated/**",
+        "**/mobile/BookBud/app/build/intermediates/**"
+    ],
+    "java.project.resourceFilters": [
+        "node_modules",
+        ".git",
+        "__CREATED_BY_JAVA_LANGUAGE_SERVER__",
+        "mobile/BookBud/app/build"
+    ]
 }

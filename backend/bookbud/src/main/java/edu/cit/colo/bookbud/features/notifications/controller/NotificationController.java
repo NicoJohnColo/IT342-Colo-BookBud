@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.cit.colo.bookbud.dto.ApiResponse;
+import edu.cit.colo.bookbud.shared.dto.ApiResponse;
 import edu.cit.colo.bookbud.features.notifications.dto.NotificationDTO;
-import edu.cit.colo.bookbud.features.users.security.JwtUtil;
+import edu.cit.colo.bookbud.features.auth.security.JwtUtil;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 

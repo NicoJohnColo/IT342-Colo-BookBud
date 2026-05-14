@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../../context/AuthContext';
+import { AuthProvider } from '../../../shared/context/AuthContext';
 
 /**
  * Authentication Feature Tests
@@ -277,3 +277,4 @@ describe('Authentication Features', () => {
     });
   });
 });
+

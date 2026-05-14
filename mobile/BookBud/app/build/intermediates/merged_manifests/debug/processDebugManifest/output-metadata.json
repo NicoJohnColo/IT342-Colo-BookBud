@@ -4,7 +4,7 @@
     "type": "MERGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "edu.cit.colo.bookbud",
+  "applicationId": "com.example.bookbud",
   "variantName": "debug",
   "elements": [
     {

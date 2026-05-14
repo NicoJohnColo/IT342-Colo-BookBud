@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.users.dto.UpdateUserRequest;
 import edu.cit.colo.bookbud.features.users.dto.UserProfileDTO;
 import edu.cit.colo.bookbud.features.users.entity.User;
@@ -103,3 +103,4 @@ class UserServiceTest {
         verify(userRepository, never()).save(any(User.class));
     }
 }
+

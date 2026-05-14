@@ -1,4 +1,4 @@
-import { BACKEND_ORIGIN } from '../services/api';
+import { BACKEND_ORIGIN } from '../../../shared/api/axiosConfig';
 
 export const resolveBookImageUrl = (imageUrl) => {
   if (!imageUrl) return '';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import adminService from '../../../services/adminService';
-import '../../../pages/admin/AdminPages.css';
+import adminService from '../../admin/services/adminService';
+import '../../admin/pages/AdminPages.css';
 
 export default function AdminUsersPage({ users = [], onRefresh }) {
   const [filteredUsers, setFilteredUsers] = useState(users);

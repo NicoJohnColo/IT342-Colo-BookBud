@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.cit.colo.bookbud.dto.ApiResponse;
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.features.auth.security.JwtUtil;
 import edu.cit.colo.bookbud.features.books.dto.BookDTO;
 import edu.cit.colo.bookbud.features.books.dto.CreateBookRequest;
 import edu.cit.colo.bookbud.features.books.dto.ExternalBookDTO;
 import edu.cit.colo.bookbud.features.books.dto.UpdateBookRequest;
 import edu.cit.colo.bookbud.features.books.service.BookService;
-import edu.cit.colo.bookbud.features.users.security.JwtUtil;
+import edu.cit.colo.bookbud.shared.dto.ApiResponse;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

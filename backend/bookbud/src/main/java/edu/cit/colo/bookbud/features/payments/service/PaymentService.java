@@ -11,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.cit.colo.bookbud.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.exception.BusinessException;
-import edu.cit.colo.bookbud.exception.ResourceNotFoundException;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
 import edu.cit.colo.bookbud.features.payments.dto.CreatePaymentRequest;
 import edu.cit.colo.bookbud.features.payments.dto.EarningsSummaryDTO;

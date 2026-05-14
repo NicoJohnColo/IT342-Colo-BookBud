@@ -1,5 +1,5 @@
-edu.cit.colo.bookbud.test.app-jetified-core-1.6.1-0 C:\Users\Nicoj\.gradle\caches\8.12\transforms\31567afe01834917a5bad63acdf7ef3a\transformed\jetified-core-1.6.1\res
-edu.cit.colo.bookbud.test.app-androidTest-1 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\generated\res\resValues\androidTest\debug
-edu.cit.colo.bookbud.test.app-mergeDebugAndroidTestResources-2 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-edu.cit.colo.bookbud.test.app-mergeDebugAndroidTestResources-3 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-edu.cit.colo.bookbud.test.app-debugAndroidTest-4 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
+com.example.bookbud.test.app-jetified-core-1.6.1-0 C:\Users\Nicoj\.gradle\caches\8.12\transforms\f95bf7afe6254a0e2742bb16eee50a68\transformed\jetified-core-1.6.1\res
+com.example.bookbud.test.app-androidTest-1 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\generated\res\resValues\androidTest\debug
+com.example.bookbud.test.app-mergeDebugAndroidTestResources-2 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.bookbud.test.app-mergeDebugAndroidTestResources-3 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.bookbud.test.app-debugAndroidTest-4 C:\Users\Nicoj\OneDrive\Desktop\IT342-Colo-BookBud\mobile\BookBud\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
