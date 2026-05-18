@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.bookbud.app-mergeDebugResources-36:/values-v21/values-v21.xml",
+            "outputFile": "com.example.bookbud.app-mergeDebugResources-78:/values-v21/values-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\26e65cc560df4a207775e3982c604beb\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",

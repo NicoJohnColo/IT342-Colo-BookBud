@@ -30,6 +30,7 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
   const [userProfile, setUserProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [profileError, setProfileError] = useState('');
+  const [cancelModalId, setCancelModalId] = useState(null);
 
   const filtered = useMemo(() => {
     if (tab === 'All') return transactions;
@@ -56,9 +57,15 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
     }
   };
 
-  const onCancel = async (transactionId) => {
-    if (!window.confirm('Cancel this transaction?')) return;
-    await onAction(transactionId, 'Cancelled');
+  const onCancelClick = (transactionId) => {
+    setCancelModalId(transactionId);
+  };
+
+  const onConfirmCancel = async () => {
+    if (!cancelModalId) return;
+    const id = cancelModalId;
+    setCancelModalId(null);
+    await onAction(id, 'Cancelled');
   };
 
   const onRatingSubmit = async (transactionId) => {
@@ -175,7 +182,7 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
                 </div>
               </div>
 
-                {isLister && status === 'pending' ? (
+                {isLister && status === 'pending' && txn.paymentMethod !== 'Stripe_Card' ? (
                   <div className="txn-actions">
                     <button className="btn btn-primary btn-sm" disabled={isBusy} onClick={() => onAction(txn.transactionId, 'Active')}>
                       {isBusy ? 'Updating...' : 'Approve Request'}
@@ -186,7 +193,7 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
                     >
                       View Buyer Details
                     </button>
-                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancel(txn.transactionId)}>
+                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancelClick(txn.transactionId)}>
                       Cancel Transaction
                     </button>
                   </div>
@@ -203,7 +210,7 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
                     >
                       Contact Buyer
                     </button>
-                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancel(txn.transactionId)}>
+                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancelClick(txn.transactionId)}>
                       Cancel Transaction
                     </button>
                   </div>
@@ -217,7 +224,7 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
                     >
                       View Seller Details
                     </button>
-                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancel(txn.transactionId)}>
+                    <button className="btn btn-danger btn-sm" disabled={isBusy} onClick={() => onCancelClick(txn.transactionId)}>
                       Cancel Transaction
                     </button>
                   </div>
@@ -253,7 +260,19 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
                     </div>
                   </div>
                 ) : status === 'completed' ? (
-                  <div className="txn-rating-complete">Rating submitted</div>
+                  <div className="txn-rating-complete">
+                    Rating submitted
+                    {isLister && String(txn.paymentStatus || '').toLowerCase() === 'pending' && (
+                      <button 
+                        className="btn btn-outline btn-sm" 
+                        style={{ marginLeft: '12px', borderColor: '#f59e0b', color: '#b45309' }}
+                        disabled={isBusy} 
+                        onClick={() => onAction(txn.transactionId, 'Completed')}
+                      >
+                        {isBusy ? 'Syncing...' : '🔄 Re-sync Payment'}
+                      </button>
+                    )}
+                  </div>
                 ) : null}
             </div>
           );
@@ -343,6 +362,33 @@ export default function TransactionsPage({ transactions = [], onUpdateStatus, on
               <p style={{ color: '#666' }}>No details available</p>
             </div>
           )}
+        </div>
+      </div>
+    )}
+
+    {/* Cancel Confirmation Modal */}
+    {cancelModalId && (
+      <div className="modal-overlay" onClick={() => setCancelModalId(null)}>
+        <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3>Cancel Transaction</h3>
+            <button className="close-btn" onClick={() => setCancelModalId(null)}>×</button>
+          </div>
+          <div className="modal-body" style={{ textAlign: 'center', padding: '30px 20px' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
+            <p>Are you sure you want to cancel this transaction?</p>
+            <p style={{ fontSize: '13px', color: '#666', marginTop: '10px' }}>
+              This action cannot be undone and will revert the book's status.
+            </p>
+          </div>
+          <div className="modal-footer" style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <button className="btn btn-secondary" onClick={() => setCancelModalId(null)}>
+              No, Keep It
+            </button>
+            <button className="btn btn-danger" onClick={onConfirmCancel}>
+              Yes, Cancel Transaction
+            </button>
+          </div>
         </div>
       </div>
     )}

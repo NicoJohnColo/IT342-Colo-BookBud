@@ -2,6 +2,9 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import './BrowsePage.css';
 import { resolveBookImageUrl } from '../utils/bookImage';
 import wishlistService from '../../wishlist/services/wishlistService';
+import paymentService from '../../payments/services/paymentService';
+import transactionService from '../../transactions/services/transactionService';
+import StripePaymentModal from '../../payments/components/StripePaymentModal';
 
 const asNumber = (value) => Number(value || 0);
 const toLower = (value) => String(value || '').toLowerCase();
@@ -10,8 +13,7 @@ const isOwnedByCurrentUser = (book, currentUserId) => String(book?.ownerId || ''
 const isAvailable = (book) => toLower(book?.status) === 'available';
 const PAYMENT_METHODS = [
   { value: 'cash', label: 'Cash', apiValue: 'Cash' },
-  { value: 'gcash', label: 'GCash', apiValue: 'GCash' },
-  { value: 'bank_transfer', label: 'Bank Transfer', apiValue: 'Bank Transfer' },
+  { value: 'stripe', label: 'Card Payment (Stripe)', apiValue: 'Stripe_Card' },
 ];
 const availabilityLabel = (book) => {
   const status = toLower(book?.status);
@@ -44,6 +46,8 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
   const [modalError, setModalError] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [wishlistLoading, setWishlistLoading] = useState({});
+  const [stripeClientSecret, setStripeClientSecret] = useState(null);
+  const [pendingTransactionId, setPendingTransactionId] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('bookbud-browse-filters');
@@ -215,12 +219,23 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
     setSubmitting(true);
     setModalError('');
     try {
-      await onCreateTransaction?.(payload);
-      setFeedback({
-        type: 'success',
-        message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted successfully.`,
+      const created = await onCreateTransaction?.({
+        ...payload,
+        paymentMethod: paymentMethod === 'stripe' ? 'Stripe_Card' : 'Cash'
       });
-      closeModal();
+      const transactionId = created?.transactionId;
+
+      if (paymentMethod === 'stripe') {
+        const stripeData = await paymentService.initiateStripePayment(transactionId);
+        setStripeClientSecret(stripeData.clientSecret);
+        setPendingTransactionId(transactionId);
+      } else {
+        setFeedback({
+          type: 'success',
+          message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted successfully.`,
+        });
+        closeModal();
+      }
     } catch (error) {
       const message =
         error?.response?.data?.error?.message ||
@@ -237,6 +252,44 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
   const selectedBookIsOwn = isOwnedByCurrentUser(selectedBook, currentUserId);
   const selectedBookIsAvailable = isAvailable(selectedBook);
   const selectedBookAvailability = availabilityLabel(selectedBook);
+
+  const onStripeSuccess = async () => {
+    try {
+      if (pendingTransactionId) {
+        await paymentService.confirmStripePayment(pendingTransactionId);
+      }
+      setFeedback({
+        type: 'success',
+        message: 'Payment confirmed! Your purchase is successful.',
+      });
+    } catch (error) {
+      console.error('Confirmation error:', error);
+      setFeedback({
+        type: 'success',
+        message: 'Payment successful! Syncing transaction details...',
+      });
+    } finally {
+      setStripeClientSecret(null);
+      setPendingTransactionId(null);
+      closeModal();
+      onWishlistChange?.();
+      window.dispatchEvent(new CustomEvent('refreshDashboard'));
+      window.dispatchEvent(new CustomEvent('refreshPayments'));
+    }
+  };
+
+  const onStripeCancel = async () => {
+    if (pendingTransactionId) {
+      try {
+        await transactionService.updateTransactionStatus(pendingTransactionId, 'Cancelled');
+      } catch (err) {
+        console.error('Error cancelling transaction:', err);
+      }
+    }
+    setStripeClientSecret(null);
+    setPendingTransactionId(null);
+    setSubmitting(false);
+  };
 
   return (
     <div>
@@ -495,18 +548,29 @@ export default function BrowsePage({ books = [], currentUserId, onCreateTransact
                   !selectedBookIsAvailable ||
                   (selectedMode === 'rent' ? !selectedBookSupportsRent : !selectedBookSupportsBuy)
                 }
+                title={paymentMethod === 'stripe' ? 'Proceed to Stripe Payment' : ''}
                 onClick={onSubmitTransaction}
               >
                 {submitting
                   ? 'Submitting...'
-                  : selectedMode === 'rent'
-                    ? `Confirm Rental - PHP ${asNumber(selectedBook.priceRent)}/day`
-                    : `Confirm Purchase - PHP ${asNumber(selectedBook.priceSale)}`}
+                  : paymentMethod === 'stripe'
+                    ? 'Proceed to Stripe Payment'
+                    : selectedMode === 'rent'
+                      ? `Confirm Rental - PHP ${asNumber(selectedBook.priceRent)}/day`
+                      : `Confirm Purchase - PHP ${asNumber(selectedBook.priceSale)}`}
               </button>
             </div>
           </div>
         </div>
       ) : null}
+      {stripeClientSecret && (
+        <StripePaymentModal 
+          clientSecret={stripeClientSecret}
+          transactionId={pendingTransactionId}
+          onSuccess={onStripeSuccess}
+          onCancel={onStripeCancel}
+        />
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.bookbud.app-mergeDebugResources-36:/values-watch-v20/values-watch-v20.xml",
+            "outputFile": "com.example.bookbud.app-mergeDebugResources-78:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Nicoj\\.gradle\\caches\\8.12\\transforms\\6b34518df9e5244acbf4316d4fc99f2b\\transformed\\jetified-play-services-auth-21.2.0\\res\\values-watch-v20\\values.xml",

@@ -16,6 +16,7 @@ public class BookDTO {
     private String title;
     private String author;
     private String genre;
+    private String isbn;
     private String description;
     private String imageUrl;
     private String condition;

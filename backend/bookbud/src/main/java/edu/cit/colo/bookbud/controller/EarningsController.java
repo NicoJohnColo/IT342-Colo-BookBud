@@ -31,6 +31,9 @@ public class EarningsController {
             EarningsSummaryDTO summary = paymentService.getEarningsSummary(userId);
             return ResponseEntity.ok(ApiResponse.success(summary));
         } catch (Exception e) {
+            // Log the error for debugging
+            org.slf4j.LoggerFactory.getLogger(EarningsController.class).error("Error fetching earnings summary: {}", e.getMessage(), e);
+            
             // Return empty earnings summary instead of 500 error
             return ResponseEntity.ok(ApiResponse.success(EarningsSummaryDTO.builder()
                     .totalEarnings(0.0)

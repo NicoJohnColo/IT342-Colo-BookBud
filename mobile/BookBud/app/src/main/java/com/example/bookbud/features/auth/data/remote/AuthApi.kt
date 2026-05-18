@@ -7,18 +7,18 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
-    @POST("auth/login")
+    @POST("api/v1/auth/login")
     suspend fun login(@Body request: LoginRequest): AuthResponseEntity
     
-    @POST("auth/register")
+    @POST("api/v1/auth/register")
     suspend fun register(@Body request: RegisterRequest): AuthResponseEntity
     
-    @POST("auth/google")
+    @POST("api/v1/auth/google")
     suspend fun googleLogin(@Body idToken: Map<String, String>): AuthResponseEntity
     
-    @POST("auth/logout")
+    @POST("api/v1/auth/logout")
     suspend fun logout()
     
-    @POST("auth/refresh")
+    @POST("api/v1/auth/refresh")
     suspend fun refreshToken(): Map<String, String>
 }

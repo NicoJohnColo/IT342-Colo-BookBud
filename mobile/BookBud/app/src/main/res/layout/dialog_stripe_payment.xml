@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog_card"
+    android:padding="24dp">
+
+    <!-- Modal Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secure Card Payment"
+            android:textColor="@color/bb_text_dark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Powered by Stripe"
+            android:textColor="@color/bb_text_muted"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- Card Input block container -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Card Details"
+        android:textColor="@color/bb_text_dark"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_payment_method_unselected"
+        android:layout_marginBottom="24dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <!-- Card Number -->
+        <EditText
+            android:id="@+id/stripeCardNumber"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.2"
+            android:background="@android:color/transparent"
+            android:hint="4242 4242 4242 4242"
+            android:inputType="phone"
+            android:textColor="@color/bb_text_dark"
+            android:textSize="14sp"
+            android:maxLength="19"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:background="@color/color_gray_200" />
+
+        <!-- Expiry Month / Year -->
+        <EditText
+            android:id="@+id/stripeCardExpiry"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="MM/YY"
+            android:inputType="phone"
+            android:textColor="@color/bb_text_dark"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:maxLength="5"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:background="@color/color_gray_200" />
+
+        <!-- CVC -->
+        <EditText
+            android:id="@+id/stripeCardCvc"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:background="@android:color/transparent"
+            android:hint="CVC"
+            android:inputType="numberPassword"
+            android:textColor="@color/bb_text_dark"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:maxLength="3"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:background="@color/color_gray_200" />
+
+        <!-- ZIP -->
+        <EditText
+            android:id="@+id/stripeCardZip"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:background="@android:color/transparent"
+            android:hint="ZIP"
+            android:inputType="number"
+            android:textColor="@color/bb_text_dark"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:maxLength="5"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+    </LinearLayout>
+
+    <!-- Bottom Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stripeBtnCancel"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/bb_text_dark"
+            android:background="@drawable/bg_payment_method_unselected"
+            android:layout_marginEnd="6dp"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stripeBtnClear"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.2"
+            android:text="Clear Card"
+            android:textColor="@color/bb_text_white"
+            android:background="@drawable/bg_payment_method_selected"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="6dp"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stripeBtnPay"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.2"
+            android:text="Pay Now"
+            android:textColor="@color/bb_text_white"
+            android:background="@color/bb_orange"
+            android:layout_marginStart="4dp"
+            style="?android:attr/borderlessButtonStyle" />
+    </LinearLayout>
+
+</LinearLayout>

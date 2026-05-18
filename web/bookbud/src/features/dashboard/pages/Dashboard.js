@@ -106,10 +106,10 @@ export default function Dashboard() {
     setCurrentPage(isAdmin ? 'admin-dashboard' : 'dashboard');
   }, [user, isAdmin, navigate]);
 
-  const loadUserData = useCallback(async () => {
+  const loadUserData = useCallback(async (silent = false) => {
     if (!user) return;
 
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const [booksResult, transactionsResult, wishlistResult, notificationsResult, profileResult] = await Promise.allSettled([
         bookService.getAllBooks({ size: 100 }),
@@ -142,6 +142,12 @@ export default function Dashboard() {
       setLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    const handleRefresh = () => loadUserData();
+    window.addEventListener('refreshDashboard', handleRefresh);
+    return () => window.removeEventListener('refreshDashboard', handleRefresh);
+  }, [loadUserData]);
 
   const loadAdminData = useCallback(async () => {
     if (!isAdmin) return;
@@ -313,7 +319,7 @@ export default function Dashboard() {
   const onCreateTransaction = useCallback(
     async (payload) => {
       const created = await transactionService.createTransaction(payload);
-      await loadUserData();
+      await loadUserData(true);
       return created;
     },
     [loadUserData]

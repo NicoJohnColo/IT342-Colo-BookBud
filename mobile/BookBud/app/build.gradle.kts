@@ -72,6 +72,9 @@ dependencies {
     
     // Security - Encrypted SharedPreferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    
+    // Stripe Payment Processing
+    implementation("com.stripe:stripe-android:20.27.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

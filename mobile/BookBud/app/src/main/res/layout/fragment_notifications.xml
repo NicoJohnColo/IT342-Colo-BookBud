@@ -61,14 +61,19 @@
         android:layout_gravity="center"
         android:visibility="visible" />
 
-    <!-- RecyclerView for Notifications -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notificationsRecycler"
+    <!-- Container for Notifications -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
-        android:padding="4dp" />
+        android:padding="4dp">
+
+        <LinearLayout
+            android:id="@+id/notificationsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Empty State -->
     <TextView

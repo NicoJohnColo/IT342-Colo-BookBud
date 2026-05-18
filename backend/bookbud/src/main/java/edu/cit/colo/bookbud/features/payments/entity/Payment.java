@@ -57,8 +57,14 @@ public class Payment {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "stripe_payment_intent_id")
+    private String stripePaymentIntentId;
+
+    @Column(name = "stripe_client_secret")
+    private String stripeClientSecret;
+
     public enum PaymentMethod {
-        Cash, GCash, Bank_Transfer
+        Cash, GCash, Bank_Transfer, Stripe_Card
     }
 
     public enum PaymentStatus {

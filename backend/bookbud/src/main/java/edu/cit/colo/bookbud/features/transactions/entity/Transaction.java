@@ -67,6 +67,9 @@ public class Transaction implements Persistable<String> {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
     @Column(name = "owner_rated")
     @Builder.Default
     private Boolean ownerRated = false;

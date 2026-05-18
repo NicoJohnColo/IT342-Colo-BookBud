@@ -40,7 +40,42 @@
           <theme>@style/Theme.BookBud</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_books.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_dashboard.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_notifications.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_transactions.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_users.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_books.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_create_listing.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_listing.xml">
         <config>
           <theme>@style/Theme.BookBud</theme>
         </config>
@@ -51,6 +86,31 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_profile.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_transactions.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_wishlist.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_admin_book.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_admin_notification.xml">
+        <config>
+          <theme>@style/Theme.BookBud</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_admin_transaction.xml">
         <config>
           <theme>@style/Theme.BookBud</theme>
         </config>
@@ -67,114 +127,58 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3203cff-f0b6-4a7b-a2d8-1050048ac36c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/SplashActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/admin/presentation/activity/AdminDashboardActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/ForgotPasswordActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/GetStartedActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/LoginActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/RegisterActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/dashboard/presentation/activity/DashboardActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/controller/AdminController.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/service/StripeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/shared/config/DatabaseMigrationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/payments/data/remote/StripePaymentService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/network/StripeConfig.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/components/StripePaymentModal.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/components/StripePaymentModal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/hooks/useEarnings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/BookbudApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/BookbudApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/controller/EarningsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/controller/EarningsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/AuthResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/ForgotPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/GoogleAuthRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/LoginRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/RefreshTokenRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/RegisterRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/dto/auth/ResetPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/exception/AuthenticationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/exception/BusinessException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/exception/GlobalExceptionHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/exception/ResourceNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/controller/BookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/service/BookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/notifications/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/notifications/controller/NotificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/notifications/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/notifications/service/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/dto/BookDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/books/dto/BookDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/entity/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/repository/PaymentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/payments/service/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/controller/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/dto/CreateTransactionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/dto/CreateTransactionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/entity/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/transactions/service/TransactionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/entity/PasswordResetToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/entity/RefreshToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/repository/PasswordResetTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/repository/RefreshTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/security/JwtAuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/security/JwtUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/service/AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/users/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/wishlist/controller/WishlistController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/wishlist/controller/WishlistController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/wishlist/service/WishlistService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/features/wishlist/service/WishlistService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/service/AdminService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/books/service/BookServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/books/service/BookServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/notifications/service/NotificationServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/notifications/service/NotificationServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/payments/service/PaymentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/payments/service/PaymentServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/transactions/service/TransactionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/transactions/service/TransactionServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/users/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/users/service/UserServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/wishlist/service/WishlistServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/features/wishlist/service/WishlistServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/service/AdminServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/test/java/edu/cit/colo/bookbud/service/AdminServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../docs/FullRegressionReport_BookBud.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../docs/FullRegressionReport_BookBud.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/shared/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/java/edu/cit/colo/bookbud/shared/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../backend/bookbud/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/bookbud/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../docs/FullRegressionReport_BookBud.docx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/annotation_processor_list/debugAndroidTest/javaPreCompileDebugAndroidTest/annotationProcessors.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/annotation_processor_list/debugAndroidTest/javaPreCompileDebugAndroidTest/annotationProcessors.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/apk_ide_redirect_file/debug/createDebugApkListingFileRedirect/redirect.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/apk_ide_redirect_file/debug/createDebugApkListingFileRedirect/redirect.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/compatible_screen_manifest/debug/createDebugCompatibleScreenManifests/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compatible_screen_manifest/debug/createDebugCompatibleScreenManifests/output-metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/processDebugResources/R.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/processDebugResources/R.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debugAndroidTest/processDebugAndroidTestResources/R.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debugAndroidTest/processDebugAndroidTestResources/R.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/compile_app_classes_jar/debug/bundleDebugClassesToCompileJar/classes.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compile_app_classes_jar/debug/bundleDebugClassesToCompileJar/classes.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_0/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_1/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_2/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_3/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_4/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_5/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_6/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_73953da189960112521f1e384eabb8a579ea6f50f5baff1bc8df25146552e7fe_bucket_7/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_0/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_1/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_2/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_3/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_4/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_5/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_6/graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/desugar_graph/debugAndroidTest/dexBuilderDebugAndroidTest/out/currentProject/jar_7c24d932888a7e1166df8220e29f3c4120c597d79382ec402d27eecee7aadbaf_bucket_7/graph.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes.dex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debug/dexBuilderDebug/out" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debug/dexBuilderDebug/out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debugAndroidTest/dexBuilderDebugAndroidTest/out" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debugAndroidTest/dexBuilderDebugAndroidTest/out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debug-mergeJavaRes/merge-state" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debug-mergeJavaRes/merge-state" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/mergeDebugResources/compile-file-map.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/mergeDebugResources/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/mergeDebugResources/merger.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/packageDebugResources/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debug/packageDebugResources/merger.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest-mergeJavaRes/merge-state" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest-mergeJavaRes/merge-state" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/compile-file-map.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merger.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/androidResources" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/androidResources" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/javaResources0" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/javaResources0" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebugAndroidTest/tmp/debugAndroidTest/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebugAndroidTest/tmp/debugAndroidTest/dex-renamer-state.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebugAndroidTest/tmp/debugAndroidTest/zip-cache/androidResources" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebugAndroidTest/tmp/debugAndroidTest/zip-cache/androidResources" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/java_res/debug/processDebugJavaRes/out/META-INF/app_debug.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/java_res/debug/processDebugJavaRes/out/META-INF/app_debug.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/processDebugResources/resources-list-for-resources-debug.ap_.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/processDebugResources/resources-list-for-resources-debug.ap_.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debug/processDebugMainManifest/manifest-merger-blame-debug-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debug/processDebugMainManifest/manifest-merger-blame-debug-report.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debugAndroidTest/processDebugAndroidTestManifest/manifest-merger-blame-debug-androidTest-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debugAndroidTest/processDebugAndroidTestManifest/manifest-merger-blame-debug-androidTest-report.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_java_res/debug/mergeDebugJavaResource/base.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_java_res/debug/mergeDebugJavaResource/base.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/output-metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_fade_in_delayed.xml.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_fade_in_delayed.xml.flat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_fade_in_up.xml.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_fade_in_up.xml.flat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_scale_up_hover.xml.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/anim_scale_up_hover.xml.flat" afterDir="false" />
@@ -329,10 +333,6 @@
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values-zh-rTW_values-zh-rTW.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values-zh-rTW_values-zh-rTW.arsc.flat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values-zu_values-zu.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values-zu_values-zu.arsc.flat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values_values.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debug/mergeDebugResources/values_values.arsc.flat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v18_values-v18.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v18_values-v18.arsc.flat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v21_values-v21.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v21_values-v21.arsc.flat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v28_values-v28.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values-v28_values-v28.arsc.flat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values_values.arsc.flat" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources/values_values.arsc.flat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/mergeDebugResources.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/mergeDebugResources.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-af.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-af.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-am.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-am.json" afterDir="false" />
@@ -455,42 +455,19 @@
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-zu.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values-zu.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/multi-v2/values.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/single/mergeDebugResources.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debug/mergeDebugResources/out/single/mergeDebugResources.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/mergeDebugAndroidTestResources.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/mergeDebugAndroidTestResources.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v18.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v18.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v21.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v21.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v28.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values-v28.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_res_blame_folder/debugAndroidTest/mergeDebugAndroidTestResources/out/multi-v2/values.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/output-metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debugAndroidTest/processDebugAndroidTestManifest/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debugAndroidTest/processDebugAndroidTestManifest/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debugAndroidTest/processDebugAndroidTestManifest/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debugAndroidTest/processDebugAndroidTestManifest/output-metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_dashboard.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_dashboard.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_forgot_password.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_forgot_password.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_get_started.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_get_started.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_login.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_register.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_register.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_splash.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/layout/activity_splash.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/values/values.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_res/debug/packageDebugResources/values/values.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/processed_res/debug/processDebugResources/out/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/processed_res/debug/processDebugResources/out/output-metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/processed_res/debug/processDebugResources/out/resources-debug.ap_" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/processed_res/debugAndroidTest/processDebugAndroidTestResources/out/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/processed_res/debugAndroidTest/processDebugAndroidTestResources/out/output-metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/processed_res/debugAndroidTest/processDebugAndroidTestResources/out/resources.ap_" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/processed_res/debugAndroidTest/processDebugAndroidTestResources/out/resources.ap_" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/AuthApiClient.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/AuthResult$Error.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/AuthResult$Success.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/AuthResult.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/DashboardActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/ForgotPasswordActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/GetStartedActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/LoginActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/RegisterActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debug/dexBuilderDebug/out/edu/cit/colo/bookbud/SplashActivity.dex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debugAndroidTest/dexBuilderDebugAndroidTest/out/2ff32940bb6cc2119bdf986822085f472be41767a21baaadf9275f4e5f021b3c_1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debugAndroidTest/dexBuilderDebugAndroidTest/out/2ff32940bb6cc2119bdf986822085f472be41767a21baaadf9275f4e5f021b3c_3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debugAndroidTest/dexBuilderDebugAndroidTest/out/2ff32940bb6cc2119bdf986822085f472be41767a21baaadf9275f4e5f021b3c_5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debugAndroidTest/dexBuilderDebugAndroidTest/out/2ff32940bb6cc2119bdf986822085f472be41767a21baaadf9275f4e5f021b3c_6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/project_dex_archive/debugAndroidTest/dexBuilderDebugAndroidTest/out/2ff32940bb6cc2119bdf986822085f472be41767a21baaadf9275f4e5f021b3c_7.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/runtime_symbol_list/debug/processDebugResources/R.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/runtime_symbol_list/debug/processDebugResources/R.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/source_set_path_map/debug/mapDebugSourceSetPaths/file-map.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/source_set_path_map/debug/mapDebugSourceSetPaths/file-map.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/source_set_path_map/debugAndroidTest/mapDebugAndroidTestSourceSetPaths/file-map.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/source_set_path_map/debugAndroidTest/mapDebugAndroidTestSourceSetPaths/file-map.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debug/processDebugResources/stableIds.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debug/processDebugResources/stableIds.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debugAndroidTest/processDebugAndroidTestResources/stableIds.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debugAndroidTest/processDebugAndroidTestResources/stableIds.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/symbol_list_with_package_name/debug/processDebugResources/package-aware-r.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/symbol_list_with_package_name/debug/processDebugResources/package-aware-r.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/symbol_list_with_package_name/debugAndroidTest/processDebugAndroidTestResources/package-aware-r.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/symbol_list_with_package_name/debugAndroidTest/processDebugAndroidTestResources/package-aware-r.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream.len" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.keystream.len" afterDir="false" />
@@ -563,123 +540,57 @@
       <change beforePath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/androidTest/debug/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/androidTest/debug/output-metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/debug/output-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/debug/output-metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/AuthApiClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/AuthResult$Error.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/AuthResult$Success.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/AuthResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/DashboardActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/ForgotPasswordActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/GetStartedActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/LoginActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/RegisterActivity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/tmp/kotlin-classes/debug/edu/cit/colo/bookbud/SplashActivity.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/Adapters.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminApiClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminBookFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminDashboardActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminDashboardFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminNotificationFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminTransactionFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AdminUserFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/ApiClients.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/AuthApiClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/BookApiClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/CreateListingFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/DashboardActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/EditListingFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/EditProfileFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/ForgotPasswordActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/Fragments.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/FragmentsV2.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/GetStartedActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/HomeFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/ListingsFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/LoginActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/Models.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/PaymentApiClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/PaymentsFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/RegisterActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/SplashActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/TestConnection.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/TokenManager.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/TransactionApiClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/edu/cit/colo/bookbud/WishlistFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/BookbudApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/BookbudApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/SplashActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/SplashActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/entity/AuthResponseEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/entity/AuthResponseEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/mapper/AuthMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/mapper/AuthMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/remote/AuthApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/remote/AuthApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/repository/AuthRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/data/repository/AuthRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/domain/usecase/LoginUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/domain/usecase/LoginUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/ForgotPasswordActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/ForgotPasswordActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/GetStartedActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/GetStartedActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/LoginActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/RegisterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/activity/RegisterActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/viewmodel/LoginViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/auth/presentation/viewmodel/LoginViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/dashboard/presentation/activity/DashboardActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/dashboard/presentation/activity/DashboardActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/payments/data/remote/PaymentsApi.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/payments/di/PaymentsModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/features/payments/di/PaymentsModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/di/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/di/AppModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/network/AuthInterceptor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/network/AuthInterceptor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/network/RetrofitClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/network/RetrofitClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/storage/PreferencesManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bookbud/shared/storage/PreferencesManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_dashboard.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_dashboard.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_get_started.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_get_started.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_books.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_books.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_listings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_listings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_notifications.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_notifications.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_transactions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_transactions.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_wishlist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_wishlist.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/AlertModal/AlertModal.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/AlertModal/AlertModal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/AuthCard/AuthCard.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/AuthCard/AuthCard.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/ConfirmModal/ConfirmModal.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/ConfirmModal/ConfirmModal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/Footer/Footer.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/Footer/Footer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/FormInput/FormInput.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/FormInput/FormInput.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/GoogleAuthButton/GoogleAuthButton.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/GoogleAuthButton/GoogleAuthButton.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/Navbar/Navbar.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/Navbar/Navbar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/Navbar/Navbar.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/ProtectedRoute/ProtectedRoute.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/common.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/About1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/About2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/About3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/BuildReadImg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/bothdie.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/comic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/fiction.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/genre1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/genre2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/genre3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/genre4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/harry.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/landingBg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/manga.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/components/imgs/never.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/context/AuthContext.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/context/AuthContext.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/auth/auth.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/auth/auth.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/AdminBooksPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/AdminBooksPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/books/services/bookService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/books/services/bookService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/books/utils/bookImage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/books/utils/bookImage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/build_output.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/coverage-test-output.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/admin/pages/AdminDashboardPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/admin/pages/AdminDashboardPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/BrowsePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/BrowsePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/BrowsePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/books/pages/BrowsePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/dashboard/pages/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/dashboard/pages/Dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/dashboard/pages/styles/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/dashboard/pages/styles/layout.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/pages/PaymentPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/pages/PaymentPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/transactions/pages/AdminTransactionsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/transactions/pages/AdminTransactionsPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/AdminUsersPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/AdminUsersPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/ListingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/ListingsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/services/paymentService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/payments/services/paymentService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/transactions/pages/TransactionsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/transactions/pages/TransactionsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/OverviewPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/OverviewPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/OverviewPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/OverviewPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/ProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/features/users/pages/ProfilePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/hooks/hooks.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/hooks/useAuth.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/Dashboard/Dashboard.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/Dashboard/styles/common.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/Dashboard/styles/layout.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/Dashboard/styles/theme.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/LandingPage/LandingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/pages/LandingPage/LandingPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/admin/AdminDashboardPage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/admin/AdminPages.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/auth/Auth.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/auth/ForgotPasswordPage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/auth/ForgotPasswordPage.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/auth/LoginPage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/auth/RegisterPage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/services/adminService.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/services/api.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/services/api.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/services/authService.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/services/authService.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/utils/validation.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/utils/validators.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/pages/LandingPage/LandingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/pages/LandingPage/LandingPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../web/bookbud/src/shared/components/Footer/Footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../web/bookbud/src/shared/components/Footer/Footer.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -689,7 +600,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Nicoj\.android\avd\Medium_Phone_API_34.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Nicoj\.android\avd\Pixel_8_API_34_1.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

@@ -31,15 +31,9 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
     Page<Payment> findAllPaymentsForUser(@Param("userId") String userId, Pageable pageable);
     
     // Get payment statistics for user (earnings)
-    @Query("SELECT COALESCE(SUM(CAST(p.amount AS double)), 0.0) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = 'Paid'")
-    Double getTotalEarningsForUser(@Param("userId") String userId);
+    @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = :status")
+    java.math.BigDecimal getTotalEarningsForUser(@Param("userId") String userId, @Param("status") edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentStatus status);
     
-    @Query("SELECT COUNT(p) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = 'Pending'")
-    long getPendingPaymentCountForUser(@Param("userId") String userId);
-    
-    @Query("SELECT COUNT(p) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = 'Paid'")
-    long getSuccessfulPaymentCountForUser(@Param("userId") String userId);
-    
-    @Query("SELECT COUNT(p) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = 'Failed'")
-    long getFailedPaymentCountForUser(@Param("userId") String userId);
+    @Query("SELECT COUNT(p) FROM Payment p WHERE p.transaction.owner.userId = :userId AND p.paymentStatus = :status")
+    long getPaymentCountByStatusForUser(@Param("userId") String userId, @Param("status") edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentStatus status);
 }

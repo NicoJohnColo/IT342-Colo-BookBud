@@ -6,23 +6,29 @@ import okhttp3.Response
 
 class AuthInterceptor(private val preferencesManager: PreferencesManager) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-        
-        val token = preferencesManager.getToken()
-        val requestBuilder = originalRequest.newBuilder()
-        
-        if (!token.isNullOrEmpty()) {
-            requestBuilder.addHeader("Authorization", "Bearer $token")
+        try {
+            val originalRequest = chain.request()
+            
+            val token = preferencesManager.getToken()
+            val requestBuilder = originalRequest.newBuilder()
+            
+            if (!token.isNullOrEmpty()) {
+                requestBuilder.addHeader("Authorization", "Bearer $token")
+            }
+            
+            val response = chain.proceed(requestBuilder.build())
+            
+            // Handle 401 - token expired
+            if (response.code == 401) {
+                // Attempt to refresh token or logout
+                preferencesManager.clearAll()
+            }
+            
+            return response
+        } catch (e: Exception) {
+            // If preferences aren't ready, proceed without token
+            // This allows the app to start without blocking on prefs initialization
+            return chain.proceed(chain.request())
         }
-        
-        val response = chain.proceed(requestBuilder.build())
-        
-        // Handle 401 - token expired
-        if (response.code == 401) {
-            // Attempt to refresh token or logout
-            preferencesManager.clearAll()
-        }
-        
-        return response
     }
 }

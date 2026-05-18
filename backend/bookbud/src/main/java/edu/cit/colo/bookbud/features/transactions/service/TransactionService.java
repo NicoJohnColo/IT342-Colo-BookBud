@@ -12,9 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.shared.exception.BusinessException;
-import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.books.entity.Book;
 import edu.cit.colo.bookbud.features.books.repository.BookRepository;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
@@ -27,6 +24,9 @@ import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
 import edu.cit.colo.bookbud.features.transactions.repository.TransactionRepository;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,6 +75,7 @@ public class TransactionService {
                 .endDate(request.getEndDate())
                 .amount(transactionAmount)
                 .status(Transaction.Status.Pending)
+                .paymentMethod(request.getPaymentMethod())
                 .build();
 
         transaction = transactionRepository.save(transaction);
@@ -190,7 +191,8 @@ public class TransactionService {
                 if (!isOwner) {
                     throw new BusinessException("AUTH-003", "Only owner can complete transaction");
                 }
-                if (currentStatus != Transaction.Status.Active) {
+                // Allow transition from Active to Completed, or Completed to Completed (for sync)
+                if (currentStatus != Transaction.Status.Active && currentStatus != Transaction.Status.Completed) {
                     throw new BusinessException("BUSINESS-004", "Invalid status transition from " + currentStatus + " to " + status);
                 }
                 break;
@@ -217,12 +219,13 @@ public class TransactionService {
             // Log error but continue processing
         }
 
-        // Handle payment creation for completed transactions
+        // Handle payment creation/sync for completed transactions
         if (status == Transaction.Status.Completed) {
             try {
+                log.info("Ensuring payment record is synchronized for completed transaction: {}", transactionId);
                 createPaymentForTransaction(transaction);
             } catch (Exception e) {
-                // Log error but continue processing
+                log.error("Failed to synchronize payment for transaction {}: {}", transactionId, e.getMessage(), e);
             }
         }
 
@@ -386,7 +389,6 @@ public class TransactionService {
             // Payment info is optional, ignore errors
             log.debug("Could not fetch payment for transaction {}", transaction.getTransactionId());
         }
-        
         return TransactionDTO.builder()
                 .transactionId(transaction.getTransactionId())
                 .bookId(bookId)
@@ -401,12 +403,13 @@ public class TransactionService {
                 .status(transaction.getStatus() != null ? transaction.getStatus().name() : "Unknown")
                 .createdAt(transaction.getCreatedAt() != null ? transaction.getCreatedAt().toString() : null)
                 .userRole(role)
-                .paymentStatus(paymentStatus)
-            .paymentMethod(paymentMethod)
-            .ownerRated(transaction.getOwnerRated())
-            .renterRated(transaction.getRenterRated())
+                .paymentStatus(paymentStatus != null ? paymentStatus : "PENDING")
+                .paymentMethod(transaction.getPaymentMethod() != null ? transaction.getPaymentMethod() : paymentMethod)
+                .ownerRated(transaction.getOwnerRated())
+                .renterRated(transaction.getRenterRated())
                 .build();
     }
+    
 
     /**
      * Automatically create a payment record when transaction is completed.
@@ -414,46 +417,80 @@ public class TransactionService {
      */
     private void createPaymentForTransaction(Transaction transaction) {
         if (transaction == null || transaction.getTransactionId() == null) {
+            log.error("Cannot create payment: transaction or transactionId is null");
             return;
         }
         
-        // Don't create if payment already exists for this transaction
-        if (paymentRepository.existsByTransactionTransactionId(transaction.getTransactionId())) {
-            return;
-        }
+        log.info("Creating or updating payment for transaction: {}, status: {}, amount: {}", 
+            transaction.getTransactionId(), transaction.getStatus(), transaction.getAmount());
 
-        Payment payment = Payment.builder()
-                .transaction(transaction)
-                .amount(transaction.getAmount() != null ?
-                    new java.math.BigDecimal(transaction.getAmount()) : java.math.BigDecimal.ZERO)
-                .paymentMethod(Payment.PaymentMethod.Cash)
-                .paymentDate(java.time.LocalDate.now())
-                .paymentStatus(Payment.PaymentStatus.Paid)
-                .build();
+        // Check if a payment already exists for this transaction
+        Optional<edu.cit.colo.bookbud.features.payments.entity.Payment> existingOpt =
+                paymentRepository.findByTransactionTransactionId(transaction.getTransactionId());
 
-        try {
-            paymentRepository.save(payment);
-            log.info("Payment created successfully for transaction: {}", transaction.getTransactionId());
-        } catch (Exception e) {
-            log.error("Error saving payment for transaction {}: {}", transaction.getTransactionId(), e.getMessage());
-            // Don't rethrow - allow transaction status update to complete
-            return;
-        }
+        if (existingOpt.isPresent()) {
+            edu.cit.colo.bookbud.features.payments.entity.Payment existing = existingOpt.get();
+            log.info("Found existing payment for transaction: {}, current payment status: {}", 
+                transaction.getTransactionId(), existing.getPaymentStatus());
 
-        // Notify owner about the paid payment (with null-check for book and owner)
-        try {
-            String bookTitle = (transaction.getBook() != null && transaction.getBook().getTitle() != null)
-                ? transaction.getBook().getTitle()
-                : "Unknown Book";
-            User owner = transaction.getOwner();
-            if (owner != null && owner.getUserId() != null) {
-                notificationService.createNotification(
-                    owner.getUserId(),
-                    "Payment received for completed transaction: " + bookTitle
-                );
+            // If transaction is completed, the payment should be marked as Paid
+            if (transaction.getStatus() == Transaction.Status.Completed) {
+                if (existing.getPaymentStatus() != edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentStatus.Paid) {
+                    log.info("Updating existing payment status from {} to Paid for transaction: {}", 
+                        existing.getPaymentStatus(), transaction.getTransactionId());
+                    
+                    existing.setPaymentStatus(edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentStatus.Paid);
+                    
+                    // Set payment date if missing
+                    if (existing.getPaymentDate() == null) {
+                        existing.setPaymentDate(java.time.LocalDate.now());
+                    }
+                    
+                    paymentRepository.save(existing);
+                    log.info("Successfully updated existing payment to Paid for transaction: {}", transaction.getTransactionId());
+                } else {
+                    log.debug("Payment is already marked as Paid for transaction: {}", transaction.getTransactionId());
+                }
             }
-        } catch (Exception e) {
-            log.error("Error creating notification for payment: {}", e.getMessage());
+            return;
+        }
+
+        // No existing payment: create a new Paid payment record for the completed transaction
+        // (Only if the transaction is actually completed)
+        if (transaction.getStatus() == Transaction.Status.Completed) {
+            log.info("Creating new Paid payment record for completed transaction: {}", transaction.getTransactionId());
+            
+            edu.cit.colo.bookbud.features.payments.entity.Payment payment =
+                    edu.cit.colo.bookbud.features.payments.entity.Payment.builder()
+                    .transaction(transaction)
+                    .amount(transaction.getAmount() != null ?
+                        new java.math.BigDecimal(transaction.getAmount()) : java.math.BigDecimal.ZERO)
+                    .paymentMethod(edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentMethod.Cash)
+                    .paymentDate(java.time.LocalDate.now())
+                    .paymentStatus(edu.cit.colo.bookbud.features.payments.entity.Payment.PaymentStatus.Paid)
+                    .build();
+
+            try {
+                paymentRepository.save(payment);
+                log.info("New payment record saved successfully for transaction: {}", transaction.getTransactionId());
+                
+                // Notify owner about the payment
+                String bookTitle = (transaction.getBook() != null && transaction.getBook().getTitle() != null)
+                    ? transaction.getBook().getTitle()
+                    : "Unknown Book";
+                User owner = transaction.getOwner();
+                if (owner != null && owner.getUserId() != null) {
+                    notificationService.createNotification(
+                        owner.getUserId(),
+                        "Payment received for completed transaction: " + bookTitle
+                    );
+                }
+            } catch (Exception e) {
+                log.error("Error saving new payment for transaction {}: {}", transaction.getTransactionId(), e.getMessage());
+            }
+        } else {
+            log.warn("createPaymentForTransaction called for non-completed transaction: {}. Doing nothing.", 
+                transaction.getTransactionId());
         }
     }
 }

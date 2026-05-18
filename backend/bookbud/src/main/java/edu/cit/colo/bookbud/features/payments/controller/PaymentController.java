@@ -20,6 +20,7 @@ import edu.cit.colo.bookbud.features.payments.dto.PaymentDTO;
 import edu.cit.colo.bookbud.features.payments.dto.PaymentInitiateResponse;
 import edu.cit.colo.bookbud.features.payments.dto.PaymentStatsDTO;
 import edu.cit.colo.bookbud.features.payments.service.PaymentService;
+import edu.cit.colo.bookbud.features.payments.service.StripeService;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
 import edu.cit.colo.bookbud.shared.dto.ApiResponse;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final StripeService stripeService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
@@ -137,6 +139,29 @@ public class PaymentController {
         });
         paymentService.updatePaymentsForCompletedTransactions();
         return ResponseEntity.ok(ApiResponse.success("Payment statuses updated for completed transactions"));
+    }
+
+    @PostMapping("/initiate-stripe")
+    public ResponseEntity<ApiResponse<Map<String, String>>> initiateStripePayment(
+            @RequestBody Map<String, String> request) throws com.stripe.exception.StripeException {
+        String transactionId = request.get("transactionId");
+        return ResponseEntity.ok(ApiResponse.success(stripeService.createPaymentIntent(transactionId)));
+    }
+
+    @PostMapping("/webhook/stripe")
+    public ResponseEntity<Void> stripeWebhook(
+            @RequestBody String payload,
+            @RequestHeader("Stripe-Signature") String sigHeader) {
+        stripeService.handleStripeWebhook(payload, sigHeader);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/confirm-stripe")
+    public ResponseEntity<ApiResponse<Void>> confirmStripePayment(
+            @RequestBody Map<String, String> request) throws com.stripe.exception.StripeException {
+        String transactionId = request.get("transactionId");
+        stripeService.confirmStripePayment(transactionId);
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }
 

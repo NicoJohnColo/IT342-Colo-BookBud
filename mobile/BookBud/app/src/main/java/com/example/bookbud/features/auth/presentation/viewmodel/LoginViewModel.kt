@@ -38,4 +38,18 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+    
+    fun googleLogin(idToken: String) {
+        updateState(currentState.copy(isLoading = true, error = null))
+        viewModelScope.launch {
+            try {
+                loginUseCase.googleLogin(idToken)
+                updateState(currentState.copy(isLoading = false, success = true))
+                sendEvent(LoginUiEvent.NavigateToDashboard)
+            } catch (e: Exception) {
+                updateState(currentState.copy(isLoading = false, error = e.message))
+                sendEvent(LoginUiEvent.ShowError(e.message ?: "Google Sign-In failed"))
+            }
+        }
+    }
 }

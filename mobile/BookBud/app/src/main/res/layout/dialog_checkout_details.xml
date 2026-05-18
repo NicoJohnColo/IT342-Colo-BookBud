@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog_card"
+    android:padding="24dp">
+
+    <!-- Modal Title -->
+    <TextView
+        android:id="@+id/checkoutDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buy This Book"
+        android:textColor="@color/bb_text_dark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Book Row Details -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:elevation="0dp"
+            android:background="@color/bb_orange"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:cardCornerRadius="8dp">
+            
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                
+                <TextView
+                    android:id="@+id/checkoutCoverLetter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="B"
+                    android:textColor="@color/bb_text_light"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+                
+                <ImageView
+                    android:id="@+id/checkoutBookCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/checkoutBookTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booktest"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/checkoutBookAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="author"
+                android:textColor="@color/bb_text_muted"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/checkoutSellerBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other Seller"
+                android:textColor="@color/bb_badge_topseller_text"
+                android:textSize="12sp"
+                android:background="@drawable/bg_badge_other_seller"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Buy / Rent Toggle Group -->
+    <LinearLayout
+        android:id="@+id/checkoutTypeToggleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_payment_method_unselected"
+        android:layout_marginBottom="16dp"
+        android:padding="2dp">
+
+        <TextView
+            android:id="@+id/btnToggleRent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Rent"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/bb_text_muted"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/btnToggleBuy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Buy"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/bb_text_muted"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Pricing Display -->
+    <TextView
+        android:id="@+id/checkoutPriceDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sale Price: PHP 2000.00"
+        android:textColor="@color/bb_orange"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Rental Dates Section -->
+    <LinearLayout
+        android:id="@+id/layoutRentDates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="12sp"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/checkoutStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_payment_method_unselected"
+                android:hint="yyyy-mm-dd"
+                android:inputType="date"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="12sp"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/checkoutEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_payment_method_unselected"
+                android:hint="yyyy-mm-dd"
+                android:inputType="date"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="14sp"
+                android:focusable="false"
+                android:clickable="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Payment Method Selector -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment Method"
+        android:textColor="@color/bb_text_dark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="24dp">
+
+        <LinearLayout
+            android:id="@+id/btnPaymentCash"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_payment_method_selected"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnPaymentCard"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1.2"
+            android:background="@drawable/bg_payment_method_unselected"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Card Payment (Stripe)"
+                android:textColor="@color/bb_text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- bottom actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCheckoutCancel"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/bb_text_dark"
+            android:background="@drawable/bg_payment_method_unselected"
+            android:layout_marginEnd="8dp"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCheckoutConfirm"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.5"
+            android:text="Confirm Purchase - PHP 2000"
+            android:textColor="@color/bb_text_light"
+            android:background="@color/bb_orange"
+            android:layout_marginStart="8dp"
+            style="?android:attr/borderlessButtonStyle" />
+    </LinearLayout>
+
+</LinearLayout>

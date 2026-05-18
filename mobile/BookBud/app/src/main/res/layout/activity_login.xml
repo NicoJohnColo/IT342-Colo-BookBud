@@ -111,6 +111,8 @@
                 android:text="@string/forgot_password"
                 android:textColor="@color/bb_orange_dark"
                 android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintTop_toBottomOf="@id/layoutLoginPassword"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -150,7 +152,7 @@
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/bg_google_button"
+                android:background="#FFFFFF"
                 android:text="Continue with Google"
                 android:textAllCaps="false"
                 android:textColor="#3C3C3C"
@@ -190,7 +192,9 @@
                     android:text="Register"
                     android:textColor="@color/bb_text_dark"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

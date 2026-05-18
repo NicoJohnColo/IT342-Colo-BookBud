@@ -49,11 +49,20 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("VALID-001", "Validation failed", errors));
     }
 
+    @ExceptionHandler(com.stripe.exception.StripeException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStripeException(com.stripe.exception.StripeException ex) {
+        log.error("Stripe API error: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("STRIPE-ERROR", "Payment provider error: " + ex.getMessage(), null));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex) {
+        System.err.println("GENERIC UNHANDLED EXCEPTION: " + ex.getMessage());
+        ex.printStackTrace();
         log.error("Unhandled exception", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("SYSTEM-001", "An unexpected error occurred", null));
+                .body(ApiResponse.error("SYSTEM-001", "An unexpected error occurred: " + ex.getMessage(), null));
     }
 
     private HttpStatus determineStatus(String errorCode) {

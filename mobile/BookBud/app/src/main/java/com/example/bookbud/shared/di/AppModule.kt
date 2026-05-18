@@ -18,6 +18,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
+        // Initialize with context but defer SharedPreferences creation to first access
         PreferencesManager.init(context)
         return PreferencesManager
     }

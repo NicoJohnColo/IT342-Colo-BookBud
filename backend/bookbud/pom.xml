@@ -96,6 +96,11 @@
 			<artifactId>google-http-client-jackson2</artifactId>
 			<version>1.45.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>28.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
