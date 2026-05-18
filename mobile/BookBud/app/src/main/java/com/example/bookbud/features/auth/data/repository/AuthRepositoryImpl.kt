@@ -16,6 +16,19 @@ class AuthRepositoryImpl(
     override suspend fun login(request: LoginRequest): AuthResponse {
         val response = authApi.login(request)
         preferencesManager.saveToken(response.data.accessToken)
+        
+        // Save to TokenManager for UI and Shared Network layers
+        com.example.bookbud.shared.auth.TokenManager.saveAuthResponse(
+            com.example.bookbud.shared.models.AuthResponse(
+                accessToken = response.data.accessToken,
+                refreshToken = response.data.refreshToken,
+                userId = response.data.user.userId ?: "",
+                username = response.data.user.username ?: response.data.user.email ?: "Reader",
+                email = response.data.user.email ?: "",
+                role = response.data.user.role ?: "USER"
+            )
+        )
+        
         return AuthResponse(
             accessToken = response.data.accessToken,
             refreshToken = response.data.refreshToken,
@@ -26,6 +39,19 @@ class AuthRepositoryImpl(
     override suspend fun register(request: RegisterRequest): AuthResponse {
         val response = authApi.register(request)
         preferencesManager.saveToken(response.data.accessToken)
+        
+        // Save to TokenManager for UI and Shared Network layers
+        com.example.bookbud.shared.auth.TokenManager.saveAuthResponse(
+            com.example.bookbud.shared.models.AuthResponse(
+                accessToken = response.data.accessToken,
+                refreshToken = response.data.refreshToken,
+                userId = response.data.user.userId ?: "",
+                username = response.data.user.username ?: response.data.user.email ?: "Reader",
+                email = response.data.user.email ?: "",
+                role = response.data.user.role ?: "USER"
+            )
+        )
+        
         return AuthResponse(
             accessToken = response.data.accessToken,
             refreshToken = response.data.refreshToken,
@@ -36,6 +62,19 @@ class AuthRepositoryImpl(
     override suspend fun googleLogin(idToken: String): AuthResponse {
         val response = authApi.googleLogin(mapOf("idToken" to idToken))
         preferencesManager.saveToken(response.data.accessToken)
+        
+        // Save to TokenManager for UI and Shared Network layers
+        com.example.bookbud.shared.auth.TokenManager.saveAuthResponse(
+            com.example.bookbud.shared.models.AuthResponse(
+                accessToken = response.data.accessToken,
+                refreshToken = response.data.refreshToken,
+                userId = response.data.user.userId ?: "",
+                username = response.data.user.username ?: response.data.user.email ?: "Reader",
+                email = response.data.user.email ?: "",
+                role = response.data.user.role ?: "USER"
+            )
+        )
+        
         return AuthResponse(
             accessToken = response.data.accessToken,
             refreshToken = response.data.refreshToken,
@@ -44,8 +83,13 @@ class AuthRepositoryImpl(
     }
     
     override suspend fun logout() {
-        authApi.logout()
+        try {
+            authApi.logout()
+        } catch (e: Exception) {
+            // Ignore API failures during logout so clearAll still works
+        }
         preferencesManager.clearAll()
+        com.example.bookbud.shared.auth.TokenManager.clearAll()
     }
     
     override suspend fun refreshToken(): String {

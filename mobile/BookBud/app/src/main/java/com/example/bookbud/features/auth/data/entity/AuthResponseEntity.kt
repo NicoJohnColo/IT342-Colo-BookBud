@@ -15,12 +15,10 @@ data class AuthDataEntity(
 )
 
 data class UserEntity(
-    val userId: String,
-    val email: String,
-    val firstName: String,
-    val lastName: String,
-    val googleId: String?,
-    val rating: Double,
-    val createdAt: String,
-    val updatedAt: String
+    val userId: String?,
+    val email: String?,
+    val username: String?,
+    val role: String?,
+    val rating: String?,
+    val createdAt: String?
 )

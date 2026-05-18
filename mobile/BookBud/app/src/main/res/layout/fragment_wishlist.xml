@@ -65,13 +65,18 @@
             android:layout_gravity="center"
             android:visibility="visible" />
 
-        <!-- RecyclerView for Wishlist Items -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/wishlistRecycler"
+        <!-- Container for Wishlist Items -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:padding="12dp" />
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/wishlistContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Empty State -->
         <TextView

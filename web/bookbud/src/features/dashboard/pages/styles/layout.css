@@ -34,7 +34,7 @@
   height: 48px;
   display: block;
   object-fit: contain;
-  margin: 0 auto;
+  margin-left: 4px;
 }
 
 .sidebar-nav {

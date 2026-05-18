@@ -66,13 +66,18 @@
             android:layout_gravity="center"
             android:visibility="visible" />
 
-        <!-- RecyclerView for Listings -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listingsRecycler"
+        <!-- Container for Listings -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:padding="12dp" />
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/listingsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Empty State -->
         <TextView

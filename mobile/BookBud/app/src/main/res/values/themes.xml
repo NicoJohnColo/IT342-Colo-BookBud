@@ -9,7 +9,13 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.BookBud.Splash" parent="Theme.BookBud">
+    <!-- Lightweight theme for SplashActivity - avoids Material Design font loading delays -->
+    <style name="Theme.BookBud.Splash" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <item name="colorPrimary">@color/bb_orange</item>
+        <item name="colorPrimaryDark">@color/bb_orange_dark</item>
+        <item name="android:windowBackground">@color/bb_card_white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

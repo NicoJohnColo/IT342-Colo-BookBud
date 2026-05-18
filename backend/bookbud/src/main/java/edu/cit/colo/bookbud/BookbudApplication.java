@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /** Main Spring Boot entry point for the BookBud backend. */
 public class BookbudApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		SpringApplication.run(BookbudApplication.class, args);
 	}
 

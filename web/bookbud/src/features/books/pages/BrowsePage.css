@@ -385,3 +385,39 @@
     flex-direction: column;
   }
 }
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.modal-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark, #2d2d2d);
+}
+
+.modal-field input[type="date"] {
+  border: 1.5px solid var(--border, #e4ddd5);
+  border-radius: var(--radius, 8px);
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  color: var(--text-dark, #2d2d2d);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.modal-field input[type="date"]:hover {
+  border-color: var(--primary, #f5821e);
+}
+
+.modal-field input[type="date"]:focus {
+  border-color: var(--primary, #f5821e);
+  box-shadow: 0 0 0 3px rgba(245, 130, 30, 0.15);
+}

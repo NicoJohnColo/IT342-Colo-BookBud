@@ -32,8 +32,7 @@
             android:text="@string/app_name"
             android:textColor="@color/bb_orange"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:alpha="0" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tagline"
@@ -42,8 +41,7 @@
             android:layout_marginTop="6dp"
             android:text="@string/tagline"
             android:textSize="14sp"
-            android:textColor="@color/bb_text_dark"
-            android:alpha="0" />
+            android:textColor="@color/bb_text_dark" />
 
         <!-- Spacer pushes button to bottom -->
         <Space
@@ -66,8 +64,7 @@
             android:textColor="@color/bb_text_light"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:elevation="6dp"
-            android:alpha="0" />
+            android:elevation="6dp" />
 
     </LinearLayout>
 

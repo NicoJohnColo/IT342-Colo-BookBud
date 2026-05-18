@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bb_card_white">
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:gravity="center"
+    android:padding="16dp">
 
+    <!-- BookBud Logo -->
     <ImageView
         android:id="@+id/imageLogo"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:src="@drawable/logo"
-        android:scaleType="centerInside"
-        android:contentDescription="@string/app_name"
-        android:alpha="0"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.38" />
+        android:scaleType="fitCenter"
+        android:contentDescription="BookBud Logo"
+        android:layout_marginBottom="40dp" />
 
+    <!-- Loading Progress Indicator -->
     <ProgressBar
         android:id="@+id/progressSplash"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/bb_orange"
-        android:alpha="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="72dp" />
+        style="@android:style/Widget.ProgressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminate="true" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

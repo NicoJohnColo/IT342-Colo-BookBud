@@ -11,9 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
-import edu.cit.colo.bookbud.shared.exception.BusinessException;
-import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
 import edu.cit.colo.bookbud.features.payments.dto.CreatePaymentRequest;
 import edu.cit.colo.bookbud.features.payments.dto.EarningsSummaryDTO;
@@ -27,6 +24,9 @@ import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
 import edu.cit.colo.bookbud.features.transactions.repository.TransactionRepository;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.users.repository.UserRepository;
+import edu.cit.colo.bookbud.shared.dto.PaginatedResponse;
+import edu.cit.colo.bookbud.shared.exception.BusinessException;
+import edu.cit.colo.bookbud.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -188,13 +188,12 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public EarningsSummaryDTO getEarningsSummary(String userId) {
-        Double totalEarnings = paymentRepository.getTotalEarningsForUser(userId);
-        if (totalEarnings == null) {
-            totalEarnings = 0.0;
-        }
-        long pendingPayments = paymentRepository.getPendingPaymentCountForUser(userId);
-        long successfulPayments = paymentRepository.getSuccessfulPaymentCountForUser(userId);
-        long failedPayments = paymentRepository.getFailedPaymentCountForUser(userId);
+        long pendingPayments = paymentRepository.getPaymentCountByStatusForUser(userId, Payment.PaymentStatus.Pending);
+        long successfulPayments = paymentRepository.getPaymentCountByStatusForUser(userId, Payment.PaymentStatus.Paid);
+        long failedPayments = paymentRepository.getPaymentCountByStatusForUser(userId, Payment.PaymentStatus.Failed);
+        
+        java.math.BigDecimal total = paymentRepository.getTotalEarningsForUser(userId, Payment.PaymentStatus.Paid);
+        double totalEarnings = total != null ? total.doubleValue() : 0.0;
 
         return EarningsSummaryDTO.builder()
                 .totalEarnings(totalEarnings)

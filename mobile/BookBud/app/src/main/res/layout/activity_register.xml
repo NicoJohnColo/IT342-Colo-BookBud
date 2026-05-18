@@ -25,7 +25,6 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:lineSpacingExtra="2dp"
-            android:alpha="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -45,7 +44,6 @@
             android:textColor="@color/bb_text_dark"
             android:textSize="14sp"
             android:singleLine="true"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/textRegisterTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -65,7 +63,6 @@
             android:textColor="@color/bb_text_dark"
             android:textSize="14sp"
             android:singleLine="true"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/editName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -76,7 +73,6 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="14dp"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/editEmail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -113,7 +109,6 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="14dp"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/layoutPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -157,7 +152,6 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:elevation="3dp"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/layoutConfirmPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -167,7 +161,7 @@
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_google_button"
+            android:background="#FFFFFF"
             android:text="Continue with Google"
             android:textAllCaps="false"
             android:textColor="#3C3C3C"
@@ -177,7 +171,6 @@
             android:drawablePadding="12dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/buttonRegister"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -204,7 +197,6 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="16dp"
-            android:alpha="0"
             app:layout_constraintTop_toBottomOf="@id/progressRegister"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -224,7 +216,9 @@
                 android:text="Login"
                 android:textColor="@color/bb_text_dark"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

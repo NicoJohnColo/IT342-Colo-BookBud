@@ -19,4 +19,7 @@ public class CreateTransactionRequest {
     private LocalDate startDate;
 
     private LocalDate endDate;
+
+    @NotBlank(message = "Payment method is required")
+    private String paymentMethod;
 }

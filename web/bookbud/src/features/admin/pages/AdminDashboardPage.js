@@ -9,36 +9,28 @@ export default function AdminDashboardPage({
   notifications = [],
   onNavigate = () => {}
 }) {
-  const [platformStats, setPlatformStats] = useState(null);
-  const [loadingStats, setLoadingStats] = useState(true);
+  const [earningsSummary, setEarningsSummary] = useState(null);
 
-  // Fetch platform-wide payment statistics
   useEffect(() => {
-    const fetchPlatformStats = async () => {
-      try {
-        // Note: This would need a backend endpoint for platform-wide stats
-        // For now, calculate from transactions
-        const totalRevenue = transactions
-          .filter((t) => String(t.status || '').toLowerCase() === 'completed')
-          .reduce((sum, t) => sum + Number(t.amount || 0), 0);
-        
-        setPlatformStats({
-          totalRevenue: totalRevenue || 0,
-          totalTransactions: transactions.length,
-        });
-      } catch (error) {
-        console.error('Error fetching platform stats:', error);
-      } finally {
-        setLoadingStats(false);
-      }
-    };
+    let mounted = true;
 
-    if (transactions.length > 0) {
-      fetchPlatformStats();
-    } else {
-      setLoadingStats(false);
-    }
-  }, [transactions]);
+    (async () => {
+      try {
+        const summary = await paymentService.getEarningsSummary();
+        if (mounted) {
+          setEarningsSummary(summary);
+        }
+      } catch {
+        if (mounted) {
+          setEarningsSummary(null);
+        }
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const activeTransactions = transactions.filter((t) => String(t.status || '').toLowerCase() === 'active').length;
   const pendingTransactions = transactions.filter((t) => String(t.status || '').toLowerCase() === 'pending').length;
@@ -46,7 +38,8 @@ export default function AdminDashboardPage({
   const unreadNotifications = notifications.filter((n) => !n.isRead).length;
   const flaggedListings = books.filter((b) => b.status === 'Unavailable').length;
   const suspendedUsers = users.filter((u) => u.accountStatus === 'Suspended' || u.accountStatus === 'Banned').length;
-  const totalRevenue = platformStats?.totalRevenue || 0;
+  const totalRevenue = earningsSummary?.totalEarnings ?? completedTransactions * 10;
+  const successfulPayments = earningsSummary?.successfulPayments ?? completedTransactions;
 
   return (
     <div className="admin-page">
@@ -76,7 +69,7 @@ export default function AdminDashboardPage({
         <div className="admin-stat">
           <div className="admin-stat-label">Platform Revenue</div>
           <div className="admin-stat-value">PHP {Number(totalRevenue || 0).toFixed(0)}</div>
-          <div className="admin-stat-subtitle text-muted text-small">{completedTransactions} completed</div>
+          <div className="admin-stat-subtitle text-muted text-small">{successfulPayments} successful payments</div>
         </div>
         
         <div className="admin-stat">

@@ -41,7 +41,8 @@
 }
 
 .footer-form button {
-  background: #f97316;
+  background: #f97316 !important;
+  background-image: none !important;
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -52,7 +53,8 @@
 }
 
 .footer-form button:hover {
-  background: #ea6908;
+  background: #ea6908 !important;
+  background-image: none !important;
 }
 
 .footer-success {

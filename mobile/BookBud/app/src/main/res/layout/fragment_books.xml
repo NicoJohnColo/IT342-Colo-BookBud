@@ -176,14 +176,19 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <!-- RecyclerView for Books -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/booksRecycler"
+    <!-- Container for Books -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
-        android:padding="12dp" />
+        android:padding="12dp">
+
+        <LinearLayout
+            android:id="@+id/booksContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Empty State -->
     <TextView

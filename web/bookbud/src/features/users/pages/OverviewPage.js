@@ -7,8 +7,11 @@ import './OverviewPage.css';
 import './BrowsePage.css';
 import { resolveBookImageUrl } from '../../books/utils/bookImage';
 import wishlistService from '../../wishlist/services/wishlistService';
-import paymentService from '../../payments/services/paymentService';
+import useEarnings from '../../payments/hooks/useEarnings';
 import Navbar from '../../../shared/components/Navbar/Navbar';
+import paymentService from '../../payments/services/paymentService';
+import transactionService from '../../transactions/services/transactionService';
+import StripePaymentModal from '../../payments/components/StripePaymentModal';
 
 const HERO_COVERS = [bothDieCover, harryCover, neverCover, mangaCover];
 
@@ -28,8 +31,7 @@ const supportsBuy = (book) => {
 
 const PAYMENT_METHODS = [
   { value: 'cash', label: 'Cash', apiValue: 'Cash' },
-  { value: 'gcash', label: 'GCash', apiValue: 'GCash' },
-  { value: 'bank_transfer', label: 'Bank Transfer', apiValue: 'Bank Transfer' },
+  { value: 'stripe', label: 'Card Payment (Stripe)', apiValue: 'Stripe_Card' },
 ];
 
 const isAvailable = (book) => toLower(book?.status) === 'available';
@@ -78,37 +80,15 @@ export default function OverviewPage({
   wishlist = [],
   onWishlistChange,
 }) {
-  // State for fetching earnings data from backend
-  const [earnings, setEarnings] = useState(null);
-  const [loadingEarnings, setLoadingEarnings] = useState(true);
+  const { earnings, loading: loadingEarnings, error: earningsError, refresh: refreshEarnings } = useEarnings();
 
-  // Fetch earnings summary from backend
-  const fetchEarnings = useCallback(async () => {
-    try {
-      setLoadingEarnings(true);
-      const data = await paymentService.getEarningsSummary();
-      setEarnings(data);
-      console.log('Fetched earnings summary:', data);
-    } catch (error) {
-      console.error('Error fetching earnings:', error);
-      setEarnings(null);
-    } finally {
-      setLoadingEarnings(false);
-    }
-  }, []);
+  if (earningsError) console.warn('Dashboard statistics error:', earningsError);
 
-  // Initial load
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'test') return; // avoid async network calls during unit tests
-    fetchEarnings();
-  }, [fetchEarnings]);
-
-  // Listen for refresh events from Dashboard/Transactions
+  // Listen for refresh events (e.g., after transaction status changes)
   useEffect(() => {
     if (process.env.NODE_ENV === 'test') return;
     const handleRefresh = () => {
-      console.log('Refreshing earnings data...');
-      fetchEarnings();
+      refreshEarnings();
     };
     window.addEventListener('refreshPayments', handleRefresh);
     window.addEventListener('refreshDashboard', handleRefresh);
@@ -116,30 +96,7 @@ export default function OverviewPage({
       window.removeEventListener('refreshPayments', handleRefresh);
       window.removeEventListener('refreshDashboard', handleRefresh);
     };
-  }, [fetchEarnings]);
-
-  // Refetch earnings when transactions change (e.g., after status update)
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'test') return;
-    if (transactions.length > 0) {
-      fetchEarnings();
-    }
-  }, [transactions.length, fetchEarnings]);
-
-  // Debug logging for component data
-  useEffect(() => {
-    console.log('OverviewPage Data:', {
-      myListingsCount: myListings.length,
-      transactionsCount: transactions.length,
-      booksCount: books.length,
-      currentUserId: currentUserId,
-      earnings,
-      activeRentals,
-      totalEarned,
-      pendingPayments,
-      successfulPayments,
-    });
-  }, [myListings, transactions, books, earnings]);
+  }, [refreshEarnings]);
 
   const activeRentals = transactions.filter((t) => String(t.status || '').toLowerCase() === 'active').length;
   const soldBooks = myListings.filter((b) => String(b.status || '').toLowerCase() === 'sold').length;
@@ -172,6 +129,8 @@ export default function OverviewPage({
   const [modalError, setModalError] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [wishlistLoading, setWishlistLoading] = useState({});
+  const [stripeClientSecret, setStripeClientSecret] = useState(null);
+  const [pendingTransactionId, setPendingTransactionId] = useState(null);
 
   const isBookInWishlist = useCallback((bookId) => {
     return wishlist.some((item) => item.bookId === bookId || item.book?.bookId === bookId);
@@ -268,12 +227,24 @@ export default function OverviewPage({
     setSubmitting(true);
     setModalError('');
     try {
-      await onCreateTransaction?.(payload);
-      setFeedback({
-        type: 'success',
-        message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted successfully.`,
+      const created = await onCreateTransaction?.({
+        ...payload,
+        paymentMethod: paymentMethod === 'stripe' ? 'Stripe_Card' : 'Cash'
       });
-      closeModal();
+      const transactionId = created?.transactionId;
+
+      if (paymentMethod === 'stripe') {
+        const stripeData = await paymentService.initiateStripePayment(transactionId);
+        setStripeClientSecret(stripeData.clientSecret);
+        setPendingTransactionId(transactionId);
+        // Don't close modal yet, Stripe modal will appear over it or replace it
+      } else {
+        setFeedback({
+          type: 'success',
+          message: `${selectedMode === 'rent' ? 'Rental' : 'Purchase'} request submitted successfully.`,
+        });
+        closeModal();
+      }
     } catch (error) {
       const message =
         error?.response?.data?.error?.message ||
@@ -290,6 +261,55 @@ export default function OverviewPage({
   const selectedBookIsOwn = isOwnedByCurrentUser(selectedBook, currentUserId);
   const selectedBookIsAvailable = isAvailable(selectedBook);
   const selectedBookAvailability = availabilityLabel(selectedBook);
+
+  const onStripeSuccess = async () => {
+    try {
+      if (pendingTransactionId) {
+        await paymentService.confirmStripePayment(pendingTransactionId);
+      }
+      setFeedback({
+        type: 'success',
+        message: 'Payment confirmed! Your purchase is successful.',
+      });
+    } catch (error) {
+      console.error('Confirmation error:', error);
+      setFeedback({
+        type: 'success', // Still show success for payment, but maybe indicate sync is happening
+        message: 'Payment successful! Updating your transaction status...',
+      });
+    } finally {
+      setStripeClientSecret(null);
+      setPendingTransactionId(null);
+      closeModal();
+      
+      // Trigger data refresh across components
+      onWishlistChange?.(); 
+      window.dispatchEvent(new CustomEvent('refreshDashboard'));
+      window.dispatchEvent(new CustomEvent('refreshPayments'));
+    }
+  };
+
+  const onStripeCancel = async () => {
+    if (pendingTransactionId) {
+      try {
+        await transactionService.updateTransactionStatus(pendingTransactionId, 'Cancelled');
+      } catch (err) {
+        console.error('Error cancelling transaction:', err);
+      }
+    }
+    setStripeClientSecret(null);
+    setPendingTransactionId(null);
+    setSubmitting(false);
+  };
+
+  if (loadingEarnings) {
+    return (
+      <div className="dashboard-loading-overlay">
+        <Navbar />
+        <div className="overview-loading">Loading dashboard...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -519,18 +539,29 @@ export default function OverviewPage({
                   !selectedBookIsAvailable ||
                   (selectedMode === 'rent' ? !selectedBookSupportsRent : !selectedBookSupportsBuy)
                 }
+                title={paymentMethod === 'stripe' ? 'Proceed to Stripe Payment' : ''}
                 onClick={onSubmitTransaction}
               >
                 {submitting
                   ? 'Submitting...'
-                  : selectedMode === 'rent'
-                    ? `Confirm Rental - PHP ${asNumber(selectedBook.priceRent)}/day`
-                    : `Confirm Purchase - PHP ${asNumber(selectedBook.priceSale)}`}
+                  : paymentMethod === 'stripe'
+                    ? 'Proceed to Stripe Payment'
+                    : selectedMode === 'rent'
+                      ? `Confirm Rental - PHP ${asNumber(selectedBook.priceRent)}/day`
+                      : `Confirm Purchase - PHP ${asNumber(selectedBook.priceSale)}`}
               </button>
             </div>
           </div>
         </div>
       ) : null}
+      {stripeClientSecret && (
+        <StripePaymentModal 
+          clientSecret={stripeClientSecret}
+          transactionId={pendingTransactionId}
+          onSuccess={onStripeSuccess}
+          onCancel={onStripeCancel}
+        />
+      )}
     </div>
   );
 }
