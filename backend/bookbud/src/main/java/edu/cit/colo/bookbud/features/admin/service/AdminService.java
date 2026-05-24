@@ -1,5 +1,8 @@
 package edu.cit.colo.bookbud.features.admin.service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +18,8 @@ import edu.cit.colo.bookbud.features.notifications.dto.NotificationDTO;
 import edu.cit.colo.bookbud.features.notifications.entity.Notification;
 import edu.cit.colo.bookbud.features.notifications.repository.NotificationRepository;
 import edu.cit.colo.bookbud.features.notifications.service.NotificationService;
+import edu.cit.colo.bookbud.features.payments.entity.Payment;
+import edu.cit.colo.bookbud.features.payments.repository.PaymentRepository;
 import edu.cit.colo.bookbud.features.transactions.dto.TransactionDTO;
 import edu.cit.colo.bookbud.features.transactions.entity.Transaction;
 import edu.cit.colo.bookbud.features.transactions.repository.TransactionRepository;
@@ -35,6 +40,7 @@ public class AdminService {
     private final TransactionRepository transactionRepository;
     private final NotificationRepository notificationRepository;
     private final NotificationService notificationService;
+    private final PaymentRepository paymentRepository;
 
     @Transactional(readOnly = true)
     public PaginatedResponse<BookDTO> getAllBooks(int page, int size) {
@@ -154,6 +160,27 @@ public class AdminService {
                 .size(notifications.getSize())
                 .totalElements(notifications.getTotalElements())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> getPlatformStats() {
+        // Calculate platform-wide revenue as commission (20 PHP per successful payment)
+        long successfulPayments = paymentRepository.findAll().stream()
+                .filter(p -> p.getPaymentStatus() == Payment.PaymentStatus.Paid)
+                .count();
+
+        double totalRevenue = successfulPayments * 20.0; // 20 PHP commission per successful payment
+
+        long completedTransactions = transactionRepository.findAll().stream()
+                .filter(t -> t.getStatus() == Transaction.Status.Completed)
+                .count();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalRevenue", totalRevenue);
+        stats.put("successfulPayments", successfulPayments);
+        stats.put("completedTransactions", completedTransactions);
+
+        return stats;
     }
 
     private BookDTO mapBookToDTO(Book book) {

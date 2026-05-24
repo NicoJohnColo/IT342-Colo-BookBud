@@ -4475,6 +4475,9 @@ id textSignIn
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
+id textStatSubtitle
+id textStatTitle
+id textStatValue
 id textTop
 id textUsername
 id textView
@@ -4753,6 +4756,7 @@ layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_admin_book
 layout item_admin_notification
+layout item_admin_stat
 layout item_admin_transaction
 layout item_admin_user
 layout item_book

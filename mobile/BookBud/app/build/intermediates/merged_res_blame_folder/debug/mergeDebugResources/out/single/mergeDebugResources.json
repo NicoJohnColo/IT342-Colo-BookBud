@@ -32,10 +32,6 @@
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\bg_unread_dot.xml"
     },
     {
-        "merged": "com.example.bookbud.app-debug-80:/layout_dialog_stripe_payment.xml.flat",
-        "source": "com.example.bookbud.app-main-82:/layout/dialog_stripe_payment.xml"
-    },
-    {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_bg_status_completed.xml.flat",
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\bg_status_completed.xml"
     },
@@ -56,12 +52,12 @@
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\bg_recently_listed_icon.xml"
     },
     {
-        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\anim_fade_in_delayed.xml.flat",
-        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\anim\\fade_in_delayed.xml"
-    },
-    {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\layout_fragment_admin_notifications.xml.flat",
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\layout\\fragment_admin_notifications.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\anim_fade_in_delayed.xml.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\anim\\fade_in_delayed.xml"
     },
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_bg_genre_chip.xml.flat",
@@ -70,6 +66,10 @@
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_bg_book_card.xml.flat",
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\bg_book_card.xml"
+    },
+    {
+        "merged": "com.example.bookbud.app-debug-80:/layout_item_admin_stat.xml.flat",
+        "source": "com.example.bookbud.app-main-82:/layout/item_admin_stat.xml"
     },
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\layout_activity_login.xml.flat",
@@ -124,12 +124,12 @@
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\layout\\activity_get_started.xml"
     },
     {
-        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_get_started_bg.png.flat",
-        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\get_started_bg.png"
-    },
-    {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\layout_fragment_profile.xml.flat",
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\layout\\fragment_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_get_started_bg.png.flat",
+        "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\drawable\\get_started_bg.png"
     },
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_logo.png.flat",
@@ -138,10 +138,6 @@
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\layout_item_admin_user.xml.flat",
         "source": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-main-82:\\layout\\item_admin_user.xml"
-    },
-    {
-        "merged": "com.example.bookbud.app-debug-80:/layout_item_payment.xml.flat",
-        "source": "com.example.bookbud.app-main-82:/layout/item_payment.xml"
     },
     {
         "merged": "C:\\Users\\Nicoj\\.gradle\\daemon\\8.12\\com.example.bookbud.app-debug-80:\\drawable_ic_nav_explore.xml.flat",

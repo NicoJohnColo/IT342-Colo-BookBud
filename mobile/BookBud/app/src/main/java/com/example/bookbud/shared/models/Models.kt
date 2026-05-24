@@ -43,12 +43,20 @@ data class AuthResponse(
 data class UserProfileDTO(
     val userId: String,
     val username: String,
-    val email: String,
-    val rating: Double?,
-    val createdAt: String?,
-    val facebookUrl: String?,
-    val messenger: String?,
-    val mobileNumber: String?
+    val email: String? = null,
+    val rating: Double? = null,
+    val createdAt: String? = null,
+    val facebookUrl: String? = null,
+    val messenger: String? = null,
+    val mobileNumber: String? = null,
+    val role: String? = null,
+    val accountStatus: String? = null
+)
+
+data class AdminPlatformStatsDTO(
+    val totalRevenue: Double,
+    val successfulPayments: Long,
+    val completedTransactions: Long
 )
 
 data class UpdateUserProfileRequest(

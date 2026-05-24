@@ -49,6 +49,9 @@ public class BookService {
     @Value("${app.upload.book-images-dir:uploads/book-images}")
     private String bookImagesDir;
 
+    @Value("${app.google.books.api.key:}")
+    private String googleBooksApiKey;
+
     private static final long MAX_IMAGE_SIZE_BYTES = 5L * 1024 * 1024;
     private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp", "image/gif");
 
@@ -270,35 +273,68 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<ExternalBookDTO> searchExternalBooks(String query) {
-        try {
-            // Google Books API endpoint
-            String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=5";
-            
-            // Make HTTP request to Google Books API
-            java.net.URL url = new java.net.URL(apiUrl);
-            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", "BookBud/1.0");
-            
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
-                // Read response with try-with-resources
-                try (java.io.BufferedReader reader = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(connection.getInputStream()))) {
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    // Parse JSON response
-                    return parseGoogleBooksResponse(response.toString());
+        int maxRetries = 3;
+        int retryDelayMs = 2000; // 2 seconds
+        
+        for (int attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                // Google Books API endpoint - use isbn: prefix for ISBN searches
+                String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + query + "&maxResults=5";
+                if (googleBooksApiKey != null && !googleBooksApiKey.isEmpty()) {
+                    apiUrl += "&key=" + googleBooksApiKey;
                 }
-            } else {
+                System.out.println("Google Books API URL: " + apiUrl);
+                
+                // Make HTTP request to Google Books API
+                java.net.URL url = new java.net.URL(apiUrl);
+                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "BookBud/1.0");
+                
+                int responseCode = connection.getResponseCode();
+                System.out.println("Response code: " + responseCode);
+                
+                if (responseCode == 200) {
+                    // Read response with try-with-resources
+                    try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(connection.getInputStream()))) {
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                        System.out.println("Response: " + response.toString());
+                        // Parse JSON response
+                        return parseGoogleBooksResponse(response.toString());
+                    }
+                } else if (responseCode == 429) {
+                    // Rate limited - wait and retry
+                    System.out.println("Rate limited (429). Retrying in " + retryDelayMs + "ms...");
+                    if (attempt < maxRetries - 1) {
+                        Thread.sleep(retryDelayMs);
+                        retryDelayMs *= 2; // Exponential backoff
+                        continue;
+                    }
+                } else {
+                    System.out.println("Non-200 response code: " + responseCode);
+                    return List.of();
+                }
+            } catch (Exception e) {
+                System.out.println("Exception: " + e.getMessage());
+                e.printStackTrace();
+                if (attempt < maxRetries - 1) {
+                    try {
+                        Thread.sleep(retryDelayMs);
+                        retryDelayMs *= 2;
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                    continue;
+                }
                 return List.of();
             }
-        } catch (Exception e) {
-            return List.of();
         }
+        return List.of();
     }
     
     private List<ExternalBookDTO> parseGoogleBooksResponse(String jsonResponse) {

@@ -47,6 +47,7 @@ object RetrofitClient {
     val wishlistApi: WishlistApi by lazy { retrofit.create(WishlistApi::class.java) }
     val notificationsApi: NotificationsApi by lazy { retrofit.create(NotificationsApi::class.java) }
     val paymentsApi: PaymentsApi by lazy { retrofit.create(PaymentsApi::class.java) }
+    val adminApi: com.example.bookbud.features.admin.data.remote.AdminApi by lazy { retrofit.create(com.example.bookbud.features.admin.data.remote.AdminApi::class.java) }
 }
 
 // ==================== API Clients ====================

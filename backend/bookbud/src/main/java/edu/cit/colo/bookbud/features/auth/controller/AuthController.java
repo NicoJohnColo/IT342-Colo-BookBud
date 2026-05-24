@@ -1,6 +1,9 @@
 package edu.cit.colo.bookbud.features.auth.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +21,7 @@ import edu.cit.colo.bookbud.features.auth.dto.RegisterRequest;
 import edu.cit.colo.bookbud.features.auth.dto.ResetPasswordRequest;
 import edu.cit.colo.bookbud.features.users.entity.User;
 import edu.cit.colo.bookbud.features.auth.service.AuthService;
+import edu.cit.colo.bookbud.features.users.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
@@ -78,5 +84,31 @@ public class AuthController {
                 .role(user.getRole().name())
                 .createdAt(user.getCreatedAt().toString())
                 .build()));
+    }
+
+    @PostMapping("/setup-admin")
+    public ResponseEntity<ApiResponse<String>> setupAdmin() {
+        String password = "admin123";
+        String hashedPassword = passwordEncoder.encode(password);
+        
+        User admin = userRepository.findByEmail("admin@bookbud.com")
+                .orElse(User.builder()
+                        .username("admin")
+                        .email("admin@bookbud.com")
+                        .passwordHash(hashedPassword)
+                        .role(User.Role.ADMIN)
+                        .rating(BigDecimal.valueOf(5.00))
+                        .accountStatus("Active")
+                        .build());
+        
+        if (admin.getUserId() != null) {
+            admin.setPasswordHash(hashedPassword);
+            admin.setAccountStatus("Active");
+            admin.setRole(User.Role.ADMIN);
+        }
+        
+        userRepository.save(admin);
+        
+        return ResponseEntity.ok(ApiResponse.success("Admin user created/updated successfully. Email: admin@bookbud.com, Password: admin123"));
     }
 }

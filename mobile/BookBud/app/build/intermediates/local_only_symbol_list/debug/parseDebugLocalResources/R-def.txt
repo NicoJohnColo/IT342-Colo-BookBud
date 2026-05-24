@@ -320,6 +320,9 @@ id textRegisterTitle
 id textSeeAllFeatured
 id textSeeAllListed
 id textSignIn
+id textStatSubtitle
+id textStatTitle
+id textStatValue
 id textUsername
 id textWishlistCount
 id textWishlistTitle
@@ -381,6 +384,7 @@ layout fragment_transactions
 layout fragment_wishlist
 layout item_admin_book
 layout item_admin_notification
+layout item_admin_stat
 layout item_admin_transaction
 layout item_admin_user
 layout item_book
