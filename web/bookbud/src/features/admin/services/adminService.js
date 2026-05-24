@@ -48,6 +48,12 @@ const adminService = {
     const response = await api.get('/admin/notifications', { params });
     return response.data?.data;
   },
+
+  // Platform Stats
+  getPlatformStats: async () => {
+    const response = await api.get('/admin/stats');
+    return response.data?.data;
+  },
 };
 
 export default adminService;

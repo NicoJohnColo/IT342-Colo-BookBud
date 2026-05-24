@@ -90,4 +90,11 @@ public class AdminController {
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(ApiResponse.success(adminService.getAllNotifications(page, size)));
     }
+
+    // ==================== PLATFORM STATS ====================
+    
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getPlatformStats() {
+        return ResponseEntity.ok(ApiResponse.success(adminService.getPlatformStats()));
+    }
 }

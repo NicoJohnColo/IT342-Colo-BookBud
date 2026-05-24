@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import './AdminPages.css';
-import paymentService from '../../payments/services/paymentService';
+import adminService from '../../admin/services/adminService';
 
-export default function AdminDashboardPage({ 
-  books = [], 
-  users = [], 
-  transactions = [], 
+export default function AdminDashboardPage({
+  books = [],
+  users = [],
+  transactions = [],
   notifications = [],
   onNavigate = () => {}
 }) {
-  const [earningsSummary, setEarningsSummary] = useState(null);
+  const [platformStats, setPlatformStats] = useState(null);
 
   useEffect(() => {
     let mounted = true;
 
     (async () => {
       try {
-        const summary = await paymentService.getEarningsSummary();
+        const stats = await adminService.getPlatformStats();
         if (mounted) {
-          setEarningsSummary(summary);
+          setPlatformStats(stats);
         }
       } catch {
         if (mounted) {
-          setEarningsSummary(null);
+          setPlatformStats(null);
         }
       }
     })();
@@ -38,8 +38,8 @@ export default function AdminDashboardPage({
   const unreadNotifications = notifications.filter((n) => !n.isRead).length;
   const flaggedListings = books.filter((b) => b.status === 'Unavailable').length;
   const suspendedUsers = users.filter((u) => u.accountStatus === 'Suspended' || u.accountStatus === 'Banned').length;
-  const totalRevenue = earningsSummary?.totalEarnings ?? completedTransactions * 10;
-  const successfulPayments = earningsSummary?.successfulPayments ?? completedTransactions;
+  const totalRevenue = platformStats?.totalRevenue ?? completedTransactions * 10;
+  const successfulPayments = platformStats?.successfulPayments ?? completedTransactions;
 
   return (
     <div className="admin-page">

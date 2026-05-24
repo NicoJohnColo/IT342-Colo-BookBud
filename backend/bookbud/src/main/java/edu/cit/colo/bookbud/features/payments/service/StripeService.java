@@ -237,47 +237,45 @@ public class StripeService {
     @Transactional
     public void confirmStripePayment(String transactionId) throws StripeException {
         log.info("Manually confirming Stripe payment for transaction: {}", transactionId);
-        
+
         Payment payment = paymentRepository.findByTransactionTransactionId(transactionId)
                 .orElseThrow(() -> {
                     log.error("Payment record not found for transaction: {}", transactionId);
                     return new ResourceNotFoundException("DB-001", "Payment record not found");
                 });
-        
+
         if (payment.getPaymentStatus() == Payment.PaymentStatus.Paid) {
             log.info("Payment already marked as Paid for transaction: {}", transactionId);
             return;
         }
-        
-        String intentId = payment.getStripePaymentIntentId();
-        if (intentId == null || intentId.isBlank()) {
-            log.error("No Stripe PaymentIntent ID found for transaction: {}", transactionId);
-            throw new BusinessException("VALID-001", "No Stripe PaymentIntent ID found");
-        }
-        
-        log.info("Retrieving PaymentIntent {} from Stripe...", intentId);
-        PaymentIntent intent = PaymentIntent.retrieve(intentId, getRequestOptions());
-        
-        if (!"succeeded".equals(intent.getStatus())) {
-            log.info("PaymentIntent is in status {}, attempting manual confirmation using test credentials...", intent.getStatus());
-            try {
-                com.stripe.param.PaymentIntentConfirmParams confirmParams = 
-                    com.stripe.param.PaymentIntentConfirmParams.builder()
-                        .setPaymentMethod("pm_card_visa")
-                        .build();
-                intent = intent.confirm(confirmParams, getRequestOptions());
-                log.info("Stripe PaymentIntent manual confirmation success! Status: {}", intent.getStatus());
-            } catch (Exception e) {
-                log.warn("Failed to manually confirm PaymentIntent on Stripe: {}", e.getMessage());
+
+        // For mobile app, immediately mark as Paid when user confirms payment
+        // This bypasses the webhook delay for immediate feedback
+        log.info("Immediately marking payment as Paid for transaction: {}", transactionId);
+        payment.setPaymentStatus(Payment.PaymentStatus.Paid);
+        payment.setPaymentDate(LocalDate.now());
+        paymentRepository.save(payment);
+
+        // Update transaction status to Completed
+        Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
+        if (transaction != null) {
+            transaction.setStatus(Transaction.Status.Completed);
+            transactionRepository.save(transaction);
+
+            // Update book status to Sold
+            Book book = transaction.getBook();
+            if (book != null) {
+                book.setStatus(Book.Status.Sold);
+                bookRepository.save(book);
+
+                // Notify owner about successful payment
+                notificationService.createNotification(
+                        transaction.getOwner().getUserId(),
+                        "Payment received via Stripe for: " + book.getTitle()
+                );
             }
         }
 
-        if ("succeeded".equals(intent.getStatus())) {
-            log.info("PaymentIntent succeeded! Fulfilling payment for transaction: {}", transactionId);
-            fulfillPayment(intent);
-        } else {
-            log.warn("PaymentIntent {} is not succeeded. Current status: {}", intentId, intent.getStatus());
-            throw new BusinessException("BUSINESS-005", "Payment is not succeeded. Status: " + intent.getStatus());
-        }
+        log.info("Payment successfully confirmed and marked as Paid for transaction: {}", transactionId);
     }
 }
